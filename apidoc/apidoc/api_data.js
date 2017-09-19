@@ -5,7 +5,7 @@ define({ "api": [
     "title": "1.api Demo测试",
     "version": "1.0.0",
     "name": "Demo_api_Demo__",
-    "group": "Demo",
+    "group": "Demo___",
     "permission": [
       {
         "name": "none"
@@ -102,10 +102,488 @@ define({ "api": [
       }
     },
     "filename": "../src/main/java/com/har/unmanned/mfront/api/demo/DemoResource.java",
-    "groupTitle": "Demo",
+    "groupTitle": "Demo___",
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/demo/test"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/dispatch/replenishmentList",
+    "title": "3.api 补货列表",
+    "version": "1.0.0",
+    "name": "dispatch_api_____",
+    "group": "dispatch",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>补货列表</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dispatchNo",
+            "description": "<p>配送单号</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.replenishmentNum",
+            "description": "<p>补货总数</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.layer",
+            "description": "<p>层级(layer为：jsonObject的key)</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.layer.goodsName",
+            "description": "<p>商品名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.layer.goodsValue",
+            "description": "<p>商品单价</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.layer.goodsPicture",
+            "description": "<p>商品图片路径</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.layer.goodsId",
+            "description": "<p>商品ID</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/dispatch/DispatchResource.java",
+    "groupTitle": "dispatch",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/dispatch/replenishmentList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/dispatch/confirmReplenishment",
+    "title": "4.api 确认补货",
+    "version": "1.0.0",
+    "name": "dispatch_api_____",
+    "group": "dispatch",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>确认补货</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dispatchNo",
+            "description": "<p>配送单号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.layer",
+            "description": "<p>层级(layer为：jsonObject的key)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.layer.goodsId",
+            "description": "<p>商品ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.layer.ifConfirm",
+            "description": "<p>是否确认(0：未确认 、1:已确认)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/dispatch/DispatchResource.java",
+    "groupTitle": "dispatch",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/dispatch/confirmReplenishment"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/dispatch/dispatchList",
+    "title": "1.api 配送中心列表",
+    "version": "1.0.0",
+    "name": "dispatch_api_______",
+    "group": "dispatch",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>配送中心列表</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "status[]",
+            "description": "<p>状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.createTime",
+            "description": "<p>创建时间</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.storeName",
+            "description": "<p>取货位置</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.position",
+            "description": "<p>配送位置</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.status",
+            "description": "<p>状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dispatchNo",
+            "description": "<p>配送单号</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.carrierNote",
+            "description": "<p>取货单</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.carrierNote.goodsName",
+            "description": "<p>商品名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.carrierNote.spec",
+            "description": "<p>商品规格</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.carrierNote.quantity",
+            "description": "<p>商品数量</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/dispatch/DispatchResource.java",
+    "groupTitle": "dispatch",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/dispatch/dispatchList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/dispatch/updateDispatchStatus",
+    "title": "2.api 更新配送单状态",
+    "version": "1.0.0",
+    "name": "dispatch_api________",
+    "group": "dispatch",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>更新配送单状态</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dispatchNo",
+            "description": "<p>配送单号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "status",
+            "description": "<p>状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/dispatch/DispatchResource.java",
+    "groupTitle": "dispatch",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/dispatch/updateDispatchStatus"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/smsValidate/sendValidate",
+    "title": "1.api 发送短信验证码",
+    "version": "1.0.0",
+    "name": "smsValidate_api________",
+    "group": "smsValidate",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>发送短信验证码</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile",
+            "description": "<p>手机号</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/smsvalidate/SmsValidateResource.java",
+    "groupTitle": "smsValidate",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/smsValidate/sendValidate"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/smsValidate/validateCode",
+    "title": "2.api 验证短信验证码",
+    "version": "1.0.0",
+    "name": "smsValidate_api________",
+    "group": "smsValidate",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>验证短信验证码</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile",
+            "description": "<p>手机号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "validateCode",
+            "description": "<p>验证码</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/smsvalidate/SmsValidateResource.java",
+    "groupTitle": "smsValidate",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/smsValidate/validateCode"
       }
     ]
   }

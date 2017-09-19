@@ -30,6 +30,8 @@ public class ShopExpressive implements Serializable {
 
     private Long shopId;
 
+    private Integer type;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -136,6 +138,14 @@ public class ShopExpressive implements Serializable {
         this.shopId = shopId;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -155,6 +165,7 @@ public class ShopExpressive implements Serializable {
         sb.append(", accountNo=").append(accountNo);
         sb.append(", status=").append(status);
         sb.append(", shopId=").append(shopId);
+        sb.append(", type=").append(type);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
