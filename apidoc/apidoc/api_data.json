@@ -110,6 +110,491 @@
     ]
   },
   {
+    "type": "post",
+    "url": "/api/v1/admin/closeAnAccount",
+    "title": "4.api 结算",
+    "version": "1.0.0",
+    "name": "__",
+    "group": "admin",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>结算</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "billingId",
+            "description": "<p>结算记录id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/administrator/AdministratorResource.java",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/admin/closeAnAccount"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/admin/withdrawDeposit",
+    "title": "6.api 提现",
+    "version": "1.0.0",
+    "name": "__",
+    "group": "admin",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>提现</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "reflectTheAmountOf",
+            "description": "<p>提现金额</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/administrator/AdministratorResource.java",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/admin/withdrawDeposit"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/admin/settlementRecords",
+    "title": "3.api 结算记录",
+    "version": "1.0.0",
+    "name": "____",
+    "group": "admin",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>结算记录</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.id",
+            "description": ""
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.time",
+            "description": "<p>时间</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.commission",
+            "description": "<p>营业额</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.ratio",
+            "description": "<p>当前返佣比例</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.status",
+            "description": "<p>结算状态2、已结算3、待结算</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/administrator/AdministratorResource.java",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/admin/settlementRecords"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/admin/balanceDetails",
+    "title": "5.api 余额明细",
+    "version": "1.0.0",
+    "name": "____",
+    "group": "admin",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>余额明细</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.applyTimeZh",
+            "description": "<p>时间</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.typeZh",
+            "description": "<p>明细名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.money",
+            "description": "<p>金额</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/administrator/AdministratorResource.java",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/admin/balanceDetails"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/admin/expenseCalendar",
+    "title": "2.api 消费记录",
+    "version": "1.0.0",
+    "name": "____",
+    "group": "admin",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>消费记录</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.theNumberOfConsumer",
+            "description": "<p>消费人数</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.particulars",
+            "description": "<p>列表</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.particulars.headimgUrl",
+            "description": "<p>头像</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.particulars.name",
+            "description": "<p>昵称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.particulars.theCumulative",
+            "description": "<p>累计消费</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/administrator/AdministratorResource.java",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/admin/expenseCalendar"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/admin/bindManager",
+    "title": "1.api 绑定手机号",
+    "version": "1.0.0",
+    "name": "_____",
+    "group": "admin",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>绑定手机号</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "cellPhoneNumber",
+            "description": "<p>手机号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "verificationCode",
+            "description": "<p>验证码</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/administrator/AdministratorResource.java",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/admin/bindManager"
+      }
+    ]
+  },
+  {
     "type": "get",
     "url": "/api/v1/dispatch/replenishmentList",
     "title": "3.api 补货列表",

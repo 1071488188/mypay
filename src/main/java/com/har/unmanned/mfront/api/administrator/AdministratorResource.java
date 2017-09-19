@@ -2,6 +2,7 @@ package com.har.unmanned.mfront.api.administrator;
 
 /**
  * 管理员接口
+ * @apiDefine Follow 用户关注
  * Created by jiang on 2017/9/19.
  */
 public interface AdministratorResource {
@@ -16,11 +17,12 @@ public interface AdministratorResource {
      * @apiParam {String} verificationCode  验证码
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
+     * @apiSuccess (200) {Object} Data
      */
     String bindManager(InputParameter inputParameter);
 
     /**
-     * @api {get} /api/v1/admin/expenseCalendar 1.api 消费记录
+     * @api {get} /api/v1/admin/expenseCalendar 2.api 消费记录
      * @apiVersion 1.0.0
      * @apiName 消费记录
      * @apiGroup admin
@@ -40,7 +42,7 @@ public interface AdministratorResource {
     String expenseCalendar(InputParameter inputParameter);
 
     /**
-     * @api {get} /api/v1/admin/settlementRecords 1.api 结算记录
+     * @api {get} /api/v1/admin/settlementRecords 3.api 结算记录
      * @apiVersion 1.0.0
      * @apiName 结算记录
      * @apiGroup admin
@@ -61,7 +63,7 @@ public interface AdministratorResource {
     String settlementRecords(InputParameter inputParameter);
 
     /**
-     * @api {post} /api/v1/admin/closeAnAccount 1.api 结算
+     * @api {post} /api/v1/admin/closeAnAccount 4.api 结算
      * @apiVersion 1.0.0
      * @apiName 结算
      * @apiGroup admin
@@ -70,11 +72,12 @@ public interface AdministratorResource {
      * @apiParam {String} billingId  结算记录id
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
+     * @apiSuccess (200) {Object} Data
      */
     String closeAnAccount(InputParameter inputParameter);
 
     /**
-     * @api {get} /api/v1/admin/balanceDetails 1.api 余额明细
+     * @api {get} /api/v1/admin/balanceDetails 5.api 余额明细
      * @apiVersion 1.0.0
      * @apiName 余额明细
      * @apiGroup admin
@@ -92,7 +95,7 @@ public interface AdministratorResource {
     String balanceDetails(InputParameter inputParameter);
 
     /**
-     * @api {post} /api/v1/admin/withdrawDeposit 1.api 提现
+     * @api {post} /api/v1/admin/withdrawDeposit 6.api 提现
      * @apiVersion 1.0.0
      * @apiName 提现
      * @apiGroup admin
@@ -101,6 +104,7 @@ public interface AdministratorResource {
      * @apiParam {String} reflectTheAmountOf  提现金额
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
+     * @apiSuccess (200) {Object} Data
      */
     String withdrawDeposit(InputParameter inputParameter);
 }
