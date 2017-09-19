@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.DispatchMapper" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.Dispatch" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="dispatch_no" property="dispatchNo" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="storage_id" property="storageId" jdbcType="BIGINT" />
+    <result column="dispatchor" property="dispatchor" jdbcType="BIGINT" />
+    <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP" />
+    <result column="orders_time" property="ordersTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="bill_id" property="billId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, type_id, dispatch_no, shop_id, storage_id, dispatchor, complete_time, orders_time, 
+    create_time, `status`, bill_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.DispatchExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from dispatch
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from dispatch
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from dispatch
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.har.unmanned.mfront.model.DispatchExample" >
+    delete from dispatch
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.har.unmanned.mfront.model.Dispatch" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into dispatch (type_id, dispatch_no, shop_id, 
+      storage_id, dispatchor, complete_time, 
+      orders_time, create_time, `status`, 
+      bill_id)
+    values (#{typeId,jdbcType=BIGINT}, #{dispatchNo,jdbcType=VARCHAR}, #{shopId,jdbcType=BIGINT}, 
+      #{storageId,jdbcType=BIGINT}, #{dispatchor,jdbcType=BIGINT}, #{completeTime,jdbcType=TIMESTAMP}, 
+      #{ordersTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{billId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.Dispatch" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into dispatch
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="dispatchNo != null" >
+        dispatch_no,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="storageId != null" >
+        storage_id,
+      </if>
+      <if test="dispatchor != null" >
+        dispatchor,
+      </if>
+      <if test="completeTime != null" >
+        complete_time,
+      </if>
+      <if test="ordersTime != null" >
+        orders_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+      <if test="billId != null" >
+        bill_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="dispatchNo != null" >
+        #{dispatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="storageId != null" >
+        #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="dispatchor != null" >
+        #{dispatchor,jdbcType=BIGINT},
+      </if>
+      <if test="completeTime != null" >
+        #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ordersTime != null" >
+        #{ordersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="billId != null" >
+        #{billId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.har.unmanned.mfront.model.DispatchExample" resultType="java.lang.Integer" >
+    select count(*) from dispatch
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update dispatch
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.typeId != null" >
+        type_id = #{record.typeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dispatchNo != null" >
+        dispatch_no = #{record.dispatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId,jdbcType=BIGINT},
+      </if>
+      <if test="record.storageId != null" >
+        storage_id = #{record.storageId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dispatchor != null" >
+        dispatchor = #{record.dispatchor,jdbcType=BIGINT},
+      </if>
+      <if test="record.completeTime != null" >
+        complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ordersTime != null" >
+        orders_time = #{record.ordersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.billId != null" >
+        bill_id = #{record.billId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update dispatch
+    set id = #{record.id,jdbcType=BIGINT},
+      type_id = #{record.typeId,jdbcType=BIGINT},
+      dispatch_no = #{record.dispatchNo,jdbcType=VARCHAR},
+      shop_id = #{record.shopId,jdbcType=BIGINT},
+      storage_id = #{record.storageId,jdbcType=BIGINT},
+      dispatchor = #{record.dispatchor,jdbcType=BIGINT},
+      complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+      orders_time = #{record.ordersTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `status` = #{record.status,jdbcType=INTEGER},
+      bill_id = #{record.billId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.har.unmanned.mfront.model.Dispatch" >
+    update dispatch
+    <set >
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="dispatchNo != null" >
+        dispatch_no = #{dispatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="storageId != null" >
+        storage_id = #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="dispatchor != null" >
+        dispatchor = #{dispatchor,jdbcType=BIGINT},
+      </if>
+      <if test="completeTime != null" >
+        complete_time = #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ordersTime != null" >
+        orders_time = #{ordersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="billId != null" >
+        bill_id = #{billId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.har.unmanned.mfront.model.Dispatch" >
+    update dispatch
+    set type_id = #{typeId,jdbcType=BIGINT},
+      dispatch_no = #{dispatchNo,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      storage_id = #{storageId,jdbcType=BIGINT},
+      dispatchor = #{dispatchor,jdbcType=BIGINT},
+      complete_time = #{completeTime,jdbcType=TIMESTAMP},
+      orders_time = #{ordersTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      bill_id = #{billId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
