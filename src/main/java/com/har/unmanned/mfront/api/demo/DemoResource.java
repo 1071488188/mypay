@@ -14,7 +14,7 @@ public interface DemoResource {
      * @api {post} /api/v1/demo/test 1.api Demo测试
      * @apiVersion 1.0.0
      * @apiName Demo api Demo测试
-     * @apiGroup Demo
+     * @apiGroup Demo 测试
      * @apiPermission none
      *
      * @apiDescription Demo测试

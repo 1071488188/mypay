@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.StorageBillMapper" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.StorageBill" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="BIGINT" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="storage_id" property="storageId" jdbcType="BIGINT" />
+    <result column="dispatchor" property="dispatchor" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, bill_type, supplier_id, bill_no, amount, `status`, creator, create_time, auditor, 
+    audit_time, storage_id, dispatchor
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.StorageBillExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from storage_bill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from storage_bill
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from storage_bill
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.har.unmanned.mfront.model.StorageBillExample" >
+    delete from storage_bill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.har.unmanned.mfront.model.StorageBill" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into storage_bill (bill_type, supplier_id, bill_no, 
+      amount, `status`, creator, 
+      create_time, auditor, audit_time, 
+      storage_id, dispatchor)
+    values (#{billType,jdbcType=INTEGER}, #{supplierId,jdbcType=BIGINT}, #{billNo,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{creator,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=BIGINT}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{storageId,jdbcType=BIGINT}, #{dispatchor,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.StorageBill" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into storage_bill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="storageId != null" >
+        storage_id,
+      </if>
+      <if test="dispatchor != null" >
+        dispatchor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="storageId != null" >
+        #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="dispatchor != null" >
+        #{dispatchor,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.har.unmanned.mfront.model.StorageBillExample" resultType="java.lang.Integer" >
+    select count(*) from storage_bill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update storage_bill
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.billType != null" >
+        bill_type = #{record.billType,jdbcType=INTEGER},
+      </if>
+      <if test="record.supplierId != null" >
+        supplier_id = #{record.supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="record.billNo != null" >
+        bill_no = #{record.billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.auditor != null" >
+        auditor = #{record.auditor,jdbcType=BIGINT},
+      </if>
+      <if test="record.auditTime != null" >
+        audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.storageId != null" >
+        storage_id = #{record.storageId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dispatchor != null" >
+        dispatchor = #{record.dispatchor,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update storage_bill
+    set ID = #{record.id,jdbcType=BIGINT},
+      bill_type = #{record.billType,jdbcType=INTEGER},
+      supplier_id = #{record.supplierId,jdbcType=BIGINT},
+      bill_no = #{record.billNo,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=INTEGER},
+      `status` = #{record.status,jdbcType=INTEGER},
+      creator = #{record.creator,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      auditor = #{record.auditor,jdbcType=BIGINT},
+      audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      storage_id = #{record.storageId,jdbcType=BIGINT},
+      dispatchor = #{record.dispatchor,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.har.unmanned.mfront.model.StorageBill" >
+    update storage_bill
+    <set >
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=BIGINT},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="storageId != null" >
+        storage_id = #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="dispatchor != null" >
+        dispatchor = #{dispatchor,jdbcType=BIGINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.har.unmanned.mfront.model.StorageBill" >
+    update storage_bill
+    set bill_type = #{billType,jdbcType=INTEGER},
+      supplier_id = #{supplierId,jdbcType=BIGINT},
+      bill_no = #{billNo,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=BIGINT},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      storage_id = #{storageId,jdbcType=BIGINT},
+      dispatchor = #{dispatchor,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

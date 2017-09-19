@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.ShopStockMapper" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.ShopStock" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="initial_quantity" property="initialQuantity" jdbcType="INTEGER" />
+    <result column="initial_time" property="initialTime" jdbcType="TIMESTAMP" />
+    <result column="layer" property="layer" jdbcType="INTEGER" />
+    <result column="dispatch_quantity" property="dispatchQuantity" jdbcType="INTEGER" />
+    <result column="min_quantity" property="minQuantity" jdbcType="INTEGER" />
+    <result column="shop_base_quantity" property="shopBaseQuantity" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="template_id" property="templateId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, shop_id, goods_id, quantity, initial_quantity, initial_time, layer, dispatch_quantity, 
+    min_quantity, shop_base_quantity, `status`, template_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.ShopStockExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from shop_stock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop_stock
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from shop_stock
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.har.unmanned.mfront.model.ShopStockExample" >
+    delete from shop_stock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.har.unmanned.mfront.model.ShopStock" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shop_stock (shop_id, goods_id, quantity, 
+      initial_quantity, initial_time, layer, 
+      dispatch_quantity, min_quantity, shop_base_quantity, 
+      `status`, template_id)
+    values (#{shopId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{quantity,jdbcType=INTEGER}, 
+      #{initialQuantity,jdbcType=INTEGER}, #{initialTime,jdbcType=TIMESTAMP}, #{layer,jdbcType=INTEGER}, 
+      #{dispatchQuantity,jdbcType=INTEGER}, #{minQuantity,jdbcType=INTEGER}, #{shopBaseQuantity,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{templateId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.ShopStock" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shop_stock
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="initialQuantity != null" >
+        initial_quantity,
+      </if>
+      <if test="initialTime != null" >
+        initial_time,
+      </if>
+      <if test="layer != null" >
+        layer,
+      </if>
+      <if test="dispatchQuantity != null" >
+        dispatch_quantity,
+      </if>
+      <if test="minQuantity != null" >
+        min_quantity,
+      </if>
+      <if test="shopBaseQuantity != null" >
+        shop_base_quantity,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+      <if test="templateId != null" >
+        template_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="initialQuantity != null" >
+        #{initialQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="initialTime != null" >
+        #{initialTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="layer != null" >
+        #{layer,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchQuantity != null" >
+        #{dispatchQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="minQuantity != null" >
+        #{minQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="shopBaseQuantity != null" >
+        #{shopBaseQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.har.unmanned.mfront.model.ShopStockExample" resultType="java.lang.Integer" >
+    select count(*) from shop_stock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update shop_stock
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId,jdbcType=BIGINT},
+      </if>
+      <if test="record.goodsId != null" >
+        goods_id = #{record.goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="record.quantity != null" >
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.initialQuantity != null" >
+        initial_quantity = #{record.initialQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.initialTime != null" >
+        initial_time = #{record.initialTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.layer != null" >
+        layer = #{record.layer,jdbcType=INTEGER},
+      </if>
+      <if test="record.dispatchQuantity != null" >
+        dispatch_quantity = #{record.dispatchQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.minQuantity != null" >
+        min_quantity = #{record.minQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopBaseQuantity != null" >
+        shop_base_quantity = #{record.shopBaseQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.templateId != null" >
+        template_id = #{record.templateId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update shop_stock
+    set id = #{record.id,jdbcType=BIGINT},
+      shop_id = #{record.shopId,jdbcType=BIGINT},
+      goods_id = #{record.goodsId,jdbcType=BIGINT},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      initial_quantity = #{record.initialQuantity,jdbcType=INTEGER},
+      initial_time = #{record.initialTime,jdbcType=TIMESTAMP},
+      layer = #{record.layer,jdbcType=INTEGER},
+      dispatch_quantity = #{record.dispatchQuantity,jdbcType=INTEGER},
+      min_quantity = #{record.minQuantity,jdbcType=INTEGER},
+      shop_base_quantity = #{record.shopBaseQuantity,jdbcType=INTEGER},
+      `status` = #{record.status,jdbcType=INTEGER},
+      template_id = #{record.templateId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.har.unmanned.mfront.model.ShopStock" >
+    update shop_stock
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="initialQuantity != null" >
+        initial_quantity = #{initialQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="initialTime != null" >
+        initial_time = #{initialTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="layer != null" >
+        layer = #{layer,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchQuantity != null" >
+        dispatch_quantity = #{dispatchQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="minQuantity != null" >
+        min_quantity = #{minQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="shopBaseQuantity != null" >
+        shop_base_quantity = #{shopBaseQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="templateId != null" >
+        template_id = #{templateId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.har.unmanned.mfront.model.ShopStock" >
+    update shop_stock
+    set shop_id = #{shopId,jdbcType=BIGINT},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      quantity = #{quantity,jdbcType=INTEGER},
+      initial_quantity = #{initialQuantity,jdbcType=INTEGER},
+      initial_time = #{initialTime,jdbcType=TIMESTAMP},
+      layer = #{layer,jdbcType=INTEGER},
+      dispatch_quantity = #{dispatchQuantity,jdbcType=INTEGER},
+      min_quantity = #{minQuantity,jdbcType=INTEGER},
+      shop_base_quantity = #{shopBaseQuantity,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      template_id = #{templateId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

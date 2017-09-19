@@ -31,7 +31,6 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
     String clientSecret;
     @Value("${client.APPID}")
     String APPID;
-
     @Autowired
     WxAuthUtil wxAuthUtil;
 
@@ -68,6 +67,10 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
             }
             if (expValue == 0) {
                 log.error("检查Cookie过期，请重新授权");
+                throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
+            }
+            if(CheckUtil.isNull(openId)){
+                log.error("未获取到openid");
                 throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
             }
         } else {

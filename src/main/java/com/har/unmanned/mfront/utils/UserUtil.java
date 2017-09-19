@@ -3,12 +3,14 @@ package com.har.unmanned.mfront.utils;
 
 import com.har.unmanned.mfront.config.Constants;
 import com.har.unmanned.mfront.config.ErrorCode;
+import com.har.unmanned.mfront.dao.extend.ShopWechatMapperExtend;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.ShopWechat;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,7 +28,8 @@ public class UserUtil {
 
     @Value("${client.client-secret}")
     String key;
-
+    @Autowired
+    ShopWechatMapperExtend shopWechatMapperExtend;
     /***
      * 从cookie中获取用户信息
      * @return 授权登录后的用户信息
@@ -50,6 +53,11 @@ public class UserUtil {
                         wxUser.setOpenid((String) claims.get(key));
                         break;
                     }
+                }
+                wxUser=shopWechatMapperExtend.selectByOpenId(wxUser.getOpenid());
+                if(CheckUtil.isNull(wxUser)){
+                    log.info("获取用户信息失败，未查询到用户信息");
+                    throw new ApiBizException(ErrorCode.E00000006.CODE,ErrorCode.E00000006.MSG, cookieStr);
                 }
             } else {
                 log.info("获取用户信息失败，用户未授权");
