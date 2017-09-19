@@ -2,9 +2,9 @@ package com.har.unmanned.mfront.api.demo;
 
 import com.alibaba.fastjson.JSONObject;
 
-public interface WxShopResource {
+public interface WxUserShopResource {
     /**
-     * @api {get} /api/v1/wxShop 1.微商城首页
+     * @api {get} /api/v1/wxUserShop 1.微商城首页
      * @apiVersion 1.0.0
      * @apiName wxShop
      * @apiGroup wxShop
@@ -81,4 +81,22 @@ public interface WxShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品的购买数量
      * */
     JSONObject buyRecord(JSONObject params);
+
+    /**
+     * @api {get} /api/v1/wxShop/userInfo 4.用户信息
+     * @apiVersion 1.0.0
+     * @apiName userInfo
+     * @apiGroup wxShop
+     * @apiPermission none
+     *
+     * @apiDescription 用户信息
+     *
+     * @apiSuccess (200) {String} RespCode      响应编码，8位
+     * @apiSuccess (200) {String} RespDesc      响应描述
+     * @apiSuccess (200) {Object} Data			响应数据
+     * @apiSuccess (200) {Object} Data.wxUser	授权的微信用户
+     * @apiSuccess (200) {String} Data.wxUser.name	用户昵称
+     * @apiSuccess (200) {String} Data.wxUser.headimgUrl 用户头像
+     * */
+    JSONObject userInfo(JSONObject params);
 }
