@@ -57,7 +57,7 @@ public class UserUtil {
                 wxUser=shopWechatMapperExtend.selectByOpenId(wxUser.getOpenid());
                 if(CheckUtil.isNull(wxUser)){
                     log.info("获取用户信息失败，未查询到用户信息");
-                    throw new ApiBizException(ErrorCode.E00000001.CODE,"获取用户信息失败", cookieStr);
+                    throw new ApiBizException(ErrorCode.E00000006.CODE,ErrorCode.E00000006.MSG, cookieStr);
                 }
             } else {
                 log.info("获取用户信息失败，用户未授权");
