@@ -9,6 +9,8 @@ public class ShopWechat implements Serializable {
 
     private String openid;
 
+    private String phone;
+
     private String name;
 
     private Date focusTime;
@@ -24,6 +26,10 @@ public class ShopWechat implements Serializable {
     private Integer sex;
 
     private String ip;
+
+    private Long userId;
+
+    private Integer role;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,6 +47,14 @@ public class ShopWechat implements Serializable {
 
     public void setOpenid(String openid) {
         this.openid = openid == null ? null : openid.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
     }
 
     public String getName() {
@@ -107,6 +121,22 @@ public class ShopWechat implements Serializable {
         this.ip = ip == null ? null : ip.trim();
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -115,6 +145,7 @@ public class ShopWechat implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", openid=").append(openid);
+        sb.append(", phone=").append(phone);
         sb.append(", name=").append(name);
         sb.append(", focusTime=").append(focusTime);
         sb.append(", location=").append(location);
@@ -123,6 +154,8 @@ public class ShopWechat implements Serializable {
         sb.append(", headimgUrl=").append(headimgUrl);
         sb.append(", sex=").append(sex);
         sb.append(", ip=").append(ip);
+        sb.append(", userId=").append(userId);
+        sb.append(", role=").append(role);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
