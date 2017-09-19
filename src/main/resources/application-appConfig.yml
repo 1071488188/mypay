@@ -11,3 +11,7 @@ har:
       domain: http://192.168.70.7:8082
       projectName: /har-unmanned-mfront
       host: ${har.server.front.domain}${har.server.front.projectName}
+  frontProxy:   #老前置机配置
+    url:  http://119.6.202.172:8083/HARFrontProxy
+    appId: 10030
+    publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOTHV3vx+y9y5UudlcSuikglI+1yBVQg3a4wfS47dl01bbS1Vt6Kw98eOezM2B6Gqf3PqdVZmr5coc27zoB+KclAlURRLuDAlp06VmgnoG+aBrlH2kMFBrI9wI3FWO+z3I5Zq3CbFSimL22pINd9AYvzhw0h12CVfakVZv8UkAnQIDAQAB

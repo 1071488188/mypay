@@ -1,6 +1,7 @@
 package com.har.unmanned.mfront.api.dispatch;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 配送中心
@@ -18,6 +19,8 @@ public interface DispatchResource {
      * @apiPermission none
      * @apiDescription 配送中心列表
      * @apiParam {Number} status[] 	状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）
+     * @apiParam {Number} page=1 当前页数
+     * @apiParam {Number} pageSize=10 每页显示条数
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object[]} Data			响应数据
@@ -31,7 +34,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} Data.carrierNote.spec         商品规格
      * @apiSuccess (200) {Number} Data.carrierNote.quantity     商品数量
      */
-    JSONObject dispatchList(JSONObject params);
+    JSONObject dispatchList(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) throws Exception;
 
     /**
      * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
@@ -45,7 +48,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
-    JSONObject updateDispatchStatus(JSONObject params);
+    JSONObject updateDispatchStatus(JSONObject params)throws Exception;
 
     /**
      * @api {get} /api/v1/dispatch/replenishmentList 3.api 补货列表
@@ -65,7 +68,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} Data.layer.goodsPicture   商品图片路径
      * @apiSuccess (200) {Number} Data.layer.goodsId        商品ID
      */
-    JSONObject replenishmentList(JSONObject params);
+    JSONObject replenishmentList(JSONObject params)throws Exception;
 
     /**
      * @api {post} /api/v1/dispatch/confirmReplenishment 4.api 确认补货
@@ -81,5 +84,5 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
-    JSONObject confirmReplenishment(JSONObject params);
+    JSONObject confirmReplenishment(JSONObject params)throws Exception;
 }
