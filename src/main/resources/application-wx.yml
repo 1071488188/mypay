@@ -1,0 +1,27 @@
+wx:
+  auth:
+    maxAge: 86400 #授权信息保留时间(默认24小时)
+    authPath: https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wx.auth.appId}&redirect_uri=${wx.auth.wxAuthCallBack}&response_type=code&scope={0}&state={1}
+    authAccessTokenUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wx.auth.appId}&secret=${wx.auth.secret}&code={0}&grant_type=authorization_code
+    authRefreshTokenUrl: https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=${wx.auth.appId}&refresh_token={0}&grant_type=refresh_token
+    authCheckAccessTokenUrl: https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang=zh_CN
+    wxAuthCallBack: ${har.server.front.host}/api/v1/wxAuth/wxAuthCallBack
+#    paternerKey: daeb1993ddee0822edcbeeffa35dedcf
+#    mch_id: 1303699301
+    appId: wx458c425cd30d32f3
+    secret: 3f9333742b8e4e2024cfe1f65660f71b
+#    appId: wx6b09d460cd913b96
+#    secret: 809636152e5f8cec63e21d5981e0d2f8
+    interceptor:
+      excluded: "/**/wxAuthCallBack" #拦截器排除地址
+  token: 
+    tokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.auth.appId}&secret=${wx.auth.secret}
+  template:
+    subscribe: #订阅通知模板
+      templateId: uM0aXfqWC8lpDNIXIfSf6NUcwcoVKk9jVLvu2ic_hkw
+      color: 173177 #字体颜色不带井号
+      detailsUrl: ${har.server.web.host}/#/subscription #详情url
+    push: #推送通知模板
+      templateId: bxB6fgCaj9ytvmhmrzLm1Rw8xYREh9tMPMkNhlpFOmg
+      color: 173177 #字体颜色不带井号
+      detailsUrl: ${har.server.web.host}/#/myattention #详情url
