@@ -1,6 +1,8 @@
-package com.har.unmanned.mfront.api.demo;
+package com.har.unmanned.mfront.api.wxUser;
 
 import com.alibaba.fastjson.JSONObject;
+import com.har.unmanned.mfront.exception.ApiBizException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface WxUserShopResource {
     /**
@@ -34,10 +36,10 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品库存数量
      * */
-    JSONObject wxShop(JSONObject params);
+    JSONObject wxUserShop(@RequestParam(value = "shopCode") String shopCode) throws ApiBizException;
 
     /**
-     * @api {post} /api/v1/wxShop/submitOrder 2.提交订单
+     * @api {post} /api/v1/wxUserShop/submitOrder 2.提交订单
      * @apiVersion 1.0.0
      * @apiName submitOrder
      * @apiGroup wxShop
@@ -46,6 +48,10 @@ public interface WxUserShopResource {
      * @apiDescription 用户购买商品, 提交订单
      *
      * @apiParam {String} shopCode 货架编号
+     * @apiParam {String} location 地理位置信息
+     * @apiParam {Number} longitude 经度
+     * @apiParam {Number} latitude 纬度
+     * @apiParam {Object} shopCode 货架编号
      * @apiParam {Object[]} goodsList 	所购买的商品的集合
      * @apiParam {String} goodsList.id 	商品id
      * @apiParam {Number} goodsList.num 商品的个数
@@ -56,10 +62,10 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} Data.orderNo  订单号
      * @apiSuccess (200) {String} Data.singData	支付签名数据
      * */
-    JSONObject submitOrder(JSONObject params);
+    JSONObject submitOrder(JSONObject params) throws ApiBizException;
 
     /**
-     * @api {get} /api/v1/wxShop/buyRecord 3.购买记录
+     * @api {get} /api/v1/wxUserShop/buyRecord 3.购买记录
      * @apiVersion 1.0.0
      * @apiName buyRecord
      * @apiGroup wxShop
@@ -80,10 +86,10 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品的购买数量
      * */
-    JSONObject buyRecord(JSONObject params);
+    JSONObject buyRecord();
 
     /**
-     * @api {get} /api/v1/wxShop/userInfo 4.用户信息
+     * @api {get} /api/v1/wxUserShop/userInfo 4.用户信息
      * @apiVersion 1.0.0
      * @apiName userInfo
      * @apiGroup wxShop
@@ -94,9 +100,9 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} RespCode      响应编码，8位
      * @apiSuccess (200) {String} RespDesc      响应描述
      * @apiSuccess (200) {Object} Data			响应数据
-     * @apiSuccess (200) {Object} Data.wxUser	授权的微信用户
+     * @apiSuccess (200) {Object} Data.wxUser	授权的微信用户基本信息
      * @apiSuccess (200) {String} Data.wxUser.name	用户昵称
      * @apiSuccess (200) {String} Data.wxUser.headimgUrl 用户头像
      * */
-    JSONObject userInfo(JSONObject params);
+    JSONObject userInfo();
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.extend.ShopWechatMapperExtend" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.ShopWechatDomain" >
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="focus_time" jdbcType="TIMESTAMP" property="focusTime" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+    <result column="headimg_url" jdbcType="VARCHAR" property="headimgUrl" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="role" jdbcType="INTEGER" property="role" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     id, openid, phone, `name`, focus_time, `location`, longitude, latitude, headimg_url,
+    sex, ip, user_id, `role`
+  </sql>
+  <!--根据openid查询用户信息-->
+  <select id="selectByOpenId" resultMap="BaseResultMap" parameterType="java.lang.String">
+      select
+    <include refid="Base_Column_List" />
+    from shop_wechat where openid=#{openid}
+    order by id asc limit 1
+  </select>
+
+  <select id="selectGoodsInfo" resultType="com.har.unmanned.mfront.model.extend.CodeGoodsDomain">
+    SELECT
+    cg.classify_id classifyId,cg.`name`,cg.spec,cg.price,cg.store_unit storeUnit,cg.shop_unit shopUnit,cg.ratio,cg.layer,
+    cg.create_time createTime,cg.creator,cg.update_time updateTime,cg.updator,cg.`status`,cg.image,cg.id, ss.quantity
+    FROM shop_stock ss
+    LEFT JOIN code_goods cg ON ss.goods_id = cg.id
+    WHERE ss.shop_id = #{shopId}
+    AND ss.`status` = 0
+    AND cg.`status` = 0
+    AND cg.id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+  <select id="buyRecordList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.CodeGoodsDomain">
+
+  </select>
+</mapper>

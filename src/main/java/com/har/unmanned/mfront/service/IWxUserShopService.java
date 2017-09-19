@@ -1,6 +1,7 @@
 package com.har.unmanned.mfront.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.har.unmanned.mfront.exception.ApiBizException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,11 +21,38 @@ public abstract class IWxUserShopService {
      * @param param
      * @return
      */
-    public abstract JSONObject selectGoodsList(JSONObject param);
+    public abstract JSONObject selectGoodsList(String param) throws ApiBizException;
     /**
      * 提交订单
      * @param param
      * @return
      */
-    public abstract JSONObject submitOrder(JSONObject param);
+    public abstract JSONObject submitOrder(JSONObject param) throws ApiBizException;
+
+    /**
+     * 支付订单
+     * @param param
+     * @return
+     */
+    public abstract JSONObject payOrder(JSONObject param);
+
+    /**
+     * 微信回调
+     * @param param
+     * @return
+     */
+    public abstract JSONObject callBack(JSONObject param);
+
+    /**
+     * 用户购买记录
+     * @return
+     */
+    public abstract JSONObject buyRecord();
+
+    /**
+     * 用户的一些基本信息
+     * @return
+     */
+    public abstract JSONObject userInfo();
+
 }
