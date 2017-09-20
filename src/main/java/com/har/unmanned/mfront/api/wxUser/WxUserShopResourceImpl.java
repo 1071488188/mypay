@@ -28,17 +28,17 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
     private IWxUserShopService wxUserShopService;
     /**
      * 用户首页
-     * @param shopCode
+     * @param inputParameter
      * @return
      */
     @Override
     @GetMapping
-    public JSONObject wxUserShop(@RequestParam(value = "shopCode") String shopCode) throws ApiBizException {
-        log.info("[wxShop]用户访问首页传入数据:" + shopCode);
-        LogHelper.save(LogType.RECEIVE, "[submitOrder]用户访问首页_开始", shopCode);
+    public JSONObject wxUserShop(InputParameter inputParameter) throws ApiBizException {
+        log.info("[wxShop]用户访问首页传入数据:" + inputParameter);
+        LogHelper.save(LogType.RECEIVE, "[submitOrder]用户访问首页_开始", inputParameter);
         RespMessage respMessage = new RespMessage();
         // 返回数据
-        JSONObject respJson = wxUserShopService.selectGoodsList(shopCode);
+        JSONObject respJson = wxUserShopService.selectGoodsList(inputParameter.getShopCode());
         LogHelper.save(LogType.RESPONSE, "[submitOrder]用户访问首页_结束", respJson);
         log.info("[wxShop]用户访问首页响应数据:" + respJson);
         respMessage.setRespCode(ErrorCode.E00000000.CODE);
@@ -54,16 +54,10 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @PostMapping("/submitOrder")
-    public JSONObject submitOrder(JSONObject params) throws ApiBizException {
+    public JSONObject submitOrder(InputParameter params) throws ApiBizException {
         log.info("[submitOrder]用户提交订单传入数据:" + params);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户提交订单_开始", params);
         RespMessage respMessage = new RespMessage();
-        if (CheckUtil.isNull(params.getString("shopCode"))
-                || CheckUtil.isNull(params.getJSONArray("goodsList"))) {
-            log.info("提交订单请求参数不全" + params);
-            LogHelper.save(LogType.RECEIVE, "提交订单请求参数不全", params);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, "提交订单请求参数不全", params);
-        }
         // 返回数据
         JSONObject object = wxUserShopService.submitOrder(params);
         log.info("提交订单返回的参数:" + object);

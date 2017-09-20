@@ -1,38 +1,35 @@
-package com.har.unmanned.mfront.api.administrator;
+package com.har.unmanned.mfront.api.wxUser;
 
-import com.har.unmanned.mfront.api.administrator.ValidGroup.BindManagerGroup;
-import com.har.unmanned.mfront.api.administrator.ValidGroup.CloseAnAccountGroup;
+import com.alibaba.fastjson.JSONArray;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.PageGroup;
-import com.har.unmanned.mfront.api.administrator.ValidGroup.WithdrawDepositGroup;
+import com.har.unmanned.mfront.api.wxUser.validGroup.IndexGroup;
+import com.har.unmanned.mfront.api.wxUser.validGroup.OrderGroup;
 import lombok.Data;
 
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 
 /**
- * 管理员入参实体
- * Created by jiang on 2017/9/19.
+ * 微信用户入参实体
+ * Created by cc on 2017/9/19.
  */
 @Data
 public class InputParameter {
-    @NotNull(message = "提现金额不能为空!", groups = WithdrawDepositGroup.class)
-    @Digits(fraction = 2, integer = 10, message = "请输入提现正确金额!", groups = WithdrawDepositGroup.class)
-    @Min(value = 2, message = "提现金额必须大于等于10!", groups = WithdrawDepositGroup.class)
-    private String reflectTheAmountOf;//提现金额
-    @NotNull(message = "请输入手机号！", groups = BindManagerGroup.class)
-    @Pattern(regexp = "^[0-9]{11}$", message = "请输入正确手机号！", groups = BindManagerGroup.class)
-    private String cellPhoneNumber;//手机号
-    @NotNull(message = "请输入验证码！", groups = BindManagerGroup.class)
-    @Pattern(regexp = "^[0-9]{6}$", message = "请输入正确验证码！", groups = BindManagerGroup.class)
-    private String verificationCode;//验证码
+    @NotNull(message = "货架编号不能为空!", groups = {IndexGroup.class, OrderGroup.class})
+    private String shopCode;
+
     @NotNull(message = "页码不能为空!", groups = PageGroup.class)
     @Min(value = 1, message = "页码输入错误", groups = PageGroup.class)
-    private Integer page;//页码
+    private Integer page;
     @NotNull(message = "每页显示条数不能为空!", groups = PageGroup.class)
     @Min(value = 1, message = "每页显示条数错误", groups = PageGroup.class)
-    private Integer pageSize;//每页显示条数
-    @NotNull(message = "参数不能为空!", groups = CloseAnAccountGroup.class)
-    private String billingId;//结算清单id
+    private Integer pageSize;
+
+    @NotNull(message = "所选商品不能为空!", groups = OrderGroup.class)
+    private JSONArray goodsList;
+
+    private String location;
+    private BigDecimal longitude;
+    private BigDecimal latitude;
 }

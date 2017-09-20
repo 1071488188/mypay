@@ -8,8 +8,8 @@ public interface WxUserShopResource {
     /**
      * @api {get} /api/v1/wxUserShop 1.微商城首页
      * @apiVersion 1.0.0
-     * @apiName wxShop
-     * @apiGroup wxShop
+     * @apiName wxUserShop
+     * @apiGroup wxUserShop
      * @apiPermission none
      *
      * @apiDescription 普通用户进入微商城首页
@@ -36,13 +36,13 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品库存数量
      * */
-    JSONObject wxUserShop(@RequestParam(value = "shopCode") String shopCode) throws ApiBizException;
+    JSONObject wxUserShop(InputParameter inputParameter) throws ApiBizException;
 
     /**
      * @api {post} /api/v1/wxUserShop/submitOrder 2.提交订单
      * @apiVersion 1.0.0
      * @apiName submitOrder
-     * @apiGroup wxShop
+     * @apiGroup wxUserShop
      * @apiPermission none
      *
      * @apiDescription 用户购买商品, 提交订单
@@ -51,7 +51,6 @@ public interface WxUserShopResource {
      * @apiParam {String} location 地理位置信息
      * @apiParam {Number} longitude 经度
      * @apiParam {Number} latitude 纬度
-     * @apiParam {Object} shopCode 货架编号
      * @apiParam {Object[]} goodsList 	所购买的商品的集合
      * @apiParam {String} goodsList.id 	商品id
      * @apiParam {Number} goodsList.num 商品的个数
@@ -62,13 +61,13 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} Data.orderNo  订单号
      * @apiSuccess (200) {String} Data.singData	支付签名数据
      * */
-    JSONObject submitOrder(JSONObject params) throws ApiBizException;
+    JSONObject submitOrder(InputParameter inputParameter) throws ApiBizException;
 
     /**
      * @api {get} /api/v1/wxUserShop/buyRecord 3.购买记录
      * @apiVersion 1.0.0
      * @apiName buyRecord
-     * @apiGroup wxShop
+     * @apiGroup wxUserShop
      * @apiPermission none
      *
      * @apiDescription 用户的消费记录
@@ -92,7 +91,7 @@ public interface WxUserShopResource {
      * @api {get} /api/v1/wxUserShop/userInfo 4.用户信息
      * @apiVersion 1.0.0
      * @apiName userInfo
-     * @apiGroup wxShop
+     * @apiGroup wxUserShop
      * @apiPermission none
      *
      * @apiDescription 用户信息

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
+import com.har.unmanned.mfront.api.wxUser.InputParameter;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.dao.ShopMapper;
 import com.har.unmanned.mfront.dao.ShopOrderItemMapper;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import scala.annotation.meta.param;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -60,14 +62,14 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public JSONObject submitOrder(JSONObject param) throws ApiBizException {
+	public JSONObject submitOrder(InputParameter param) throws ApiBizException {
 		log.info("service传入参数: " + param);
 		ShopWechat shopWechat = userUtil.userInfo();
 		log.info("获取到的授权用户信息: " + JSONObject.toJSONString(shopWechat));
 		/** 1. 防止重复提交订单 */
 		StringBuilder redisKey = new StringBuilder();
 		redisKey.append(shopWechat.getOpenid());
-		redisKey.append(",").append(param.getString("shopCode"));
+		redisKey.append(",").append(param.getShopCode());
 		boolean exists = redisService.isKeyExists(UNMANNED + redisKey.toString());
 		if (exists) {
 			log.info("提交订单重复请求:" + param);
@@ -79,18 +81,18 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 		/** 2. 获取货架信息 */
 		ShopExample shopExample = new ShopExample();
 		ShopExample.Criteria criteria = shopExample.createCriteria();
-		criteria.andShopCodeEqualTo(param.getString("shopCode"));
+		criteria.andShopCodeEqualTo(param.getShopCode());
 		List<Shop> shops = shopMapper.selectByExample(shopExample);
 		if (shops.isEmpty()) {
 			log.info("查询货架信息异常:" + param);
-			throw new ApiBizException(ErrorCode.E00000001.CODE, "查询货架信息异常", param.getString("shopCode"));
+			throw new ApiBizException(ErrorCode.E00000001.CODE, "查询货架信息异常", param.getShopCode());
 		}
 		Shop shop = shops.get(0);
 		log.info("获取到的货架信息:" + JSONObject.toJSONString(shop));
 
 
 		/** 3. 生成订单记录 */
-		JSONArray goodsList = param.getJSONArray("goodsList");
+		JSONArray goodsList = param.getGoodsList();
 		log.info("所传入的购买的商品信息的集合:" + goodsList);
 		List<Long> ids = new ArrayList();
 		JSONObject reqJson = new JSONObject(); // 优化请求中的商品id以及数量信息, 使商品id与数量一一对应, 类似于{'1':'3','9':'2'}
@@ -122,9 +124,9 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 		BigDecimal commission = ratio.divide(new BigDecimal(100)).multiply(new BigDecimal(totalMoney));
 		DecimalFormat format = new DecimalFormat("0");
 		shopOrder.setCommission(Integer.parseInt(format.format(commission))); // 单位(分)
-		shopOrder.setLocation(param.getString("location"));
-		shopOrder.setLatitude(param.getBigDecimal("latitude"));
-		shopOrder.setLongitude(param.getBigDecimal("longitude"));
+		shopOrder.setLocation(param.getLocation());
+		shopOrder.setLatitude(param.getLatitude());
+		shopOrder.setLongitude(param.getLongitude());
 		shopOrder.setStatus(0); //未支付
 		shopOrderMapper.insertSelective(shopOrder);
 		// 订单明细
@@ -165,6 +167,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 
 	@Override
 	public JSONObject userInfo() {
+		log.info("查询用户详情service");
 		return null;
 	}
 
