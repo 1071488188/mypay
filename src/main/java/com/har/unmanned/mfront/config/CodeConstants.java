@@ -31,4 +31,13 @@ public class CodeConstants {
 		/** 货架发送短信 */
 		public static final Integer  UNMANNED= 40;
 	}
+	/** 支付订单状态 */
+	public static interface OrderStatus {
+
+		/** 未支付 */
+		public static final Integer UNPAID= 0;
+
+		/** 已支付 */
+		public static final Integer SUCCESS= 1;
+	}
 }

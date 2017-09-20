@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.extend.ShopWechatQueryMapper" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.ShopOrderDomain" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="shopId" property="shopId" jdbcType="BIGINT" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+    <result column="orderTime" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="commission" property="commission" jdbcType="INTEGER" />
+    <result column="payNo" property="payNo" jdbcType="VARCHAR" />
+    <result column="payTime" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+
+    <!--扩展属性-->
+    <result column="payTimeString" property="payTimeString" jdbcType="VARCHAR" />
+    <collection property="items" ofType="com.har.unmanned.mfront.model.extend.ShopOrderItemDomain">
+      <id column="IID" property="id" jdbcType="BIGINT" />
+      <result column="orderId" property="orderId" jdbcType="BIGINT" />
+      <result column="goodsId" property="goodsId" jdbcType="BIGINT" />
+      <result column="ishopId" property="shopId" jdbcType="BIGINT" />
+      <result column="shopCode" property="shopCode" jdbcType="VARCHAR" />
+      <result column="quantity" property="quantity" jdbcType="INTEGER" />
+      <result column="price" property="price" jdbcType="INTEGER" />
+      <result column="iamount" property="amount" jdbcType="INTEGER" />
+      <result column="iorderTime" property="orderTime" jdbcType="TIMESTAMP" />
+      <!--扩展属性-->
+      <result column="iname" property="name" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  <select id="selectGoodsInfo" resultType="com.har.unmanned.mfront.model.extend.CodeGoodsDomain">
+    SELECT
+      cg.classify_id classifyId,cg.`name`,cg.spec,cg.price,cg.store_unit storeUnit,cg.shop_unit shopUnit,cg.ratio,cg.layer,
+      cg.create_time createTime,cg.creator,cg.update_time updateTime,cg.updator,cg.`status`,cg.image,cg.id, ss.quantity
+    FROM shop_stock ss
+    LEFT JOIN code_goods cg ON ss.goods_id = cg.id
+    WHERE ss.shop_id = #{shopId}
+    AND ss.`status` = 0
+    AND cg.`status` = 0
+    AND cg.id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+  <select id="selectBuyHistory" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+      so.shop_id shopId, so.openid,	so.`name`,	so.order_no orderNo, so.order_time orderTime,	so.amount,	so.commission, so.pay_no payNo,	so.pay_time payTime,
+      so.location,	so.longitude,	so.latitude, so.`status`, soi.order_id orderId,	soi.goods_id goodsId, DATE_FORMAT(so.pay_time,'%Y.%m.%d %H:%m:%s') payTimeString,
+      soi.shop_id ishopId, soi.shop_code shopCode,	soi.quantity,	soi.price,	soi.amount iamount,	soi.order_time iorderTime, so.ID, soi.ID IID, cg.`name` iname
+    FROM
+      shop_order so
+    LEFT JOIN shop_order_item soi ON so.ID = soi.order_id
+    LEFT JOIN code_goods cg ON soi.goods_id = cg.id
+    WHERE
+      so.openid = #{openId}
+    AND so.status = 1
+  </select>
+  <select id="selectShopGoodsList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
+    SELECT
+      ss.shop_id shopId, ss.goods_id goodsId, ss.quantity, ss.initial_quantity initialQuantity,	ss.initial_time initialTime, ss.layer, ss.dispatch_quantity dispatchQuantity,
+       ss.min_quantity minQuantity,ss.shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId
+    FROM
+      shop s
+    LEFT JOIN shop_stock ss ON s.id = ss.shop_id
+    LEFT JOIN code_goods cg ON ss.goods_id = cg.id
+    WHERE s.shop_code = #{shopCode}
+    AND cg.`status` = 0
+    ORDER BY ss.layer ASC
+  </select>
+  <select id="selectRecentlyBuyList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
+    SELECT
+      SUM(soi.quantity) totalNum, soi.goods_id goodsId, cg.`name`, ROUND(cg.price / 100,2) price, cg.image, ss.quantity, ss.layer
+    FROM shop_order so
+    LEFT JOIN shop_order_item soi ON so.ID = soi.order_id
+    LEFT JOIN code_goods cg ON soi.goods_id = cg.id
+    LEFT JOIN (SELECT * FROM shop_stock ss1 WHERE ss1.shop_id = #{shopId}) ss ON ss.goods_id = cg.id
+    WHERE so.openid = #{openId}
+    AND soi.shop_id = #{shopId}
+    AND so.`status` = 1
+    AND ss.`status` = 0
+    GROUP BY soi.goods_id
+    ORDER BY totalNum DESC
+    LIMIT 0,2
+  </select>
+</mapper>
