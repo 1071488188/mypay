@@ -22,7 +22,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data
      */
-    String bindManager(InputParameter inputParameter);
+    String bindManager(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {get} /api/v1/admin/expenseCalendar 2.api 消费记录
@@ -45,7 +45,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} Data.particulars.name           	昵称
      * @apiSuccess (200) {String} Data.particulars.theCumulative   累计消费
      */
-    String expenseCalendar(InputParameter inputParameter);
+    String expenseCalendar(InputParameter inputParameter)throws Exception;
 
     /**
      * @api {get} /api/v1/admin/settlementRecords 3.api 结算记录
@@ -69,7 +69,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} Data.commission		佣金已结算
      * @apiSuccess (200) {String} Data.status		结算状态2、已结算3、待结算
      */
-    String settlementRecords(InputParameter inputParameter);
+    String settlementRecords(InputParameter inputParameter)throws Exception;
 
     /**
      * @api {post} /api/v1/admin/closeAnAccount 4.api 结算
@@ -86,7 +86,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data
      */
-    String closeAnAccount(InputParameter inputParameter);
+    String closeAnAccount(InputParameter inputParameter)throws Exception;
 
     /**
      * @api {get} /api/v1/admin/balanceDetails 5.api 余额明细
@@ -107,7 +107,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} Data.typeZh		      明细名称
      * @apiSuccess (200) {String} Data.money		      金额
      */
-    String balanceDetails(InputParameter inputParameter);
+    String balanceDetails(InputParameter inputParameter)throws Exception;
 
     /**
      * @api {post} /api/v1/admin/withdrawDeposit 6.api 提现
@@ -124,5 +124,5 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data
      */
-    String withdrawDeposit(InputParameter inputParameter);
+    String withdrawDeposit(InputParameter inputParameter)throws Exception;
 }
