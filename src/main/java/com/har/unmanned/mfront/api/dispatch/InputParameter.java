@@ -1,7 +1,7 @@
 package com.har.unmanned.mfront.api.dispatch;
 
-import com.har.unmanned.mfront.api.dispatch.ValidGroup.PageGroup;
-import com.har.unmanned.mfront.api.dispatch.ValidGroup.ValidateCodeGroup;
+import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
+import com.har.unmanned.mfront.api.dispatch.validgroup.ValidateCodeGroup;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
