@@ -153,5 +153,13 @@ public class RandomUtils {
 	
 	public static void main(String[] args) {
 		System.out.println(generateString(15));
+		System.out.println(generateMixString(15));
+		System.out.println(generateLowerString(15));
+		System.out.println(generateUpperString(15));
+		System.out.println(generateZeroString(15));
+		System.out.println(toFixdLengthString(123, 15));
+		System.out.println(toFixdLengthString(123L, 15));
+		System.out.println("="+generateDigit(12));
+        System.err.println(generateNumberString(8));
 	}
 }
