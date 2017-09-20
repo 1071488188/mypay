@@ -1,9 +1,10 @@
 package com.har.unmanned.mfront.api.dispatch;
 
+import com.har.unmanned.mfront.api.dispatch.ValidGroup.PageGroup;
 import com.har.unmanned.mfront.api.dispatch.ValidGroup.ValidateCodeGroup;
-import com.har.unmanned.mfront.api.smsvalidate.ValidGroup.SendValidateGroup;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -19,5 +20,12 @@ public class InputParameter {
     @NotNull(message = "请输入验证码！", groups = ValidateCodeGroup.class)
     @Pattern(regexp = "^[0-9]{6}$", message = "请输入正确验证码！", groups = ValidateCodeGroup.class)
     private String validateCode;//验证码
-
+    @NotNull(message = "页码不能为空!", groups = PageGroup.class)
+    @Min(value = 1, message = "页码输入错误", groups = PageGroup.class)
+    private Integer page;//页码
+    @NotNull(message = "每页显示条数不能为空!", groups = PageGroup.class)
+    @Min(value = 1, message = "每页显示条数错误", groups = PageGroup.class)
+    private Integer pageSize;//每页显示条数
+    @NotNull(message = "配送状态不能为空!", groups = PageGroup.class)
+    private String status;//配送状态
 }

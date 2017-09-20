@@ -38,7 +38,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} Data.carrierNote.spec         商品规格
      * @apiSuccess (200) {Number} Data.carrierNote.quantity     商品数量
      */
-    JSONObject dispatchList(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "status") String status) throws Exception;
+    JSONObject dispatchList(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
