@@ -106,4 +106,11 @@ public class ErrorCode {
 
 		String MSG = "存在重复的订阅条件";
 	}
+
+	public interface E00000015 {
+
+		String CODE = "00000015";
+
+		String MSG = "权限不足";
+	}
 }
