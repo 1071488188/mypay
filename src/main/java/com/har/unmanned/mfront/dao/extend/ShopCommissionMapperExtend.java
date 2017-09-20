@@ -1,30 +1,27 @@
-package com.har.unmanned.mfront.dao;
+package com.har.unmanned.mfront.dao.extend;
 
-import com.har.unmanned.mfront.model.ShopCommission;
-import com.har.unmanned.mfront.model.ShopCommissionExample;
-import java.util.List;
+import com.har.unmanned.mfront.dao.ShopCommissionMapper;
+import com.har.unmanned.mfront.model.extend.ShopCommissionExtend;
 import org.apache.ibatis.annotations.Param;
 
-public interface ShopCommissionMapper {
-    int countByExample(ShopCommissionExample example);
+import java.util.List;
 
-    int deleteByExample(ShopCommissionExample example);
+/**
+ * 佣金结算清单扩展
+ */
+public interface ShopCommissionMapperExtend extends ShopCommissionMapper{
+    /**
+     * 查询网点佣金记录清单
+     * @param shopId
+     * @return
+     */
+    public List<ShopCommissionExtend> selectListByShopId(@Param("shopId") Long shopId);
 
-    int deleteByPrimaryKey(Long id);
-
-    int insert(ShopCommission record);
-
-    int insertSelective(ShopCommission record);
-
-    List<ShopCommission> selectByExample(ShopCommissionExample example);
-
-    ShopCommission selectByPrimaryKey(Long id);
-
-    int updateByExampleSelective(@Param("record") ShopCommission record, @Param("example") ShopCommissionExample example);
-
-    int updateByExample(@Param("record") ShopCommission record, @Param("example") ShopCommissionExample example);
-
-    int updateByPrimaryKeySelective(ShopCommission record);
-
-    int updateByPrimaryKey(ShopCommission record);
+    /**
+     * 查询该用户是否有当前结算清单
+     * @param id
+     * @param userId
+     * @return
+     */
+    public int countByUserIdAndId(@Param("id") Long id,@Param("userId") Long userId);
 }

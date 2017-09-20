@@ -1,5 +1,6 @@
 package com.har.unmanned.mfront.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.api.administrator.InputParameter;
 import com.har.unmanned.mfront.config.ErrorCode;
@@ -7,14 +8,18 @@ import com.har.unmanned.mfront.dao.ShopMapper;
 import com.har.unmanned.mfront.dao.ShopOrderMapper;
 import com.har.unmanned.mfront.dao.ShopWechatMapper;
 import com.har.unmanned.mfront.dao.SysUserMapper;
+import com.har.unmanned.mfront.dao.extend.ShopCommissionMapperExtend;
 import com.har.unmanned.mfront.dao.extend.ShopOrderMapperExtend;
 import com.har.unmanned.mfront.dao.extend.SysUserMapperExtend;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.*;
+import com.har.unmanned.mfront.model.extend.ShopCommissionExtend;
 import com.har.unmanned.mfront.model.extend.ShopOrderExtend;
 import com.har.unmanned.mfront.service.AdministratorService;
 import com.har.unmanned.mfront.utils.CheckUtil;
+import com.har.unmanned.mfront.utils.PageUtil;
 import com.har.unmanned.mfront.utils.UserUtil;
+import kafka.utils.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +46,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     ShopOrderMapper shopOrderMapper;
     @Autowired
     ShopOrderMapperExtend shopOrderMapperExtend;
+    @Autowired
+    ShopCommissionMapperExtend shopCommissionMapperExtend;
     private static int roleId=3;//网点管理员权限
     @Override
     public void verifyPermissions() throws Exception {
@@ -108,20 +115,61 @@ public class AdministratorServiceImpl implements AdministratorService {
         JSONObject jsonObject=new JSONObject();
         Integer page=inputParameter.getPage();
         Integer pageSize=inputParameter.getPageSize();
+        //1根据用户user_id查询所管理的网点
+        Shop shop = getShop();
+        log.info("当前用户网点查询结果{}",shop);
+        //2查询累计消费人数
+        int countByShopId=shopOrderMapperExtend.countByShopId(shop.getId());
+        jsonObject.put("theNumberOfConsumer",countByShopId);
+        log.info("查询累计消费人数{}",countByShopId);
+        //3查询列表
+        PageUtil.startPage(page, pageSize);
+        List<ShopOrderExtend> shopOrderExtendList=shopOrderMapperExtend.sumByShopId(shop.getId());
+        jsonObject.put("particulars",shopOrderExtendList);
+        log.info("查询列表{}",shopOrderExtendList);
+        return jsonObject;
+    }
+
+    @Override
+    public JSONArray settlementRecords(InputParameter inputParameter) throws Exception {
+        JSONArray jsonArray=new JSONArray();
+        Integer page=inputParameter.getPage();
+        Integer pageSize=inputParameter.getPageSize();
+        Shop shop = getShop();
+        //1根据用户user_id查询所管理的网点
+        log.info("当前用户网点查询结果{}",shop);
+        //2查询网点佣金记录列表
+        List<ShopCommissionExtend> shopCommissionExtendList=shopCommissionMapperExtend.selectListByShopId(shop.getId());
+        if(!CheckUtil.isNull(shopCommissionExtendList)&&shopCommissionExtendList.size()>0){
+            jsonArray.add(shopCommissionExtendList);
+        }
+        return jsonArray;
+    }
+
+    @Override
+    public void closeAnAccount(InputParameter inputParameter) throws Exception {
+        String billingId=inputParameter.getBillingId();
+        //获取当前用户信息
+        ShopWechat shopWechat= userUtil.userInfo();
+        verifyPermissions();//验证是否有权限
+        //1查询当前用户是否包含该清单
+        int count=shopCommissionMapperExtend.countByUserIdAndId(Long.parseLong(billingId),shopWechat.getUserId());
+        log.info("清单id{},查询当前用户是否包含清单结果{}",billingId,count);
+        if(count==0){
+        throw new ApiBizException(ErrorCode.E00000001.CODE,"无权执行该操作",inputParameter);
+        }
+
+    }
+
+    private Shop getShop() throws Exception {
         verifyPermissions();//验证是否有权限
         ShopWechat shopWechat=userUtil.userInfo();
         ShopExample shopExample=new ShopExample();
-        //1根据用户user_id查询所管理的网点
         ShopExample.Criteria criteria=shopExample.createCriteria();
         criteria.andUserIdEqualTo(shopWechat.getUserId());
         shopExample.setOrderByClause(" id asc");
         List<Shop> shopList=shopMapper.selectByExample(shopExample) ;
-        Shop shop=shopList.get(0);
-        //2查询累计消费人数
-        int countByShopId=shopOrderMapperExtend.countByShopId(shop.getId());
-        jsonObject.put("theNumberOfConsumer",countByShopId);
-
-        return null;
+        return shopList.get(0);
     }
 
     @Override

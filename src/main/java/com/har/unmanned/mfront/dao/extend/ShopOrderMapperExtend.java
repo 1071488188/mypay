@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 订单扩展
+ */
 public interface ShopOrderMapperExtend extends ShopOrderMapper{
     /**
      * 根据网点id统计所有消费人数

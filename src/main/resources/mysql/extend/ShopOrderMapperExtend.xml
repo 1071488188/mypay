@@ -27,7 +27,7 @@
   </select>
 
   <select id="sumByShopId" resultMap="BaseResultMap" parameterType="map">
-    SELECT sw.name,sw.headimg_url, SUM (so.amount) as amount  from shop_order so LEFT JOIN shop_wechat sw
+    SELECT sw.name,sw.headimg_url, SUM (so.amount)/100 as amount  from shop_order so LEFT JOIN shop_wechat sw
     ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY openid ORDER by amount desc
 
   </select>

@@ -455,7 +455,7 @@ define({ "api": [
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.commission",
+            "field": "Data.amount",
             "description": "<p>营业额</p>"
           },
           {
@@ -469,8 +469,15 @@ define({ "api": [
             "group": "200",
             "type": "String",
             "optional": false,
+            "field": "Data.commission",
+            "description": "<p>佣金已结算</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
             "field": "Data.status",
-            "description": "<p>结算状态2、已结算3、待结算</p>"
+            "description": "<p>结算状态0、待结算1、已结算</p>"
           }
         ]
       }
@@ -1044,6 +1051,476 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/smsValidate/sendValidate"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/wxUserShop/buyRecord",
+    "title": "3.api 购买记录",
+    "version": "1.0.0",
+    "name": "buyRecord",
+    "group": "wxUserShop",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>用户的消费记录</p>",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.dataList",
+            "description": "<p>响应集合</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.orderNo",
+            "description": "<p>订单号</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.amount",
+            "description": "<p>订单金额</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.payTimeString",
+            "description": "<p>消费时间(YYYY.MM.dd hh:mm:ss)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.dataList.goodsList",
+            "description": "<p>购买的商品集合</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.goodsList.name",
+            "description": "<p>商品名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.goodsList.image",
+            "description": "<p>商品图片</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.goodsList.price",
+            "description": "<p>商品单价(元)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.goodsList.quantity",
+            "description": "<p>商品的购买数量</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
+    "groupTitle": "wxUserShop",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop/buyRecord"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/wxUserShop/submitOrder",
+    "title": "2.api 提交订单",
+    "version": "1.0.0",
+    "name": "submitOrder",
+    "group": "wxUserShop",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>提交订单</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "shopCode",
+            "description": "<p>货架编号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "location",
+            "description": "<p>地理位置信息</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>经度</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>纬度</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object[]",
+            "optional": false,
+            "field": "goodsList",
+            "description": "<p>所购买的商品的集合</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "goodsList.goodsId",
+            "description": "<p>商品id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "goodsList.goodsNum",
+            "description": "<p>商品的个数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.orderNo",
+            "description": "<p>订单号</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.singData",
+            "description": "<p>支付签名数据</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
+    "groupTitle": "wxUserShop",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop/submitOrder"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/wxUserShop/userInfo",
+    "title": "4.api 用户信息",
+    "version": "1.0.0",
+    "name": "userInfo",
+    "group": "wxUserShop",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>用户基本信息</p>",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data.",
+            "description": "<p>授权的微信用户基本信息</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.name",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.headimgUrl",
+            "description": "<p>用户头像</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
+    "groupTitle": "wxUserShop",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop/userInfo"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/wxUserShop",
+    "title": "1.api 微商城首页",
+    "version": "1.0.0",
+    "name": "wxUserShop",
+    "group": "wxUserShop",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>微商城首页</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "shopCode",
+            "description": "<p>货架编号</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.shopCode",
+            "description": "<p>货架编号</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.recentPurchaseList",
+            "description": "<p>最近购买的集合(两个)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.recentPurchaseList.goodsId",
+            "description": "<p>商品id</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.recentPurchaseList.name",
+            "description": "<p>商品名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.recentPurchaseList.image",
+            "description": "<p>商品图片</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.recentPurchaseList.price",
+            "description": "<p>商品单价(元)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.recentPurchaseList.quantity",
+            "description": "<p>商品库存数量</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.recentPurchaseList.layer",
+            "description": "<p>商品摆放位置</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data.dataList",
+            "description": "<p>数据的集合, {'1':[], '2':[]}这种结构</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.layer",
+            "description": "<p>货架的层级(1, 2, 3, 4, 5)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Data.dataList.goodsList",
+            "description": "<p>每一层所对应的商品</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.goodsList.goodsId",
+            "description": "<p>商品id</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.goodsList.name",
+            "description": "<p>商品名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.goodsList.image",
+            "description": "<p>商品图片</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.goodsList.price",
+            "description": "<p>商品单价(元)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.goodsList.quantity",
+            "description": "<p>商品库存数量</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
+    "groupTitle": "wxUserShop",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop"
       }
     ]
   }

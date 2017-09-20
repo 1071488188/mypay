@@ -79,10 +79,10 @@ public interface AdministratorResource {
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.id
      * @apiSuccess (200) {String} Data.time		    时间
-     * @apiSuccess (200) {String} Data.commission		营业额
+     * @apiSuccess (200) {String} Data.amount		营业额
      * @apiSuccess (200) {String} Data.ratio		    当前返佣比例
      * @apiSuccess (200) {String} Data.commission		佣金已结算
-     * @apiSuccess (200) {String} Data.status		结算状态2、已结算3、待结算
+     * @apiSuccess (200) {String} Data.status		结算状态0、待结算1、已结算
      */
     String settlementRecords(InputParameter inputParameter)throws Exception;
 
