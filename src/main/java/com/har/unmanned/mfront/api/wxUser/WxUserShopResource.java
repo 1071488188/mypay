@@ -4,6 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
+/**
+ * 微商城
+ * @apiDefine wxUserShop 微商城
+ * @author cc
+ * @create 2017-09-20 15:36
+ **/
 public interface WxUserShopResource {
     /**
      * @api {get} /api/v1/wxUserShop 1.api 微商城首页

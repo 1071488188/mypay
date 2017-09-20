@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 
 @Service
@@ -35,7 +36,16 @@ public class WxPayServiceImpl extends WxPayService {
 
 	@Override
 	public Map<String, String> paymentOrderHbxWeb(String openid, String total_fee, String body, String out_trade_no, String wxCallBack, String ip) throws Exception {
-
+		Map param = new TreeMap();
+		param.put("appid", appid);
+		param.put("mch_id", mch_id);
+		param.put("body", body);
+		param.put("out_trade_no", out_trade_no);
+		param.put("total_fee", total_fee);
+		param.put("spbill_create_ip", appid);
+		param.put("appid", appid);
+		param.put("appid", appid);
+		param.put("appid", appid);
 		return null;
 	}
 
