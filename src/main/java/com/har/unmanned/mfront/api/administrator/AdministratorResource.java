@@ -2,19 +2,22 @@ package com.har.unmanned.mfront.api.administrator;
 
 /**
  * 管理员接口
- * @apiDefine Follow 用户关注
+ * @apiDefine admin 管理员接口
  * Created by jiang on 2017/9/19.
  */
 public interface AdministratorResource {
     /**
      * @api {post} /api/v1/admin/bindManager 1.api 绑定手机号
      * @apiVersion 1.0.0
-     * @apiName 绑定手机号
+     * @apiName bindManager
      * @apiGroup admin
      * @apiPermission none
+     *
      * @apiDescription 绑定手机号
+     *
      * @apiParam {String} cellPhoneNumber  手机号
      * @apiParam {String} verificationCode  验证码
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data
@@ -24,12 +27,15 @@ public interface AdministratorResource {
     /**
      * @api {get} /api/v1/admin/expenseCalendar 2.api 消费记录
      * @apiVersion 1.0.0
-     * @apiName 消费记录
+     * @apiName expenseCalendar
      * @apiGroup admin
      * @apiPermission none
+     *
      * @apiDescription 消费记录
+     *
      * @apiParam {String} page  页码
      * @apiParam {String} pageSize  每页显示条数
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
@@ -44,12 +50,15 @@ public interface AdministratorResource {
     /**
      * @api {get} /api/v1/admin/settlementRecords 3.api 结算记录
      * @apiVersion 1.0.0
-     * @apiName 结算记录
+     * @apiName settlementRecords
      * @apiGroup admin
      * @apiPermission none
+     *
      * @apiDescription 结算记录
+     *
      * @apiParam {String} page  页码
      * @apiParam {String} pageSize  每页显示条数
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
@@ -65,11 +74,14 @@ public interface AdministratorResource {
     /**
      * @api {post} /api/v1/admin/closeAnAccount 4.api 结算
      * @apiVersion 1.0.0
-     * @apiName 结算
+     * @apiName closeAnAccount
      * @apiGroup admin
      * @apiPermission none
+     *
      * @apiDescription 结算
+     *
      * @apiParam {String} billingId  结算记录id
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data
@@ -79,12 +91,15 @@ public interface AdministratorResource {
     /**
      * @api {get} /api/v1/admin/balanceDetails 5.api 余额明细
      * @apiVersion 1.0.0
-     * @apiName 余额明细
+     * @apiName balanceDetails
      * @apiGroup admin
      * @apiPermission none
+     *
      * @apiDescription 余额明细
+     *
      * @apiParam {String} page  页码
      * @apiParam {String} pageSize  每页显示条数
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object[]} Data			响应数据
@@ -97,11 +112,14 @@ public interface AdministratorResource {
     /**
      * @api {post} /api/v1/admin/withdrawDeposit 6.api 提现
      * @apiVersion 1.0.0
-     * @apiName 提现
+     * @apiName withdrawDeposit
      * @apiGroup admin
      * @apiPermission none
+     *
      * @apiDescription 提现
+     *
      * @apiParam {String} reflectTheAmountOf  提现金额
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data
