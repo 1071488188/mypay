@@ -48,99 +48,101 @@ public class AdministratorServiceImpl implements AdministratorService {
     ShopOrderMapperExtend shopOrderMapperExtend;
     @Autowired
     ShopCommissionMapperExtend shopCommissionMapperExtend;
-    private static int roleId=3;//网点管理员权限
+    private static int roleId = 3;//网点管理员权限
+
     @Override
     public void verifyPermissions() throws Exception {
         //获取当前用户信息
-        ShopWechat shopWechat= userUtil.userInfo();
-        String openid=shopWechat.getOpenid();
-        Long userId=shopWechat.getUserId();
-        if(CheckUtil.isNull(userId)){
-            throw new ApiBizException(ErrorCode.E00000001.CODE,"无权限操作",shopWechat);
+        ShopWechat shopWechat = userUtil.userInfo();
+        String openid = shopWechat.getOpenid();
+        Long userId = shopWechat.getUserId();
+        if (CheckUtil.isNull(userId)) {
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "无权限操作", shopWechat);
         }
         //判断用户是否为网点管理员
-       int count= sysUserMapperExtend.getuserRole(userId,roleId,null);
-        if(count==0){
-            throw new ApiBizException(ErrorCode.E00000001.CODE,"无权限操作",shopWechat);
+        int count = sysUserMapperExtend.getuserRole(userId, roleId, null);
+        if (count == 0) {
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "无权限操作", shopWechat);
         }
 
     }
 
     @Override
     public int adminInit() throws Exception {
-        int flag=0;
+        int flag = 0;
         //获取当前用户信息
-        ShopWechat shopWechat= userUtil.userInfo();
-        log.info("查询是否为网点管理员当前用户信息{}",shopWechat);
-        String openid=shopWechat.getOpenid();
-        Long userId=shopWechat.getUserId();
-        if(!CheckUtil.isNull(userId)){
+        ShopWechat shopWechat = userUtil.userInfo();
+        log.info("查询是否为网点管理员当前用户信息{}", shopWechat);
+        String openid = shopWechat.getOpenid();
+        Long userId = shopWechat.getUserId();
+        if (!CheckUtil.isNull(userId)) {
             //判断用户是否为网点管理员
-            int count= sysUserMapperExtend.getuserRole(userId,roleId,null);
-            if(count>0){
-                flag=1;
+            int count = sysUserMapperExtend.getuserRole(userId, roleId, null);
+            if (count > 0) {
+                flag = 1;
             }
         }
-        log.info("用户信息{},查询是否为网点管理员返回参数{}",shopWechat,flag);
+        log.info("用户信息{},查询是否为网点管理员返回参数{}", shopWechat, flag);
         return flag;
     }
 
     @Override
     public void bindManager(InputParameter inputParameter) throws Exception {
-       String cellPhoneNumber= inputParameter.getCellPhoneNumber();//手机号
-       String verificationCode= inputParameter.getVerificationCode();//验证码
-       int flag= adminInit();
-       if(flag==1){
-           throw new ApiBizException(ErrorCode.E00000001.CODE,"您已经是网点管理员!",inputParameter);
-       }
-       //根据手机号查询当前手机号是否为网点管理员
-        int count= sysUserMapperExtend.getuserRole(null,roleId,cellPhoneNumber);
-       if(count==0){
-           throw new ApiBizException(ErrorCode.E00000001.CODE,"当前手机号暂无网点管理员数据!",inputParameter);
-       }
-        SysUserExample sysUserExample=new SysUserExample();
-        SysUserExample.Criteria criteria= sysUserExample.createCriteria();
+        String cellPhoneNumber = inputParameter.getCellPhoneNumber();//手机号
+        String verificationCode = inputParameter.getVerificationCode();//验证码
+        int flag = adminInit();
+        if (flag == 1) {
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "您已经是网点管理员!", inputParameter);
+        }
+        //根据手机号查询当前手机号是否为网点管理员
+        int count = sysUserMapperExtend.getuserRole(null, roleId, cellPhoneNumber);
+        if (count == 0) {
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号暂无网点管理员数据!", inputParameter);
+        }
+        SysUserExample sysUserExample = new SysUserExample();
+        SysUserExample.Criteria criteria = sysUserExample.createCriteria();
         criteria.andMobileEqualTo(cellPhoneNumber);
         sysUserExample.setOrderByClause(" userId asc");
-        List<SysUser> sysUserList= sysUserMapper.selectByExample(sysUserExample);
-        SysUser sysUser=sysUserList.get(0);
-        ShopWechat shopWechat= userUtil.userInfo();
+        List<SysUser> sysUserList = sysUserMapper.selectByExample(sysUserExample);
+        SysUser sysUser = sysUserList.get(0);
+        ShopWechat shopWechat = userUtil.userInfo();
         shopWechat.setUserId(sysUser.getUserId());
-        shopWechatMapper.updateByExampleSelective(shopWechat,null);
+        shopWechatMapper.updateByExampleSelective(shopWechat, null);
 
     }
 
     @Override
     public JSONObject expenseCalendar(InputParameter inputParameter) throws Exception {
-        JSONObject jsonObject=new JSONObject();
-        Integer page=inputParameter.getPage();
-        Integer pageSize=inputParameter.getPageSize();
+        JSONObject jsonObject = new JSONObject();
+        Integer page = inputParameter.getPage();
+        Integer pageSize = inputParameter.getPageSize();
         //1根据用户user_id查询所管理的网点
         Shop shop = getShop();
-        log.info("当前用户网点查询结果{}",shop);
+        log.info("当前用户网点查询结果{}", shop);
         //2查询累计消费人数
-        int countByShopId=shopOrderMapperExtend.countByShopId(shop.getId());
-        jsonObject.put("theNumberOfConsumer",countByShopId);
-        log.info("查询累计消费人数{}",countByShopId);
+        int countByShopId = shopOrderMapperExtend.countByShopId(shop.getId());
+        jsonObject.put("theNumberOfConsumer", countByShopId);
+        log.info("查询累计消费人数{}", countByShopId);
         //3查询列表
         PageUtil.startPage(page, pageSize);
-        List<ShopOrderExtend> shopOrderExtendList=shopOrderMapperExtend.sumByShopId(shop.getId());
-        jsonObject.put("particulars",shopOrderExtendList);
-        log.info("查询列表{}",shopOrderExtendList);
+        List<ShopOrderExtend> shopOrderExtendList = shopOrderMapperExtend.sumByShopId(shop.getId());
+        jsonObject.put("particulars", shopOrderExtendList);
+        log.info("查询列表{}", shopOrderExtendList);
         return jsonObject;
     }
 
     @Override
     public JSONArray settlementRecords(InputParameter inputParameter) throws Exception {
-        JSONArray jsonArray=new JSONArray();
-        Integer page=inputParameter.getPage();
-        Integer pageSize=inputParameter.getPageSize();
+        JSONArray jsonArray = new JSONArray();
+        Integer page = inputParameter.getPage();
+        Integer pageSize = inputParameter.getPageSize();
         Shop shop = getShop();
         //1根据用户user_id查询所管理的网点
-        log.info("当前用户网点查询结果{}",shop);
+        log.info("当前用户网点查询结果{}", shop);
         //2查询网点佣金记录列表
-        List<ShopCommissionExtend> shopCommissionExtendList=shopCommissionMapperExtend.selectListByShopId(shop.getId());
-        if(!CheckUtil.isNull(shopCommissionExtendList)&&shopCommissionExtendList.size()>0){
+        PageUtil.startPage(page, pageSize);
+        List<ShopCommissionExtend> shopCommissionExtendList = shopCommissionMapperExtend.selectListByShopId(shop.getId());
+        if (!CheckUtil.isNull(shopCommissionExtendList) && shopCommissionExtendList.size() > 0) {
             jsonArray.add(shopCommissionExtendList);
         }
         return jsonArray;
@@ -148,27 +150,27 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public void closeAnAccount(InputParameter inputParameter) throws Exception {
-        String billingId=inputParameter.getBillingId();
+        String billingId = inputParameter.getBillingId();
         //获取当前用户信息
-        ShopWechat shopWechat= userUtil.userInfo();
+        ShopWechat shopWechat = userUtil.userInfo();
         verifyPermissions();//验证是否有权限
         //1查询当前用户是否包含该清单
-        int count=shopCommissionMapperExtend.countByUserIdAndId(Long.parseLong(billingId),shopWechat.getUserId());
-        log.info("清单id{},查询当前用户是否包含清单结果{}",billingId,count);
-        if(count==0){
-        throw new ApiBizException(ErrorCode.E00000001.CODE,"无权执行该操作",inputParameter);
+        int count = shopCommissionMapperExtend.countByUserIdAndId(Long.parseLong(billingId), shopWechat.getUserId());
+        log.info("清单id{},查询当前用户是否包含清单结果{}", billingId, count);
+        if (count == 0) {
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "无权执行该操作", inputParameter);
         }
 
     }
 
     private Shop getShop() throws Exception {
         verifyPermissions();//验证是否有权限
-        ShopWechat shopWechat=userUtil.userInfo();
-        ShopExample shopExample=new ShopExample();
-        ShopExample.Criteria criteria=shopExample.createCriteria();
+        ShopWechat shopWechat = userUtil.userInfo();
+        ShopExample shopExample = new ShopExample();
+        ShopExample.Criteria criteria = shopExample.createCriteria();
         criteria.andUserIdEqualTo(shopWechat.getUserId());
         shopExample.setOrderByClause(" id asc");
-        List<Shop> shopList=shopMapper.selectByExample(shopExample) ;
+        List<Shop> shopList = shopMapper.selectByExample(shopExample);
         return shopList.get(0);
     }
 

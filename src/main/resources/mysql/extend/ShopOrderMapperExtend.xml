@@ -25,7 +25,7 @@
   <select id="countByShopId" resultType="java.lang.Integer" parameterType="map">
     SELECT COUNT (DISTINCT openid) FROM shop_order WHERE shop_id=#{shopId}
   </select>
-
+  <!--查询所有消费用户-->
   <select id="sumByShopId" resultMap="BaseResultMap" parameterType="map">
     SELECT sw.name,sw.headimg_url, SUM (so.amount)/100 as amount  from shop_order so LEFT JOIN shop_wechat sw
     ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY openid ORDER by amount desc
