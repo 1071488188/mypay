@@ -18,7 +18,7 @@ public abstract class WxPayService {
      * @throws Exception
      */
     public abstract Map<String, String> paymentOrderHbxWeb(String openid, String total_fee,String body,
-                                                   String out_trade_no,String wxCallBack) throws Exception;
+                                                   String out_trade_no,String wxCallBack, String ip) throws Exception;
 
     /**
      * 微信支付统一下单(web)

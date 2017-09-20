@@ -34,7 +34,8 @@ public class WxPayServiceImpl extends WxPayService {
 
 
 	@Override
-	public Map<String, String> paymentOrderHbxWeb(String openid, String total_fee, String body, String out_trade_no, String wxCallBack) throws Exception {
+	public Map<String, String> paymentOrderHbxWeb(String openid, String total_fee, String body, String out_trade_no, String wxCallBack, String ip) throws Exception {
+
 		return null;
 	}
 

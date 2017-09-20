@@ -3,6 +3,7 @@ package com.har.unmanned.mfront.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.api.wxUser.InputParameter;
+import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.dao.*;
 import com.har.unmanned.mfront.dao.extend.ShopWechatQueryMapper;
@@ -148,7 +149,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         shopOrder.setLocation(param.getLocation());
         shopOrder.setLatitude(param.getLatitude());
         shopOrder.setLongitude(param.getLongitude());
-        shopOrder.setStatus(0); //未支付
+        shopOrder.setStatus(CodeConstants.OrderStatus.UNPAID); //未支付
         shopOrderMapper.insertSelective(shopOrder);
         // 订单明细
         for (CodeGoodsDomain codeGood : codeGoods) {
