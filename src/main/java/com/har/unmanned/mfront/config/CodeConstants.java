@@ -25,4 +25,10 @@ public class CodeConstants {
 		/** 配送员 */
 		public static final Integer DISPATCHOR = 4;
 	}
+	/** 发送短信操作类型 */
+	public static interface SmsOptType {
+
+		/** 货架发送短信 */
+		public static final Integer  UNMANNED= 40;
+	}
 }

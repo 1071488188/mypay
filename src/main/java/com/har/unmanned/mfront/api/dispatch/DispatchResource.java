@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 配送中心
- *
+ * @apiDefine dispatch 配送中心接口
  * @author huangjj
  * @create 2017-09-19 9:50
  **/
@@ -14,13 +14,16 @@ public interface DispatchResource {
     /**
      * @api {get} /api/v1/dispatch/dispatchList 1.api 配送中心列表
      * @apiVersion 1.0.0
-     * @apiName dispatch api 配送中心列表
+     * @apiName dispatchList
      * @apiGroup dispatch
      * @apiPermission none
+     *
      * @apiDescription 配送中心列表
+     *
      * @apiParam {String} status 	状态以逗号分隔（0: 未接单、1: 已接单、2: 派送中、3: 已完成）
      * @apiParam {Number} page=1        当前页数
      * @apiParam {Number} pageSize=10   每页显示条数
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object[]} Data			响应数据
@@ -40,12 +43,15 @@ public interface DispatchResource {
     /**
      * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
      * @apiVersion 1.0.0
-     * @apiName dispatch api 更新配送单状态
+     * @apiName updateDispatchStatus
      * @apiGroup dispatch
      * @apiPermission none
+     *
      * @apiDescription 更新配送单状态
+     *
      * @apiParam {String} dispatchNo 	配送单号
      * @apiParam {Number} status 	    状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
@@ -54,11 +60,14 @@ public interface DispatchResource {
     /**
      * @api {get} /api/v1/dispatch/replenishmentList 3.api 补货列表
      * @apiVersion 1.0.0
-     * @apiName dispatch api 补货列表
+     * @apiName replenishmentList
      * @apiGroup dispatch
      * @apiPermission none
+     *
      * @apiDescription 补货列表
+     *
      * @apiParam {String} dispatchNo 	配送单号
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object[]} Data			响应数据
@@ -74,16 +83,37 @@ public interface DispatchResource {
     /**
      * @api {post} /api/v1/dispatch/confirmReplenishment 4.api 确认补货
      * @apiVersion 1.0.0
-     * @apiName dispatch api 确认补货
+     * @apiName confirmReplenishment
      * @apiGroup dispatch
      * @apiPermission none
+     *
      * @apiDescription 确认补货
+     *
      * @apiParam {String} dispatchNo 	        配送单号
      * @apiParam {Object[]} Data.layer		    层级(layer为：jsonObject的key)
      * @apiParam {Number} Data.layer.goodsId        商品ID
      * @apiParam {Number} Data.layer.ifConfirm      是否确认(0：未确认 、1:已确认)
+     *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
     JSONObject confirmReplenishment(JSONObject params) throws Exception;
+
+    /**
+     * @api {post} /api/v1/dispatch/validateCode 5.api 验证短信验证码
+     * @apiVersion 1.0.0
+     * @apiName validateCode api 验证短信验证码
+     * @apiGroup dispatch
+     * @apiPermission none
+     *
+     * @apiDescription 验证短信验证码
+     *
+     * @apiParam {String} mobile  	    手机号
+     * @apiParam {String} validateCode  验证码
+     *
+     * @apiSuccess (200) {String} RespCode          响应编码，8位
+     * @apiSuccess (200) {String} RespDesc          响应描述
+     * */
+    JSONObject validateCode(InputParameter inputParameter) throws Exception;
+
 }
