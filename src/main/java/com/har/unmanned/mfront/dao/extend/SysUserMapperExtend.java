@@ -13,6 +13,6 @@ public interface SysUserMapperExtend {
      * @param roleId
      * @return
      */
-    public Integer getuserRole(@Param("userId") String userId,@Param("roleId") Integer roleId);
+    public Integer getuserRole(@Param("userId") Long userId,@Param("roleId") Integer roleId,@Param("mobile") String mobile);
 
 }
