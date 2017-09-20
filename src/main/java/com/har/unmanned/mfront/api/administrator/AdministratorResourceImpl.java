@@ -4,6 +4,7 @@ import com.har.unmanned.mfront.api.administrator.ValidGroup.BindManagerGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.CloseAnAccountGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.PageGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.WithdrawDepositGroup;
+import com.har.unmanned.mfront.exception.ApiBizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +25,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/bindManager")
-    public String bindManager(@Validated({BindManagerGroup.class}) @RequestBody InputParameter inputParameter) {
+    public String bindManager(@Validated({BindManagerGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
         return null;
     }
 
@@ -36,7 +37,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/withdrawDeposit")
-    public String withdrawDeposit(@Validated({WithdrawDepositGroup.class}) @RequestBody InputParameter inputParameter) {
+    public String withdrawDeposit(@Validated({WithdrawDepositGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
         return null;
     }
 
@@ -48,7 +49,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/expenseCalendar")
-    public String expenseCalendar(@Validated({PageGroup.class}) InputParameter inputParameter) {
+    public String expenseCalendar(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
         return null;
     }
 
@@ -60,7 +61,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/settlementRecords")
-    public String settlementRecords(@Validated({PageGroup.class}) InputParameter inputParameter) {
+    public String settlementRecords(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
         return null;
     }
 
@@ -72,7 +73,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/closeAnAccount")
-    public String closeAnAccount(@Validated({CloseAnAccountGroup.class}) @RequestBody InputParameter inputParameter) {
+    public String closeAnAccount(@Validated({CloseAnAccountGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
         return null;
     }
 
@@ -83,7 +84,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      * @return
      */
     @Override
-    public String balanceDetails(@Validated({PageGroup.class}) @RequestBody InputParameter inputParameter) {
+    public String balanceDetails(@Validated({PageGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
         return null;
     }
 }
