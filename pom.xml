@@ -120,6 +120,11 @@
 			<artifactId>pagehelper</artifactId>
 			<version>4.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.2.4.Final</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
