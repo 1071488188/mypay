@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.extend.ShopOrderMapperExtend" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.ShopOrderExtend" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="commission" property="commission" jdbcType="INTEGER" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, shop_id, openid, `name`, order_no, order_time, amount, commission, pay_no, pay_time,
+    `location`, longitude, latitude, `status`
+  </sql>
+  <!--根据网点id查询网点总消费人数-->
+  <select id="countByShopId" resultType="java.lang.Integer" parameterType="map">
+    SELECT COUNT (DISTINCT openid) FROM shop_order WHERE shop_id=#{shopId}
+  </select>
+
+  <select id="sumByShopId" resultMap="BaseResultMap" parameterType="map">
+    SELECT sw.name,sw.headimg_url, SUM (so.amount) as amount  from shop_order so LEFT JOIN shop_wechat sw
+    ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY openid ORDER by amount desc
+
+  </select>
+</mapper>

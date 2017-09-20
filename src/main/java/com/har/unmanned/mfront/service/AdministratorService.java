@@ -26,4 +26,12 @@ public interface AdministratorService {
      * @throws Exception
      */
     public void bindManager(InputParameter inputParameter) throws Exception;
+
+    /**
+     * 消费记录
+     * @param inputParameter
+     * @return
+     * @throws Exception
+     */
+    public JSONObject expenseCalendar(InputParameter inputParameter)throws Exception;
 }
