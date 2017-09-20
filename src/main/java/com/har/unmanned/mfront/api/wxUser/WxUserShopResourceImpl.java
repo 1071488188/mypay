@@ -3,16 +3,17 @@ package com.har.unmanned.mfront.api.wxUser;
 import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
+import com.har.unmanned.mfront.api.wxUser.validGroup.IndexGroup;
+import com.har.unmanned.mfront.api.wxUser.validGroup.OrderGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
-import com.har.unmanned.mfront.service.IRedisService;
 import com.har.unmanned.mfront.service.IWxUserShopService;
-import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.RespMessage;
 import com.har.unmanned.mfront.utils.Xml2JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping
-    public JSONObject wxUserShop(InputParameter inputParameter) throws ApiBizException {
+    public JSONObject wxUserShop(@Validated(IndexGroup.class) InputParameter inputParameter) throws ApiBizException {
         log.info("[wxShop]用户访问首页传入数据:" + inputParameter);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户访问首页_开始", inputParameter);
         RespMessage respMessage = new RespMessage();
@@ -54,7 +55,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @PostMapping("/submitOrder")
-    public JSONObject submitOrder(InputParameter params) throws ApiBizException {
+    public JSONObject submitOrder(@Validated(OrderGroup.class) InputParameter params) throws ApiBizException {
         log.info("[submitOrder]用户提交订单传入数据:" + params);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户提交订单_开始", params);
         RespMessage respMessage = new RespMessage();
@@ -78,7 +79,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping("/buyRecord")
-    public JSONObject buyRecord() {
+    public JSONObject buyRecord() throws ApiBizException {
         RespMessage respMessage = new RespMessage();
         // 返回数据
         log.info("[buyRecord]用户查询购买记录");
@@ -92,7 +93,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
 
     @Override
     @GetMapping("/userInfo")
-    public JSONObject userInfo() {
+    public JSONObject userInfo() throws ApiBizException {
         log.info("[userInfo]查询用户信息");
         RespMessage respMessage = new RespMessage();
         // 返回数据

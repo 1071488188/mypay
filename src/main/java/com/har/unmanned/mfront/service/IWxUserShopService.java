@@ -48,12 +48,12 @@ public abstract class IWxUserShopService {
      * 用户购买记录
      * @return
      */
-    public abstract JSONObject buyRecord();
+    public abstract JSONObject buyRecord() throws ApiBizException;
 
     /**
      * 用户的一些基本信息
      * @return
      */
-    public abstract JSONObject userInfo();
+    public abstract JSONObject userInfo() throws ApiBizException;
 
 }

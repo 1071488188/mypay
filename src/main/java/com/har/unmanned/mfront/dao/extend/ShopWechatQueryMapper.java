@@ -1,36 +1,35 @@
 package com.har.unmanned.mfront.dao.extend;
 
-import com.har.unmanned.mfront.model.CodeGoods;
-import com.har.unmanned.mfront.model.ShopWechat;
 import com.har.unmanned.mfront.model.extend.CodeGoodsDomain;
+import com.har.unmanned.mfront.model.extend.ShopOrderDomain;
+import com.har.unmanned.mfront.model.extend.ShopStockDomain;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 微信用户扩展mapper
  */
 public interface ShopWechatQueryMapper {
     /**
-     * 查询用户购买历史记录
+     * 查询用户最近购买
      *
      * @param openId
      * @return
      */
-    List<CodeGoods> selectBuyHistory(String openId);
+    List<ShopStockDomain> selectRecentlyBuyList(@Param("openId") String openId, @Param("shopId")String shopId);
 
     /**
-     * 查询所有商品
+     * 查询货架所有商品(购买首页)
      * @return
      */
-    List<CodeGoods> selectGoodsList();
+    List<ShopStockDomain> selectShopGoodsList(String shopCode);
 
     /**
      * 用户购买记录
      * @return
      */
-    List<CodeGoods> buyRecordList(String openId);
+    List<ShopOrderDomain> selectBuyHistory(String openId);
 
     /**
      * 根据id查询多个商品

@@ -93,6 +93,14 @@ public class StringUtil {
 		return bigMoney+"";
 	}
 
+	public static String conversionYUAN(String money, int num) {
+		BigDecimal bigMoney = new BigDecimal(money);
+
+		bigMoney = bigMoney.divide(new BigDecimal(100), num, BigDecimal.ROUND_HALF_UP);
+
+		return bigMoney + "";
+	}
+
 
 	/**
 	 * @description 将字符串的首字母转换成大写形式的

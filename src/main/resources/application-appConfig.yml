@@ -11,3 +11,5 @@ har:
       domain: http://192.168.70.7:8082
       projectName: /har-unmanned-mfront
       host: ${har.server.front.domain}${har.server.front.projectName}
+  picPath: http://119.6.202.172:8083/har-manage/upload/mer/productInfo/
+
