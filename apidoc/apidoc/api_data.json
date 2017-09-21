@@ -1158,7 +1158,7 @@
       }
     },
     "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
-    "groupTitle": "wxUserShop",
+    "groupTitle": "微商城",
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop/buyRecord"
@@ -1275,7 +1275,7 @@
       }
     },
     "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
-    "groupTitle": "wxUserShop",
+    "groupTitle": "微商城",
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop/submitOrder"
@@ -1344,7 +1344,7 @@
       }
     },
     "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
-    "groupTitle": "wxUserShop",
+    "groupTitle": "微商城",
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop/userInfo"
@@ -1517,7 +1517,7 @@
       }
     },
     "filename": "../src/main/java/com/har/unmanned/mfront/api/wxUser/WxUserShopResource.java",
-    "groupTitle": "wxUserShop",
+    "groupTitle": "微商城",
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop"
