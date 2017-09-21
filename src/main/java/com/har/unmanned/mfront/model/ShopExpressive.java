@@ -10,7 +10,7 @@ public class ShopExpressive implements Serializable {
 
     private Integer money;
 
-    private String applyUser;
+    private Long userId;
 
     private Date applyTime;
 
@@ -58,12 +58,12 @@ public class ShopExpressive implements Serializable {
         this.money = money;
     }
 
-    public String getApplyUser() {
-        return applyUser;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser == null ? null : applyUser.trim();
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Date getApplyTime() {
@@ -155,7 +155,7 @@ public class ShopExpressive implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", expressiveNo=").append(expressiveNo);
         sb.append(", money=").append(money);
-        sb.append(", applyUser=").append(applyUser);
+        sb.append(", userId=").append(userId);
         sb.append(", applyTime=").append(applyTime);
         sb.append(", auditor=").append(auditor);
         sb.append(", auditTime=").append(auditTime);

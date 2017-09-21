@@ -25,7 +25,7 @@ public class ShopCommission implements Serializable {
 
     private Integer status;
 
-    private String applyUser;
+    private Long userId;
 
     private Date applyTime;
 
@@ -111,12 +111,12 @@ public class ShopCommission implements Serializable {
         this.status = status;
     }
 
-    public String getApplyUser() {
-        return applyUser;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser == null ? null : applyUser.trim();
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Date getApplyTime() {
@@ -143,7 +143,7 @@ public class ShopCommission implements Serializable {
         sb.append(", ratio=").append(ratio);
         sb.append(", commission=").append(commission);
         sb.append(", status=").append(status);
-        sb.append(", applyUser=").append(applyUser);
+        sb.append(", userId=").append(userId);
         sb.append(", applyTime=").append(applyTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

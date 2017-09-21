@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="expressive_no" property="expressiveNo" jdbcType="VARCHAR" />
     <result column="money" property="money" jdbcType="INTEGER" />
-    <result column="apply_user" property="applyUser" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <result column="auditor" property="auditor" jdbcType="BIGINT" />
     <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
@@ -76,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, expressive_no, money, apply_user, apply_time, auditor, audit_time, defrayor, 
-    defray_time, account_bank, account_no, `status`, shop_id, `type`
+    id, expressive_no, money, user_id, apply_time, auditor, audit_time, defrayor, defray_time, 
+    account_bank, account_no, `status`, shop_id, `type`
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.ShopExpressiveExample" >
     select
@@ -114,12 +114,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shop_expressive (expressive_no, money, apply_user, 
+    insert into shop_expressive (expressive_no, money, user_id, 
       apply_time, auditor, audit_time, 
       defrayor, defray_time, account_bank, 
       account_no, `status`, shop_id, 
       `type`)
-    values (#{expressiveNo,jdbcType=VARCHAR}, #{money,jdbcType=INTEGER}, #{applyUser,jdbcType=VARCHAR}, 
+    values (#{expressiveNo,jdbcType=VARCHAR}, #{money,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, 
       #{applyTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=BIGINT}, #{auditTime,jdbcType=TIMESTAMP}, 
       #{defrayor,jdbcType=BIGINT}, #{defrayTime,jdbcType=TIMESTAMP}, #{accountBank,jdbcType=VARCHAR}, 
       #{accountNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{shopId,jdbcType=BIGINT}, 
@@ -137,8 +137,8 @@
       <if test="money != null" >
         money,
       </if>
-      <if test="applyUser != null" >
-        apply_user,
+      <if test="userId != null" >
+        user_id,
       </if>
       <if test="applyTime != null" >
         apply_time,
@@ -178,8 +178,8 @@
       <if test="money != null" >
         #{money,jdbcType=INTEGER},
       </if>
-      <if test="applyUser != null" >
-        #{applyUser,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="applyTime != null" >
         #{applyTime,jdbcType=TIMESTAMP},
@@ -231,8 +231,8 @@
       <if test="record.money != null" >
         money = #{record.money,jdbcType=INTEGER},
       </if>
-      <if test="record.applyUser != null" >
-        apply_user = #{record.applyUser,jdbcType=VARCHAR},
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.applyTime != null" >
         apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
@@ -274,7 +274,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       expressive_no = #{record.expressiveNo,jdbcType=VARCHAR},
       money = #{record.money,jdbcType=INTEGER},
-      apply_user = #{record.applyUser,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=BIGINT},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       auditor = #{record.auditor,jdbcType=BIGINT},
       audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
@@ -298,8 +298,8 @@
       <if test="money != null" >
         money = #{money,jdbcType=INTEGER},
       </if>
-      <if test="applyUser != null" >
-        apply_user = #{applyUser,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="applyTime != null" >
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
@@ -338,7 +338,7 @@
     update shop_expressive
     set expressive_no = #{expressiveNo,jdbcType=VARCHAR},
       money = #{money,jdbcType=INTEGER},
-      apply_user = #{applyUser,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
       auditor = #{auditor,jdbcType=BIGINT},
       audit_time = #{auditTime,jdbcType=TIMESTAMP},

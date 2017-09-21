@@ -12,7 +12,7 @@
     <result column="ratio" property="ratio" jdbcType="DECIMAL" />
     <result column="commission" property="commission" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="apply_user" property="applyUser" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -75,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, shop_id, commission_no, start_time, end_time, order_num, amount, ratio, commission, 
-    `status`, apply_user, apply_time
+    `status`, user_id, apply_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.ShopCommissionExample" >
     select
@@ -115,11 +115,11 @@
     insert into shop_commission (shop_id, commission_no, start_time, 
       end_time, order_num, amount, 
       ratio, commission, `status`, 
-      apply_user, apply_time)
+      user_id, apply_time)
     values (#{shopId,jdbcType=BIGINT}, #{commissionNo,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
       #{ratio,jdbcType=DECIMAL}, #{commission,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{applyUser,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP})
+      #{userId,jdbcType=BIGINT}, #{applyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.ShopCommission" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -154,8 +154,8 @@
       <if test="status != null" >
         `status`,
       </if>
-      <if test="applyUser != null" >
-        apply_user,
+      <if test="userId != null" >
+        user_id,
       </if>
       <if test="applyTime != null" >
         apply_time,
@@ -189,8 +189,8 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="applyUser != null" >
-        #{applyUser,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="applyTime != null" >
         #{applyTime,jdbcType=TIMESTAMP},
@@ -236,8 +236,8 @@
       <if test="record.status != null" >
         `status` = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.applyUser != null" >
-        apply_user = #{record.applyUser,jdbcType=VARCHAR},
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.applyTime != null" >
         apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
@@ -259,7 +259,7 @@
       ratio = #{record.ratio,jdbcType=DECIMAL},
       commission = #{record.commission,jdbcType=INTEGER},
       `status` = #{record.status,jdbcType=INTEGER},
-      apply_user = #{record.applyUser,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=BIGINT},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -295,8 +295,8 @@
       <if test="status != null" >
         `status` = #{status,jdbcType=INTEGER},
       </if>
-      <if test="applyUser != null" >
-        apply_user = #{applyUser,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="applyTime != null" >
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
@@ -315,7 +315,7 @@
       ratio = #{ratio,jdbcType=DECIMAL},
       commission = #{commission,jdbcType=INTEGER},
       `status` = #{status,jdbcType=INTEGER},
-      apply_user = #{applyUser,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
       apply_time = #{applyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>

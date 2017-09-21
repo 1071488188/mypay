@@ -27,3 +27,6 @@ mybatis:
 logging:
   level:
     com.har.unmanned.mfront: debug
+    org.springframework.web: debug
+    org.springframework.transaction: debug
+    org.mybatis: debug
