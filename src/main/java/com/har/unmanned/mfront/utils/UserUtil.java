@@ -36,9 +36,9 @@ public class UserUtil {
      */
     public ShopWechat userInfo() throws ApiBizException {
         // 初始化返回用户信息
-        ShopWechat wxUser = new ShopWechat();
-        wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGM");
-        /*ShopWechat wxUser = null;
+        //ShopWechat wxUser = new ShopWechat();
+        //wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGM");
+        ShopWechat wxUser = null;
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             // 将cookie中取出的token转换成OAuth2格式
@@ -68,7 +68,7 @@ public class UserUtil {
         } catch (Exception e) {
             log.info("获取用户信息失败，验签异常：" + e);
             throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, e);
-        }*/
+        }
         return wxUser;
     }
 
