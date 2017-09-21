@@ -17,4 +17,9 @@
       SELECT COUNT (*) FROM ,sys_user sr,shop sp,sys_user_role so
       WHERE sr.user_id=#{userId} and  so.role_id=#{roleId}
     </select>
+
+    <select id="queryUserRole" resultType="java.lang.Integer" parameterType="map">
+        SELECT COUNT (*) FROM ,sys_user sr,shop sp,sys_user_role so
+        WHERE sr.user_id=#{userId} and  so.role_id=#{roleId}
+    </select>
 </mapper>

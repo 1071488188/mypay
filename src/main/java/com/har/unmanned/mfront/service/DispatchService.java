@@ -1,6 +1,7 @@
 package com.har.unmanned.mfront.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.har.unmanned.mfront.exception.ApiBizException;
 
 /**
  * @author huangjj
@@ -42,6 +43,13 @@ public interface DispatchService {
      * @return
      * @throws Exception
      */
-    void confirmReplenishment(JSONObject param) throws Exception;
+    void confirmReplenishment(JSONObject param) throws Exception,ApiBizException;
 
+    /**
+     * 验证手机号
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    JSONObject validateCode(JSONObject param) throws Exception;
 }
