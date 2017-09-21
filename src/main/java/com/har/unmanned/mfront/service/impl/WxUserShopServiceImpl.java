@@ -7,7 +7,9 @@ import com.har.bigdata.log.LogHelper;
 import com.har.unmanned.mfront.api.wxUser.InputParameter;
 import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
-import com.har.unmanned.mfront.dao.*;
+import com.har.unmanned.mfront.dao.ShopMapper;
+import com.har.unmanned.mfront.dao.ShopOrderItemMapper;
+import com.har.unmanned.mfront.dao.ShopOrderMapper;
 import com.har.unmanned.mfront.dao.extend.ShopWechatQueryMapper;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.*;
@@ -22,11 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -201,28 +200,36 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         Map resultMap = new HashMap(); // 存放支付结果信息, 用于返回
         TreeMap<String, String> map = (TreeMap<String, String>) XMLUtil.doXMLParse(param);
         String orderNo = map.get("out_trade_no");
+        ShopOrderExample example = new ShopOrderExample();
+        ShopOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo);
+        List<ShopOrder> shopOrders = shopOrderMapper.selectByExample(example);
+        ShopOrder shopOrder = shopOrders.get(0);
+        if (shopOrder.getStatus().intValue() == CodeConstants.OrderStatus.SUCCESS) {
+            log.error("订单已经支付成功: " + JSONObject.toJSONString(shopOrder));
+            throw new ApiBizException(ErrorCode.E00000021.CODE, ErrorCode.E00000021.MSG, param, CommonExceptionLevel.WARN);
+        }
+
         boolean flag = false; // true 支付成功, false 支付失败, 用于处理后台逻辑, 支付成功后更新订单和库存信息
-
-
         /** 验证微信订单支付情况 */
         try {
             if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) { // 通信异常
                 log.error("微信回调异常: " + map.get("return_msg"));
-                throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("return_msg"), param, CommonExceptionLevel.WARN);
+                throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("return_msg"), param, CommonExceptionLevel.WARN);
             }
             if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) { // 支付异常
                 log.error("微信回调异常: " + map.get("err_code_des"));
-                throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
+                throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
             }
             boolean validSign = WeiXinUtils.isValidSign(map, appsecret);
-            if (!validSign) { // 签名验证异常
+            if (!validSign) {
                 log.error("微信签名验证异常: " + param);
-                throw new ApiBizException(ErrorCode.E00000001.CODE, "微信签名验证异常", param, CommonExceptionLevel.WARN);
+                throw new ApiBizException(ErrorCode.E00000019.CODE, ErrorCode.E00000019.MSG, param, CommonExceptionLevel.WARN);
             }
             Map<String, String> orderquery = wxPayService.orderquery(orderNo);
             if (!CheckUtil.isEquals(orderquery.get("trade_state"), "SUCCESS")) {
                 log.error("微信支付结果验证异常: " + orderquery);
-                throw new ApiBizException(ErrorCode.E00000001.CODE, "订单" + orderNo + "支付失败", orderquery, CommonExceptionLevel.WARN);
+                throw new ApiBizException(ErrorCode.E00000020.CODE, "订单" + orderNo + "支付失败", orderquery, CommonExceptionLevel.WARN);
             }
             flag = true;
         } catch (ApiBizException e) {
@@ -240,11 +247,6 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         /** 处理后台业务逻辑 */
         try {
             if (flag) { // 支付成功
-                ShopOrderExample shopOrderExample = new ShopOrderExample();
-                ShopOrderExample.Criteria shopOrderCriteria = shopOrderExample.createCriteria();
-                shopOrderCriteria.andOrderNoEqualTo(orderNo);
-                List<ShopOrder> shopOrders = shopOrderMapper.selectByExample(shopOrderExample);
-                ShopOrder shopOrder = shopOrders.get(0);
                 // 1. 更新基础订单信息
                 shopOrder.setPayNo(map.get("transaction_id")); // 微信订单号
                 shopOrder.setPayTime(new Date()); // 付款成功时间
@@ -273,6 +275,10 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 
 
         /** 返回数据 */
+        if (resultMap.isEmpty()) {
+            resultMap.put("return_code", "SUCCESS");
+            resultMap.put("return_msg", "支付成功");
+        }
         sb.append("<xml>");
         for (Object o : resultMap.entrySet()) {
             Map.Entry entry = (Map.Entry) o;

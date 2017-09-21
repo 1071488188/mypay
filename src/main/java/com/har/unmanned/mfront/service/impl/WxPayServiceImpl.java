@@ -1,5 +1,6 @@
 package com.har.unmanned.mfront.service.impl;
 
+import com.har.bigdata.exception.CommonExceptionLevel;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.WxPayService;
@@ -60,11 +61,11 @@ public class WxPayServiceImpl extends WxPayService {
         Map<String, String> map = XMLUtil.doXMLParse(respString);
         if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) {
             log.error("微信签名失败: " + param);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("return_msg"), param);
+            throw new ApiBizException(ErrorCode.E00000016.CODE, map.get("return_msg"), param, CommonExceptionLevel.WARN);
         }
         if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) {
             log.error("微信签名失败: " + param);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("err_code_des"), param);
+            throw new ApiBizException(ErrorCode.E00000016.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
         }
         TreeMap respMap = new TreeMap();
         respMap.put("appId", map.get("appid"));
@@ -95,11 +96,11 @@ public class WxPayServiceImpl extends WxPayService {
         Map<String, String> map = XMLUtil.doXMLParse(respString);
         if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) {
             log.error("微信订单查询失败: " + param);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("return_msg"), param);
+            throw new ApiBizException(ErrorCode.E00000017.CODE, map.get("return_msg"), param);
         }
         if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) {
             log.error("微信订单查询失败: " + param);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("err_code_des"), param);
+            throw new ApiBizException(ErrorCode.E00000017.CODE, map.get("err_code_des"), param);
         }
         log.info("-------------查询微信订单结束------------");
         return map;
