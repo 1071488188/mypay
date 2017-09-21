@@ -13,6 +13,5 @@ public class DispatchItemDomain extends DispatchItem{
     private String goodsName;
     // 商品规格
     private String spec;
-    //商品数量
-    private int quantity;
+
 }

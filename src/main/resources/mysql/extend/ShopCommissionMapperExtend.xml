@@ -17,6 +17,10 @@
     <!--扩展字段-->
     <result column="time" property="time" jdbcType="VARCHAR" />
   </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_id, commission_no, start_time, end_time, order_num, amount, ratio, commission,
+    `status`, user_id, apply_time
+  </sql>
   <!--查询网点佣金记录清单-->
   <select id="selectListByShopId" resultMap="BaseResultMap" parameterType="map">
     SELECT
@@ -25,7 +29,31 @@
   </select>
   <!--查询该用户是否有当前结算清单-->
   <select id="countByUserIdAndId" resultType="java.lang.Integer" parameterType="map">
-    SELECT count(*) from shop_commission sc,shop s
+    SELECT
+    <include refid="Base_Column_List" />
+    from shop_commission sc,shop s
     WHERE sc.shop_id=s.shop_id  and sc.id=#{id} and s.user_id=#{userId}
   </select>
+  <!--查询当月订单根据网点进行分组-->
+  <select id="selectByShop" resultMap="BaseResultMap" parameterType="map">
+    SELECT tj.* FROM  (SELECT count(*) as order_num,SUM (so.amount) as amount,sum(so.commission) as commission,so.shop_id from shop_order so
+    where DATE_FORMAT(so.order_time,'%Y-%m-%d') >=#{startTime} and DATE_FORMAT(so.order_time,'%Y-%m-%d')<= #{endTime}
+    group by so.shop_id ORDER by so.order_time DESC) tj LEFT JOIN (
+    SELECT sc.shop_id from shop_commission sc
+    where DATE_FORMAT( sc.start_time,'%Y-%m-%d') >=#{startTime} and DATE_FORMAT(sc.end_time,'%Y-%m-%d')<= #{endTime}) yy
+    on tj.shop_id=yy.shop_id
+    where ISNULL(yy.shop_id) OR yy.shop_id = "";
+  </select>
+  <!--批量生成待结算清单-->
+  <insert id="bulkInsert" parameterType="java.util.List" >
+    insert into shop_commission
+    (shop_id, commission_no, start_time,end_time, order_num, amount,ratio, commission, `status`,user_id, apply_time)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.shopId,jdbcType=BIGINT}, #{item.commissionNo,jdbcType=VARCHAR}, #{item.startTime,jdbcType=TIMESTAMP},
+      #{item.endTime,jdbcType=TIMESTAMP}, #{item.orderNum,jdbcType=INTEGER}, #{item.amount,jdbcType=INTEGER},
+      #{item.ratio,jdbcType=DECIMAL}, #{item.commission,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER},
+      #{item.userId,jdbcType=BIGINT}, #{item.applyTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
 </mapper>

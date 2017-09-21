@@ -120,7 +120,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {Object[]} Data			响应数据
      * @apiSuccess (200) {String} Data.applyTimeZh		  时间
      * @apiSuccess (200) {String} Data.typeZh		      明细名称
-     * @apiSuccess (200) {String} Data.money		      金额
+     * @apiSuccess (200) {String} Data.moneyZh		      金额
      */
     String balanceDetails(InputParameter inputParameter)throws Exception;
 

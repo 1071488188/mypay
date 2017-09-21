@@ -40,4 +40,30 @@ public class CodeConstants {
 		/** 已支付 */
 		public static final Integer SUCCESS= 1;
 	}
+	/**
+	 * 提现流水类型
+	 */
+	public static interface WithdrawCurrentType{
+		/**
+		 * 佣金结算
+		 */
+		public static int COMMISSIONSETTLEMENT=0;
+		/**
+		 * 提现
+		 */
+		public static int WITHDRAWDEPOSIT=1;
+	}
+	/**
+	 * 佣金结算状态
+	 */
+	public static interface CommissionStatus{
+		/**
+		 * 待结算
+		 */
+		public static int FORTHE=0;
+		/**
+		 * 已结算
+		 */
+		public static int HAVEALREADYSETTLED=1;
+	}
 }
