@@ -295,73 +295,63 @@ public class ShopExpressiveExample {
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserIsNull() {
-            addCriterion("apply_user is null");
+        public Criteria andUserIdIsNull() {
+            addCriterion("user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserIsNotNull() {
-            addCriterion("apply_user is not null");
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserEqualTo(String value) {
-            addCriterion("apply_user =", value, "applyUser");
+        public Criteria andUserIdEqualTo(Long value) {
+            addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserNotEqualTo(String value) {
-            addCriterion("apply_user <>", value, "applyUser");
+        public Criteria andUserIdNotEqualTo(Long value) {
+            addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserGreaterThan(String value) {
-            addCriterion("apply_user >", value, "applyUser");
+        public Criteria andUserIdGreaterThan(Long value) {
+            addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserGreaterThanOrEqualTo(String value) {
-            addCriterion("apply_user >=", value, "applyUser");
+        public Criteria andUserIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserLessThan(String value) {
-            addCriterion("apply_user <", value, "applyUser");
+        public Criteria andUserIdLessThan(Long value) {
+            addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserLessThanOrEqualTo(String value) {
-            addCriterion("apply_user <=", value, "applyUser");
+        public Criteria andUserIdLessThanOrEqualTo(Long value) {
+            addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserLike(String value) {
-            addCriterion("apply_user like", value, "applyUser");
+        public Criteria andUserIdIn(List<Long> values) {
+            addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserNotLike(String value) {
-            addCriterion("apply_user not like", value, "applyUser");
+        public Criteria andUserIdNotIn(List<Long> values) {
+            addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserIn(List<String> values) {
-            addCriterion("apply_user in", values, "applyUser");
+        public Criteria andUserIdBetween(Long value1, Long value2) {
+            addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andApplyUserNotIn(List<String> values) {
-            addCriterion("apply_user not in", values, "applyUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplyUserBetween(String value1, String value2) {
-            addCriterion("apply_user between", value1, value2, "applyUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplyUserNotBetween(String value1, String value2) {
-            addCriterion("apply_user not between", value1, value2, "applyUser");
+        public Criteria andUserIdNotBetween(Long value1, Long value2) {
+            addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
 

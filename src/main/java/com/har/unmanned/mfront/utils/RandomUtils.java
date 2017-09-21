@@ -159,7 +159,7 @@ public class RandomUtils {
 		System.out.println(generateZeroString(15));
 		System.out.println(toFixdLengthString(123, 15));
 		System.out.println(toFixdLengthString(123L, 15));
-		System.out.println("="+generateDigit(12));		
+		System.out.println("="+generateDigit(12));
         System.err.println(generateNumberString(8));
 	}
 }

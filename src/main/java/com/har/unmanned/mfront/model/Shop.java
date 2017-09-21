@@ -47,6 +47,8 @@ public class Shop implements Serializable {
 
     private Long userId;
 
+    private Integer shopAccountMoney;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -217,6 +219,14 @@ public class Shop implements Serializable {
         this.userId = userId;
     }
 
+    public Integer getShopAccountMoney() {
+        return shopAccountMoney;
+    }
+
+    public void setShopAccountMoney(Integer shopAccountMoney) {
+        this.shopAccountMoney = shopAccountMoney;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -244,6 +254,7 @@ public class Shop implements Serializable {
         sb.append(", longitude=").append(longitude);
         sb.append(", latitude=").append(latitude);
         sb.append(", userId=").append(userId);
+        sb.append(", shopAccountMoney=").append(shopAccountMoney);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

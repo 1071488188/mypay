@@ -7,7 +7,22 @@ package com.har.unmanned.mfront.api.administrator;
  */
 public interface AdministratorResource {
     /**
-     * @api {post} /api/v1/admin/bindManager 1.api 绑定手机号
+     * @api {get} /api/v1/admin/adminInit 1.api 是否为网点管理员初始化接口
+     * @apiVersion 1.0.0
+     * @apiName adminInit
+     * @apiGroup admin
+     * @apiPermission none
+     *
+     * @apiDescription 是否为网点管理员初始化接口
+     *
+     * @apiSuccess (200) {String} RespCode          响应编码，8位
+     * @apiSuccess (200) {String} RespDesc          响应描述
+     * @apiSuccess (200) {Object} Data
+     * @apiSuccess (200) {Number} Data.whetherNetwork 是否为网点管理员，0、否1、是
+     */
+    String adminInit()throws Exception;
+    /**
+     * @api {post} /api/v1/admin/bindManager 2.api 绑定手机号
      * @apiVersion 1.0.0
      * @apiName bindManager
      * @apiGroup admin
@@ -25,7 +40,7 @@ public interface AdministratorResource {
     String bindManager(InputParameter inputParameter) throws Exception;
 
     /**
-     * @api {get} /api/v1/admin/expenseCalendar 2.api 消费记录
+     * @api {get} /api/v1/admin/expenseCalendar 3.api 消费记录
      * @apiVersion 1.0.0
      * @apiName expenseCalendar
      * @apiGroup admin
@@ -48,7 +63,7 @@ public interface AdministratorResource {
     String expenseCalendar(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {get} /api/v1/admin/settlementRecords 3.api 结算记录
+     * @api {get} /api/v1/admin/settlementRecords 4.api 结算记录
      * @apiVersion 1.0.0
      * @apiName settlementRecords
      * @apiGroup admin
@@ -64,15 +79,15 @@ public interface AdministratorResource {
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.id
      * @apiSuccess (200) {String} Data.time		    时间
-     * @apiSuccess (200) {String} Data.commission		营业额
+     * @apiSuccess (200) {String} Data.amount		营业额
      * @apiSuccess (200) {String} Data.ratio		    当前返佣比例
      * @apiSuccess (200) {String} Data.commission		佣金已结算
-     * @apiSuccess (200) {String} Data.status		结算状态2、已结算3、待结算
+     * @apiSuccess (200) {String} Data.status		结算状态0、待结算1、已结算
      */
     String settlementRecords(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {post} /api/v1/admin/closeAnAccount 4.api 结算
+     * @api {post} /api/v1/admin/closeAnAccount 5.api 结算
      * @apiVersion 1.0.0
      * @apiName closeAnAccount
      * @apiGroup admin
@@ -89,7 +104,7 @@ public interface AdministratorResource {
     String closeAnAccount(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {get} /api/v1/admin/balanceDetails 5.api 余额明细
+     * @api {get} /api/v1/admin/balanceDetails 6.api 余额明细
      * @apiVersion 1.0.0
      * @apiName balanceDetails
      * @apiGroup admin
@@ -110,7 +125,7 @@ public interface AdministratorResource {
     String balanceDetails(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {post} /api/v1/admin/withdrawDeposit 6.api 提现
+     * @api {post} /api/v1/admin/withdrawDeposit 7.api 提现
      * @apiVersion 1.0.0
      * @apiName withdrawDeposit
      * @apiGroup admin

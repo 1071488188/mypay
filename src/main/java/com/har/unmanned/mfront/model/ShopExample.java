@@ -1475,6 +1475,66 @@ public class ShopExample {
             addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
+
+        public Criteria andShopAccountMoneyIsNull() {
+            addCriterion("shop_account_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyIsNotNull() {
+            addCriterion("shop_account_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyEqualTo(Integer value) {
+            addCriterion("shop_account_money =", value, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyNotEqualTo(Integer value) {
+            addCriterion("shop_account_money <>", value, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyGreaterThan(Integer value) {
+            addCriterion("shop_account_money >", value, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("shop_account_money >=", value, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyLessThan(Integer value) {
+            addCriterion("shop_account_money <", value, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyLessThanOrEqualTo(Integer value) {
+            addCriterion("shop_account_money <=", value, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyIn(List<Integer> values) {
+            addCriterion("shop_account_money in", values, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyNotIn(List<Integer> values) {
+            addCriterion("shop_account_money not in", values, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyBetween(Integer value1, Integer value2) {
+            addCriterion("shop_account_money between", value1, value2, "shopAccountMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopAccountMoneyNotBetween(Integer value1, Integer value2) {
+            addCriterion("shop_account_money not between", value1, value2, "shopAccountMoney");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
