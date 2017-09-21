@@ -130,7 +130,7 @@ define({ "api": [
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.money",
+            "field": "Data.moneyZh",
             "description": "<p>金额</p>"
           }
         ]
@@ -580,22 +580,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "Object[]",
             "optional": false,
-            "field": "Data.layer",
-            "description": "<p>层级(layer为：jsonObject的key)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "Data.layer.goodsId",
-            "description": "<p>商品ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "Data.layer.ifConfirm",
-            "description": "<p>是否确认(0：未确认 、1:已确认)</p>"
+            "field": "goodsIds",
+            "description": "<p>商品ID(已确认商品)</p>"
           }
         ]
       }
@@ -827,44 +813,58 @@ define({ "api": [
           },
           {
             "group": "200",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "Data.replenishmentNum",
             "description": "<p>补货总数</p>"
           },
           {
             "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.species",
+            "description": "<p>种类</p>"
+          },
+          {
+            "group": "200",
             "type": "Object[]",
             "optional": false,
-            "field": "Data.layer",
+            "field": "Data.goods",
             "description": "<p>层级(layer为：jsonObject的key)</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.layer.goodsName",
+            "field": "Data.goods.layer.goodsName",
             "description": "<p>商品名称</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.layer.goodsValue",
+            "field": "Data.goods.layer.goodsValue",
             "description": "<p>商品单价</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.layer.goodsPicture",
+            "field": "Data.goods.layer.goodsPicture",
             "description": "<p>商品图片路径</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.layer.goodsId",
+            "field": "Data.goods.layer.goodsQuantity",
+            "description": "<p>商品数量</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.goods.layer.goodsId",
             "description": "<p>商品ID</p>"
           }
         ]

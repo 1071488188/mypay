@@ -18,12 +18,14 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <!--扩展字段-->
     <result column="applyTimeZh" property="applyTimeZh" jdbcType="VARCHAR" />
-    <result column="typeZh" property="typeZh" jdbcType="VARCHAR" />
     <result column="moneyZh" property="moneyZh" jdbcType="VARCHAR" />
   </resultMap>
   <!--查询余额明细-->
   <select id="selectBalanceOfSubsidiary" resultMap="BaseResultMap" parameterType="map">
-  select money,apply_time from shop_expressive where shop_id=#{shopId}
+    select
+    date_format(apply_time,'%Y-%c-%d %h:%i:%s') as applyTimeZh,type ,
+    case when type=0 then +money when type=1 then -money when type=2 then +money end as moneyZh
+    from shop_expressive where shop_id=#{shopId}
   </select>
 
 </mapper>

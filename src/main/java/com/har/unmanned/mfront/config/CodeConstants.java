@@ -52,6 +52,10 @@ public class CodeConstants {
 		 * 提现
 		 */
 		public static int WITHDRAWDEPOSIT=1;
+		/**
+		 * 打款失败回款
+		 */
+		public static int RETURNEDMONEY=2;
 	}
 	/**
 	 * 佣金结算状态

@@ -24,7 +24,7 @@
   <!--查询网点佣金记录清单-->
   <select id="selectListByShopId" resultMap="BaseResultMap" parameterType="map">
     SELECT
-    id,FORMAT(start_time,'YYYY-MM-DD') as time,amount/100 as amount,commission/100 as commission,ratio,status
+    id,date_format(start_time,'%Y-%c-%d') as time,amount/100 as amount,commission/100 as commission,ratio,status
     from shop_commission where shop_id=#{shopId}
   </select>
   <!--查询该用户是否有当前结算清单-->
