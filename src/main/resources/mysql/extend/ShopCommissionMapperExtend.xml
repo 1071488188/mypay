@@ -32,7 +32,7 @@
     SELECT
     <include refid="Base_Column_List" />
     from shop_commission sc,shop s
-    WHERE sc.shop_id=s.shop_id  and sc.id=#{id} and s.user_id=#{userId}
+    WHERE sc.shop_id=s.shop_id  and sc.id=#{id} and s.user_id=#{userId} and sc.status=0
   </select>
   <!--查询当月订单根据网点进行分组-->
   <select id="selectByShop" resultMap="BaseResultMap" parameterType="map">
