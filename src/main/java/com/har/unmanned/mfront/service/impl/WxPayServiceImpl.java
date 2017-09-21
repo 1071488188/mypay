@@ -1,6 +1,9 @@
 package com.har.unmanned.mfront.service.impl;
 
+import com.har.unmanned.mfront.config.ErrorCode;
+import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.WxPayService;
+import com.har.unmanned.mfront.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,52 +38,71 @@ public class WxPayServiceImpl extends WxPayService {
 
 
 	@Override
-	public Map<String, String> paymentOrderHbxWeb(String openid, String total_fee, String body, String out_trade_no, String wxCallBack, String ip) throws Exception {
-		Map param = new TreeMap();
+	public Map<String, String> paymentOrderHbxWeb(String openid, String total_fee, String body, String out_trade_no, String ip) throws Exception {
+	    log.info("-------------生成微信签名开始------------");
+        String nonceStr = Sha1Util.getNonceStr();
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        TreeMap param = new TreeMap();
 		param.put("appid", appid);
 		param.put("mch_id", mch_id);
-		param.put("body", body);
-		param.put("out_trade_no", out_trade_no);
-		param.put("total_fee", total_fee);
-		param.put("spbill_create_ip", appid);
-		param.put("appid", appid);
-		param.put("appid", appid);
-		param.put("appid", appid);
-		return null;
+        param.put("nonce_str", nonceStr);
+        param.put("body", body);
+        param.put("out_trade_no", out_trade_no);
+        param.put("total_fee", total_fee);
+        param.put("spbill_create_ip", ip);
+        param.put("notify_url", notify_url);
+        param.put("trade_type", trade_type);
+        //param.put("openid", openid);
+        String sign = WeiXinUtils.createPackage(param, appsecret);
+        param.put("sign", sign);
+        String respString = WxHttpUtil.sendPost(unified_order_url, param, charset);
+        log.info("微信统一下单返回数据: " + respString);
+        Map<String, String> map = XMLUtil.doXMLParse(respString);
+        if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) {
+            log.error("微信签名失败: " + param);
+            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("return_msg"), param);
+        }
+        if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) {
+            log.error("微信签名失败: " + param);
+            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("err_code_des"), param);
+        }
+        TreeMap respMap = new TreeMap();
+        respMap.put("appId", map.get("appid"));
+        respMap.put("timeStamp", timeStamp);
+        respMap.put("nonceStr", nonceStr);
+        respMap.put("package", "prepay_id=" + map.get("prepay_id"));
+        respMap.put("signType", sign_type);
+        String paySign = WeiXinUtils.createPaySign(respMap, appsecret);
+        respMap.put("paySign", paySign);
+        log.info("-------------生成微信签名结束------------");
+        return respMap;
 	}
 
-	@Override
-	public Map<String, String> paymentOrderWeb(String openid, String total_fee, String body, String out_trade_no) throws Exception {
-		return null;
-	}
-
-	@Override
-	public boolean closeOrderWeb(String out_trade_no) throws Exception {
-		return false;
-	}
-
-	@Override
-	public Map<String, String> paymentOrderApp(String total_fee, String body, String out_trade_no) throws Exception {
-		return null;
-	}
-
-	@Override
-	public Map<String, String> paymentOrderHSHApp(String total_fee, String body, String out_trade_no, String wxCallBack) throws Exception {
-		return null;
-	}
-
-	@Override
-	public boolean closeOrderApp(String out_trade_no) throws Exception {
-		return false;
-	}
 
 	@Override
 	public Map<String, String> orderquery(String out_trade_no) throws Exception {
-		return null;
+        log.info("-------------查询微信订单开始------------");
+        String nonceStr = Sha1Util.getNonceStr();
+        TreeMap param = new TreeMap();
+        param.put("appid", appid);
+        param.put("mch_id", mch_id);
+        param.put("out_trade_no", out_trade_no);
+        param.put("nonce_str", nonceStr);
+        String sign = WeiXinUtils.createPackage(param, appsecret);
+        param.put("sign", sign);
+        String respString = WxHttpUtil.sendPost(query_order_url, param, charset);
+        log.info("微信统一下单返回数据: " + respString);
+        Map<String, String> map = XMLUtil.doXMLParse(respString);
+        if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) {
+            log.error("微信订单查询失败: " + param);
+            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("return_msg"), param);
+        }
+        if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) {
+            log.error("微信订单查询失败: " + param);
+            throw new ApiBizException(ErrorCode.E00000001.CODE, map.get("err_code_des"), param);
+        }
+        log.info("-------------查询微信订单结束------------");
+        return map;
 	}
 
-	@Override
-	public Map<String, String> orderQueryH5(String out_trade_no) throws Exception {
-		return null;
-	}
 }

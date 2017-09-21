@@ -63,7 +63,7 @@
   <select id="selectShopGoodsList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
     SELECT
       ss.shop_id shopId, ss.goods_id goodsId, ss.quantity, ss.initial_quantity initialQuantity,	ss.initial_time initialTime, ss.layer, ss.dispatch_quantity dispatchQuantity,
-       ss.min_quantity minQuantity,ss.shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId
+      ss.min_quantity minQuantity,ss.shop_base_quantity shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId
     FROM
       shop s
     LEFT JOIN shop_stock ss ON s.id = ss.shop_id
@@ -87,4 +87,8 @@
     ORDER BY totalNum DESC
     LIMIT 0,2
   </select>
+
+  <update id="updateGoodsStock" parameterType="java.lang.String">
+    UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId}
+  </update>
 </mapper>

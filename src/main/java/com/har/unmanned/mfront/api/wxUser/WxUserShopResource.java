@@ -2,7 +2,6 @@ package com.har.unmanned.mfront.api.wxUser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.exception.ApiBizException;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -68,7 +67,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} Data.orderNo  订单号
      * @apiSuccess (200) {String} Data.singData	支付签名数据
      * */
-    JSONObject submitOrder(InputParameter inputParameter) throws ApiBizException;
+    JSONObject submitOrder(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {get} /api/v1/wxUserShop/buyRecord 3.api 购买记录

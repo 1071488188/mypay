@@ -3,11 +3,14 @@ package com.har.unmanned.mfront.service;
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.api.wxUser.InputParameter;
 import com.har.unmanned.mfront.exception.ApiBizException;
+import com.har.unmanned.mfront.model.ShopOrder;
+import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -28,21 +31,21 @@ public abstract class IWxUserShopService {
      * @param param
      * @return
      */
-    public abstract JSONObject submitOrder(InputParameter param) throws ApiBizException;
+    public abstract ShopOrder submitOrder(InputParameter param) throws ApiBizException;
 
     /**
      * 支付订单
-     * @param param
+     * @param shopOrder
      * @return
      */
-    public abstract JSONObject payOrder(JSONObject param);
+    public abstract JSONObject payOrder(ShopOrder shopOrder) throws Exception;
 
     /**
      * 微信回调
      * @param param
      * @return
      */
-    public abstract JSONObject callBack(JSONObject param);
+    public abstract String callBack(String param) throws JDOMException, IOException, ApiBizException;
 
     /**
      * 用户购买记录

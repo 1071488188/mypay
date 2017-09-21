@@ -7,9 +7,9 @@ import com.har.unmanned.mfront.api.wxUser.validGroup.IndexGroup;
 import com.har.unmanned.mfront.api.wxUser.validGroup.OrderGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
+import com.har.unmanned.mfront.model.ShopOrder;
 import com.har.unmanned.mfront.service.IWxUserShopService;
 import com.har.unmanned.mfront.utils.RespMessage;
-import com.har.unmanned.mfront.utils.Xml2JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -55,14 +55,14 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @PostMapping("/submitOrder")
-    public JSONObject submitOrder(@Validated(OrderGroup.class) InputParameter params) throws ApiBizException {
+    public JSONObject submitOrder(@Validated(OrderGroup.class) InputParameter params) throws Exception {
         log.info("[submitOrder]用户提交订单传入数据:" + params);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户提交订单_开始", params);
         RespMessage respMessage = new RespMessage();
         // 返回数据
-        JSONObject object = wxUserShopService.submitOrder(params);
-        log.info("提交订单返回的参数:" + object);
-        JSONObject respJson = wxUserShopService.payOrder(object);
+        ShopOrder shopOrder = wxUserShopService.submitOrder(params);
+        log.info("提交订单返回的参数:" + JSONObject.toJSONString(shopOrder));
+        JSONObject respJson = wxUserShopService.payOrder(shopOrder);
 
         log.info("微信同一下单返回的参数:" + respJson);
         LogHelper.save(LogType.RESPONSE, "[submitOrder]用户提交订单_结束", respJson);
@@ -111,16 +111,10 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      * @return
      */
     @GetMapping("/callBack")
-    public JSONObject callBack(HttpServletRequest request, @RequestBody String params) throws Exception {
+    public String callBack(HttpServletRequest request, @RequestBody String params) throws Exception {
         log.info("[callBack]微信支付回调传入数据:" + params);
-        RespMessage respMessage = new RespMessage();
-        // 返回数据
-        JSONObject reqJson = Xml2JsonUtil.xml2JsonObject(params);
-        JSONObject respJson = wxUserShopService.callBack(reqJson);
-        log.info("[callBack]微信支付回调响应数据:" + params);
-        respMessage.setRespCode(ErrorCode.E00000000.CODE);
-        respMessage.setRespDesc(ErrorCode.E00000000.MSG);
-        respMessage.setData(respJson);
-        return respMessage.getRespMessage();
+        String respString = wxUserShopService.callBack(params);
+        log.info("[callBack]微信支付回调响应数据:" + respString);
+        return respString;
     }
 }
