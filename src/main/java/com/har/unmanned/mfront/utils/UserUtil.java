@@ -37,7 +37,7 @@ public class UserUtil {
     public ShopWechat userInfo() throws ApiBizException {
         // 初始化返回用户信息
         ShopWechat wxUser = new ShopWechat();
-        wxUser.setOpenid("o8ZOpjiUrXB8W8_72jq8v2DlkLDo");
+        wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGM");
         /*ShopWechat wxUser = null;
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();

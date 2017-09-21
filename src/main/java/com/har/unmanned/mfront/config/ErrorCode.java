@@ -153,6 +153,13 @@ public class ErrorCode {
 
 		String CODE = "00000021";
 
-		String MSG = "微信订单已经支付";
+		String MSG = "商品库存异常";
+	}
+
+	public interface E00000022 {
+
+		String CODE = "00000022";
+
+		String MSG = "商品库存扣减异常";
 	}
 }

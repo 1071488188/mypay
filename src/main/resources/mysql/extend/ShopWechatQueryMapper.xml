@@ -89,6 +89,6 @@
   </select>
 
   <update id="updateGoodsStock" parameterType="java.lang.String">
-    UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId}
+    UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId} AND quantity > #{num}
   </update>
 </mapper>

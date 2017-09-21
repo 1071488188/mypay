@@ -53,7 +53,7 @@ public class WxPayServiceImpl extends WxPayService {
         param.put("spbill_create_ip", ip);
         param.put("notify_url", notify_url);
         param.put("trade_type", trade_type);
-        //param.put("openid", openid);
+        param.put("openid", openid);
         String sign = WeiXinUtils.createPackage(param, appsecret);
         param.put("sign", sign);
         String respString = WxHttpUtil.sendPost(unified_order_url, param, charset);

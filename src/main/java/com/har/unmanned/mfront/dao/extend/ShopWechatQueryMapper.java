@@ -43,5 +43,5 @@ public interface ShopWechatQueryMapper {
      * @param goodsId
      * @param num
      */
-    void updateGoodsStock(@Param("shopId") Long shopId, @Param("goodsId")Long goodsId, @Param("num")Integer num);
+    Integer updateGoodsStock(@Param("shopId") String shopId, @Param("goodsId")String goodsId, @Param("num")String num);
 }

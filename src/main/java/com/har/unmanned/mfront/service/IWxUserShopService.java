@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +33,7 @@ public abstract class IWxUserShopService {
      * @param param
      * @return
      */
-    public abstract ShopOrder submitOrder(InputParameter param) throws ApiBizException;
+    public abstract ShopOrder submitOrder(InputParameter param) throws ApiBizException, UnsupportedEncodingException;
 
     /**
      * 支付订单
@@ -46,7 +47,7 @@ public abstract class IWxUserShopService {
      * @param param
      * @return
      */
-    public abstract String callBack(String param) throws JDOMException, IOException, ApiBizException;
+    public abstract void callBack(String param) throws Exception;
 
     /**
      * 用户购买记录

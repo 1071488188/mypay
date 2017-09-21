@@ -1,6 +1,8 @@
 package com.har.unmanned.mfront.api.wxUser;
 
 import com.alibaba.fastjson.JSONObject;
+import com.har.bigdata.exception.CommonException;
+import com.har.bigdata.exception.CommonExceptionLevel;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.wxUser.validGroup.IndexGroup;
@@ -9,6 +11,7 @@ import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.ShopOrder;
 import com.har.unmanned.mfront.service.IWxUserShopService;
+import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by cc on 2017/9/19.
@@ -35,7 +40,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping
-    public JSONObject wxUserShop(@Validated(IndexGroup.class) @RequestBody InputParameter inputParameter) throws ApiBizException {
+    public JSONObject wxUserShop(@Validated(IndexGroup.class) InputParameter inputParameter) throws ApiBizException {
         log.info("[wxShop]用户访问首页传入数据:" + inputParameter);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户访问首页_开始", inputParameter);
         RespMessage respMessage = new RespMessage();
@@ -111,11 +116,58 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      * @param params
      * @return
      */
-    @GetMapping("/callBack")
+    @RequestMapping("/callBack")
     public String callBack(HttpServletRequest request, @RequestBody String params) throws Exception {
         log.info("[callBack]微信支付回调传入数据:" + params);
-        String respString = wxUserShopService.callBack(params);
-        log.info("[callBack]微信支付回调响应数据:" + respString);
-        return respString;
+        StringBuilder sb = new StringBuilder(); // 返回结果, 用于通知微信
+        Map resultMap = new HashMap();
+        try {
+            wxUserShopService.callBack(params);
+            log.info("[callBack]微信支付回调响应数据:");
+            resultMap.put("return_code", "SUCCESS");
+            resultMap.put("return_msg", "支付成功");
+            sb.append("<xml>");
+            for (Object o : resultMap.entrySet()) {
+                Map.Entry entry = (Map.Entry) o;
+                sb.append("<").append(entry.getKey()).append(">")
+                        .append(entry.getValue())
+                        .append("</").append(entry.getKey()).append(">");
+            }
+            sb.append("</xml>");
+        } catch (ApiBizException e) {
+            e.printStackTrace();
+            LogHelper.saveCommonException(e);
+            if ((CheckUtil.isEquals(e.getErrCode(), ErrorCode.E00000018.CODE)) // return_code或result_code不为SUCCESS
+                    || (CheckUtil.isEquals(e.getErrCode(), ErrorCode.E00000019.CODE)) // 微信签名验证异常
+                    || (CheckUtil.isEquals(e.getErrCode(), ErrorCode.E00000020.CODE))) { // 订单查询结果为支付失败
+                resultMap.put("return_code", "FAIL");
+                resultMap.put("return_msg", e.getMessage());
+            } else if ((CheckUtil.isEquals(e.getErrCode(), ErrorCode.E00000021.CODE)) // 因库存异常导致库存扣减失败
+                    || (CheckUtil.isEquals(e.getErrCode(), ErrorCode.E00000022.CODE))) { // 订单和库存更新过程中出现异常
+                resultMap.put("return_code", "SUCCESS");
+                resultMap.put("return_msg", "支付成功");
+            }
+            sb.append("<xml>");
+            for (Object o : resultMap.entrySet()) {
+                Map.Entry entry = (Map.Entry) o;
+                sb.append("<").append(entry.getKey()).append(">")
+                        .append(entry.getValue())
+                        .append("</").append(entry.getKey()).append(">");
+            }
+            sb.append("</xml>");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("return_code", "SUCCESS");
+            resultMap.put("return_msg", "支付成功");
+            sb.append("<xml>");
+            for (Object o : resultMap.entrySet()) {
+                Map.Entry entry = (Map.Entry) o;
+                sb.append("<").append(entry.getKey()).append(">")
+                        .append(entry.getValue())
+                        .append("</").append(entry.getKey()).append(">");
+            }
+            sb.append("</xml>");
+        }
+        return sb.toString();
     }
 }
