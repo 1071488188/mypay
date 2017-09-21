@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by cc on 2017/9/19.
@@ -93,7 +94,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
 
     @Override
     @GetMapping("/userInfo")
-    public JSONObject userInfo() throws ApiBizException {
+    public JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException {
         log.info("[userInfo]查询用户信息");
         RespMessage respMessage = new RespMessage();
         // 返回数据

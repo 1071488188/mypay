@@ -3,6 +3,8 @@ package com.har.unmanned.mfront.api.wxUser;
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.exception.ApiBizException;
 
+import java.io.UnsupportedEncodingException;
+
 
 /**
  * 微商城
@@ -105,9 +107,8 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} RespCode      响应编码，8位
      * @apiSuccess (200) {String} RespDesc      响应描述
      * @apiSuccess (200) {Object} Data			响应数据
-     * @apiSuccess (200) {Object} Data.	授权的微信用户基本信息
      * @apiSuccess (200) {String} Data.name	用户昵称
      * @apiSuccess (200) {String} Data.headimgUrl 用户头像
      * */
-    JSONObject userInfo() throws ApiBizException;
+    JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException;
 }

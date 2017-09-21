@@ -21,16 +21,16 @@ import com.har.unmanned.mfront.service.IWxUserShopService;
 import com.har.unmanned.mfront.service.WxPayService;
 import com.har.unmanned.mfront.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.util.Base64Utils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -77,11 +77,11 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         for (ShopStockDomain codeGood : codeGoods) {
             JSONObject object = new JSONObject();
             object.put("goodsId", codeGood.getGoodsId());
-            object.put("name", codeGood.getGoodsId());
+            object.put("name", codeGood.getName());
             object.put("image", picPath + (CheckUtil.isNull(codeGood.getImage()) ? "" : codeGood.getImage()));
-            object.put("price", codeGood.getGoodsId());
-            object.put("quantity", codeGood.getGoodsId());
-            object.put("layer", codeGood.getGoodsId());
+            object.put("price", codeGood.getPrice());
+            object.put("quantity", codeGood.getQuantity());
+            object.put("layer", codeGood.getLayer());
             recentPurchaseList.add(object);
         }
         respJson.put("recentPurchaseList", recentPurchaseList);
@@ -144,7 +144,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
                 totalMoney += domain.getPrice() * num;
             }
         }
-        // 销售单
+        // 1. 门店销售单
         ShopOrder shopOrder = new ShopOrder();
         shopOrder.setShopId(shop.getId());
         shopOrder.setOpenid(shopWechat.getOpenid());
@@ -161,7 +161,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         shopOrder.setLongitude(param.getLongitude());
         shopOrder.setStatus(CodeConstants.OrderStatus.UNPAID); //未支付
         shopOrderMapper.insertSelective(shopOrder);
-        // 订单明细
+        // 2. 订单明细
         for (CodeGoodsDomain codeGood : codeGoods) {
             ShopOrderItem item = new ShopOrderItem();
             item.setOrderId(shopOrder.getId());
@@ -183,8 +183,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     public JSONObject payOrder(ShopOrder shopOrder) throws Exception {
         log.info("----------------支付订单开始-----------------");
         log.info("支付订单service传入参数: " + JSONObject.toJSONString(shopOrder));
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String ip = request.getRemoteAddr();
+        String ip = ContextHolderUtils.getIp();
         Map<String, String> map = wxPayService.paymentOrderHbxWeb(shopOrder.getOpenid(), shopOrder.getAmount().toString(), "微信支付", shopOrder.getOrderNo(), ip);
         JSONObject respJson = (JSONObject) JSONObject.toJSON(map);
         log.info("----------------支付订单结束-----------------");
@@ -205,74 +204,71 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         criteria.andOrderNoEqualTo(orderNo);
         List<ShopOrder> shopOrders = shopOrderMapper.selectByExample(example);
         ShopOrder shopOrder = shopOrders.get(0);
-        if (shopOrder.getStatus().intValue() == CodeConstants.OrderStatus.SUCCESS) {
-            log.error("订单已经支付成功: " + JSONObject.toJSONString(shopOrder));
-            throw new ApiBizException(ErrorCode.E00000021.CODE, ErrorCode.E00000021.MSG, param, CommonExceptionLevel.WARN);
-        }
 
         boolean flag = false; // true 支付成功, false 支付失败, 用于处理后台逻辑, 支付成功后更新订单和库存信息
         /** 验证微信订单支付情况 */
-        try {
-            if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) { // 通信异常
-                log.error("微信回调异常: " + map.get("return_msg"));
-                throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("return_msg"), param, CommonExceptionLevel.WARN);
-            }
-            if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) { // 支付异常
-                log.error("微信回调异常: " + map.get("err_code_des"));
-                throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
-            }
-            boolean validSign = WeiXinUtils.isValidSign(map, appsecret);
-            if (!validSign) {
-                log.error("微信签名验证异常: " + param);
-                throw new ApiBizException(ErrorCode.E00000019.CODE, ErrorCode.E00000019.MSG, param, CommonExceptionLevel.WARN);
-            }
-            Map<String, String> orderquery = wxPayService.orderquery(orderNo);
-            if (!CheckUtil.isEquals(orderquery.get("trade_state"), "SUCCESS")) {
-                log.error("微信支付结果验证异常: " + orderquery);
-                throw new ApiBizException(ErrorCode.E00000020.CODE, "订单" + orderNo + "支付失败", orderquery, CommonExceptionLevel.WARN);
-            }
-            flag = true;
-        } catch (ApiBizException e) {
-            e.printStackTrace();
-            resultMap.put("return_code", "FAIL");
-            resultMap.put("return_msg", "签名验证失败");
-            LogHelper.saveCommonException(e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("return_code", "FAIL");
-            resultMap.put("return_msg", "签名验证失败");
-        }
-
-
-        /** 处理后台业务逻辑 */
-        try {
-            if (flag) { // 支付成功
-                // 1. 更新基础订单信息
-                shopOrder.setPayNo(map.get("transaction_id")); // 微信订单号
-                shopOrder.setPayTime(new Date()); // 付款成功时间
-                shopOrder.setStatus(CodeConstants.OrderStatus.SUCCESS); // 订单支付成功
-                shopOrderMapper.updateByPrimaryKeySelective(shopOrder);
-
-                // 2. 扣减商品的库存
-                ShopOrderItemExample itemExample = new ShopOrderItemExample();
-                ShopOrderItemExample.Criteria itemCriteria = itemExample.createCriteria();
-                itemCriteria.andOrderIdEqualTo(shopOrder.getId());
-                itemCriteria.andShopIdEqualTo(shopOrder.getShopId());
-                List<ShopOrderItem> shopOrderItems = shopOrderItemMapper.selectByExample(itemExample);
-                for (ShopOrderItem shopOrderItem : shopOrderItems) {
-                    Long shopId = shopOrderItem.getShopId(); //货架id
-                    Long goodsId = shopOrderItem.getGoodsId(); // 商品id
-                    Integer num = shopOrderItem.getQuantity(); // 商品数量
-                    shopWechatQueryMapper.updateGoodsStock(shopId, goodsId , num);
+        if (shopOrder.getStatus().intValue() == CodeConstants.OrderStatus.UNPAID.intValue()) {
+            try {
+                if (!CheckUtil.isEquals(map.get("return_code"), "SUCCESS")) { // 通信异常
+                    log.error("微信回调异常: " + map.get("return_msg"));
+                    throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("return_msg"), param, CommonExceptionLevel.WARN);
                 }
+                if (!CheckUtil.isEquals(map.get("result_code"), "SUCCESS")) { // 支付异常
+                    log.error("微信回调异常: " + map.get("err_code_des"));
+                    throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
+                }
+                boolean validSign = WeiXinUtils.isValidSign(map, appsecret);
+                if (!validSign) {
+                    log.error("微信签名验证异常: " + param);
+                    throw new ApiBizException(ErrorCode.E00000019.CODE, ErrorCode.E00000019.MSG, param, CommonExceptionLevel.WARN);
+                }
+                Map<String, String> orderquery = wxPayService.orderquery(orderNo);
+                if (!CheckUtil.isEquals(orderquery.get("trade_state"), "SUCCESS")) {
+                    log.error("微信支付结果验证异常: " + orderquery);
+                    throw new ApiBizException(ErrorCode.E00000020.CODE, "订单" + orderNo + "支付失败", orderquery, CommonExceptionLevel.WARN);
+                }
+                flag = true;
+            } catch (ApiBizException e) {
+                e.printStackTrace();
+                resultMap.put("return_code", "FAIL");
+                resultMap.put("return_msg", "签名验证失败");
+                LogHelper.saveCommonException(e);
+            } catch (Exception e) {
+                e.printStackTrace();
+                resultMap.put("return_code", "FAIL");
+                resultMap.put("return_msg", "签名验证失败");
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("后台逻辑处理失败: " + orderNo);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, "订单" + orderNo + "后台逻辑处理失败", param, CommonExceptionLevel.WARN);
-        }
 
+            /** 处理后台业务逻辑 */
+            try {
+                if (flag) { // 支付成功
+                    // 1. 更新基础订单信息
+                    shopOrder.setPayNo(map.get("transaction_id")); // 微信订单号
+                    shopOrder.setPayTime(new Date()); // 付款成功时间
+                    shopOrder.setStatus(CodeConstants.OrderStatus.SUCCESS); // 订单支付成功
+                    shopOrderMapper.updateByPrimaryKeySelective(shopOrder);
+
+                    // 2. 扣减商品的库存
+                    ShopOrderItemExample itemExample = new ShopOrderItemExample();
+                    ShopOrderItemExample.Criteria itemCriteria = itemExample.createCriteria();
+                    itemCriteria.andOrderIdEqualTo(shopOrder.getId());
+                    itemCriteria.andShopIdEqualTo(shopOrder.getShopId());
+                    List<ShopOrderItem> shopOrderItems = shopOrderItemMapper.selectByExample(itemExample);
+                    for (ShopOrderItem shopOrderItem : shopOrderItems) {
+                        Long shopId = shopOrderItem.getShopId(); //货架id
+                        Long goodsId = shopOrderItem.getGoodsId(); // 商品id
+                        Integer num = shopOrderItem.getQuantity(); // 商品数量
+                        shopWechatQueryMapper.updateGoodsStock(shopId, goodsId , num);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("后台逻辑处理失败: " + orderNo);
+                throw new ApiBizException(ErrorCode.E00000001.CODE, "订单" + orderNo + "后台逻辑处理失败", param, CommonExceptionLevel.WARN);
+            }
+        }
 
         /** 返回数据 */
         if (resultMap.isEmpty()) {
@@ -320,18 +316,20 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
             shopOrder.put("goodsList", goodsList);
             dataList.add(shopOrder);
         }
+        respJson.put("dataList", dataList);
         log.info("返回的记录信息: " + respJson);
         log.info("-----------------用户所购买的商品信息service结束----------------");
         return respJson;
     }
 
     @Override
-    public JSONObject userInfo() throws ApiBizException {
+    public JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException {
         log.info("-----------------查询用户详情service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
-        respJson.put("name", shopWechat.getName());
-        respJson.put("headimgUrl", shopWechat.getHeadimgUrl());
+
+        respJson.put("name", CheckUtil.isNull(shopWechat.getName()) ? "" : new String(Base64.decodeBase64(shopWechat.getName().getBytes("utf-8")), "utf-8")); // 解码用户名
+        respJson.put("headimgUrl", CheckUtil.isNull(shopWechat.getHeadimgUrl()) ? "" : shopWechat.getHeadimgUrl());
         log.info("-----------------查询用户详情service结束----------------");
         return respJson;
     }
@@ -352,7 +350,6 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
                 object.put("quantity", shopStockDomain.getQuantity());
                 goodsList.add(object);
             } else {
-                map.put("layer", shopStockDomain.getLayer());
                 if (goodsList.isEmpty()) { // 首次进入
                     JSONObject object = new JSONObject();
                     object.put("goodsId", shopStockDomain.getGoodsId());
@@ -362,7 +359,8 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
                     object.put("quantity", shopStockDomain.getQuantity());
                     goodsList.add(object);
                 } else {
-                    dataList.put(shopStockDomain.getLayer().toString(), goodsList);
+                    Object clone = goodsList.clone(); // 复制一份, 以免goodsList清除影响dataList中的数据
+                    dataList.put(map.get("layer").toString(), clone);
                     goodsList.clear();
                     JSONObject object = new JSONObject();
                     object.put("goodsId", shopStockDomain.getGoodsId());
@@ -372,9 +370,10 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
                     object.put("quantity", shopStockDomain.getQuantity());
                     goodsList.add(object);
                 }
+                map.put("layer", shopStockDomain.getLayer());
             }
         }
-
+        dataList.put(map.get("layer").toString(), goodsList); // 放入最后一层的数据
         log.info("格式化后的数据: " + dataList);
         log.info("-----------------格式化商品开始----------------");
         return dataList;

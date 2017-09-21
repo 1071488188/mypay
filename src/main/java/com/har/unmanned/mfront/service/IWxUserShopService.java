@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -57,6 +58,6 @@ public abstract class IWxUserShopService {
      * 用户的一些基本信息
      * @return
      */
-    public abstract JSONObject userInfo() throws ApiBizException;
+    public abstract JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException;
 
 }
