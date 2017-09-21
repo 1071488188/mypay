@@ -3,7 +3,8 @@ package com.har.unmanned.mfront.api.dispatch;
 import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
-import com.har.unmanned.mfront.api.dispatch.ValidGroup.ValidateCodeGroup;
+import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
+import com.har.unmanned.mfront.api.dispatch.validgroup.ValidateCodeGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.service.DispatchService;
 import com.har.unmanned.mfront.utils.RespMessage;
@@ -26,18 +27,18 @@ public class DispatchResourceImpl implements DispatchResource {
 
     @Override
     @GetMapping("/dispatchList")
-    public JSONObject dispatchList(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "status") String status) throws Exception {
+    public JSONObject dispatchList(@Validated({PageGroup.class}) InputParameter inputParameter) throws Exception {
         LogHelper.save(LogType.RECEIVE, "配送中心列表_开始", null);
-        log.info("param={}, {}", page, pageSize);
+        log.info("param={}", inputParameter);
         // 返回消息
         RespMessage respMessage = new RespMessage();
         // 返回数据
         JSONObject retJson;
         // 请求参数
         JSONObject reqParam = new JSONObject();
-        reqParam.put("page", page);
-        reqParam.put("pageSize", pageSize);
-        reqParam.put("status", status);
+        reqParam.put("page", inputParameter.getPage());
+        reqParam.put("pageSize", inputParameter.getPageSize());
+        reqParam.put("status", inputParameter.getStatus());
 
         LogHelper.save(LogType.REQUEST, "配送中心列请求参数", reqParam);
         log.info("配送中心列请求参数：" + reqParam);
