@@ -50,4 +50,12 @@ public interface AdministratorService {
      * @throws Exception
      */
     public void closeAnAccount(InputParameter inputParameter)throws Exception;
+
+    /**
+     * 余额明细
+     * @param inputParameter
+     * @return
+     * @throws Exception
+     */
+    JSONArray balanceDetails(InputParameter inputParameter)throws Exception;
 }
