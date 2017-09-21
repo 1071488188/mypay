@@ -35,7 +35,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping
-    public JSONObject wxUserShop(@Validated(IndexGroup.class) InputParameter inputParameter) throws ApiBizException {
+    public JSONObject wxUserShop(@Validated(IndexGroup.class) @RequestBody InputParameter inputParameter) throws ApiBizException {
         log.info("[wxShop]用户访问首页传入数据:" + inputParameter);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户访问首页_开始", inputParameter);
         RespMessage respMessage = new RespMessage();
@@ -56,7 +56,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @PostMapping("/submitOrder")
-    public JSONObject submitOrder(@Validated(OrderGroup.class) InputParameter params) throws Exception {
+    public JSONObject submitOrder(@Validated(OrderGroup.class) @RequestBody InputParameter params) throws Exception {
         log.info("[submitOrder]用户提交订单传入数据:" + params);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户提交订单_开始", params);
         RespMessage respMessage = new RespMessage();

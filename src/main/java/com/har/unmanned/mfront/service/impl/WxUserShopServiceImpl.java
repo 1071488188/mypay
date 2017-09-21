@@ -155,6 +155,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
         BigDecimal ratio = shop.getRatio();
         BigDecimal commission = ratio.divide(new BigDecimal(100)).multiply(new BigDecimal(totalMoney));
         DecimalFormat format = new DecimalFormat("0");
+        shopOrder.setRatio(ratio);
         shopOrder.setCommission(Integer.parseInt(format.format(commission))); // 单位(分)
         shopOrder.setLocation(param.getLocation());
         shopOrder.setLatitude(param.getLatitude());

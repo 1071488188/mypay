@@ -995,6 +995,66 @@ public class ShopOrderExample {
             addCriterion("`status` not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        public Criteria andRatioIsNull() {
+            addCriterion("ratio is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioIsNotNull() {
+            addCriterion("ratio is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioEqualTo(BigDecimal value) {
+            addCriterion("ratio =", value, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioNotEqualTo(BigDecimal value) {
+            addCriterion("ratio <>", value, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioGreaterThan(BigDecimal value) {
+            addCriterion("ratio >", value, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("ratio >=", value, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioLessThan(BigDecimal value) {
+            addCriterion("ratio <", value, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("ratio <=", value, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioIn(List<BigDecimal> values) {
+            addCriterion("ratio in", values, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioNotIn(List<BigDecimal> values) {
+            addCriterion("ratio not in", values, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("ratio between", value1, value2, "ratio");
+            return (Criteria) this;
+        }
+
+        public Criteria andRatioNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("ratio not between", value1, value2, "ratio");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

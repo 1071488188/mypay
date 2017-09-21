@@ -38,7 +38,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} Data.carrierNote.spec         商品规格
      * @apiSuccess (200) {Number} Data.carrierNote.quantity     商品数量
      */
-    JSONObject dispatchList(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "status") String status) throws Exception;
+    JSONObject dispatchList(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
@@ -71,12 +71,14 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object[]} Data			响应数据
-     * @apiSuccess (200) {String} Data.replenishmentNum 补货总数
-     * @apiSuccess (200) {Object[]} Data.layer		    层级(layer为：jsonObject的key)
-     * @apiSuccess (200) {String} Data.layer.goodsName      商品名称
-     * @apiSuccess (200) {String} Data.layer.goodsValue     商品单价
-     * @apiSuccess (200) {String} Data.layer.goodsPicture   商品图片路径
-     * @apiSuccess (200) {Number} Data.layer.goodsId        商品ID
+     * @apiSuccess (200) {Number} Data.replenishmentNum 补货总数
+     * @apiSuccess (200) {Number} Data.species 种类
+     * @apiSuccess (200) {Object[]} Data.goods		    层级(layer为：jsonObject的key)
+     * @apiSuccess (200) {String} Data.goods.layer.goodsName      商品名称
+     * @apiSuccess (200) {String} Data.goods.layer.goodsValue     商品单价
+     * @apiSuccess (200) {String} Data.goods.layer.goodsPicture   商品图片路径
+     * @apiSuccess (200) {Number} Data.goods.layer.goodsQuantity  商品数量
+     * @apiSuccess (200) {Number} Data.goods.layer.goodsId        商品ID
      */
     JSONObject replenishmentList(JSONObject params) throws Exception;
 
@@ -90,9 +92,7 @@ public interface DispatchResource {
      * @apiDescription 确认补货
      *
      * @apiParam {String} dispatchNo 	        配送单号
-     * @apiParam {Object[]} Data.layer		    层级(layer为：jsonObject的key)
-     * @apiParam {Number} Data.layer.goodsId        商品ID
-     * @apiParam {Number} Data.layer.ifConfirm      是否确认(0：未确认 、1:已确认)
+     * @apiParam {Object[]} goodsIds	            商品ID(已确认商品)
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述

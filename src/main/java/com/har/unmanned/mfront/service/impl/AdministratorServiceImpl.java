@@ -3,12 +3,11 @@ package com.har.unmanned.mfront.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.api.administrator.InputParameter;
+import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
-import com.har.unmanned.mfront.dao.ShopMapper;
-import com.har.unmanned.mfront.dao.ShopOrderMapper;
-import com.har.unmanned.mfront.dao.ShopWechatMapper;
-import com.har.unmanned.mfront.dao.SysUserMapper;
+import com.har.unmanned.mfront.dao.*;
 import com.har.unmanned.mfront.dao.extend.ShopCommissionMapperExtend;
+import com.har.unmanned.mfront.dao.extend.ShopMapperExtend;
 import com.har.unmanned.mfront.dao.extend.ShopOrderMapperExtend;
 import com.har.unmanned.mfront.dao.extend.SysUserMapperExtend;
 import com.har.unmanned.mfront.exception.ApiBizException;
@@ -23,7 +22,9 @@ import kafka.utils.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,11 +44,13 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Autowired
     ShopMapper shopMapper;
     @Autowired
-    ShopOrderMapper shopOrderMapper;
-    @Autowired
     ShopOrderMapperExtend shopOrderMapperExtend;
     @Autowired
     ShopCommissionMapperExtend shopCommissionMapperExtend;
+    @Autowired
+    ShopMapperExtend shopMapperExtend;
+    @Autowired
+    ShopExpressiveMapper shopExpressiveMapper;
     private static int roleId = 3;//网点管理员权限
 
     @Override
@@ -149,17 +152,38 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
     public void closeAnAccount(InputParameter inputParameter) throws Exception {
-        String billingId = inputParameter.getBillingId();
+        Long billingId = Long.parseLong(inputParameter.getBillingId());
         //获取当前用户信息
         ShopWechat shopWechat = userUtil.userInfo();
-        verifyPermissions();//验证是否有权限
-        //1查询当前用户是否包含该清单
-        int count = shopCommissionMapperExtend.countByUserIdAndId(Long.parseLong(billingId), shopWechat.getUserId());
-        log.info("清单id{},查询当前用户是否包含清单结果{}", billingId, count);
-        if (count == 0) {
+        //1验证是否有权限
+        verifyPermissions();
+        //2查询当前用户是否包含该清单
+        ShopCommissionExtend shopCommissionExtend = shopCommissionMapperExtend.countByUserIdAndId(billingId, shopWechat.getUserId());
+        log.info("清单id{},查询当前用户是否包含清单结果{}", billingId, shopCommissionExtend);
+        if (CheckUtil.isNull(shopCommissionExtend)) {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "无权执行该操作", inputParameter);
         }
+        //3修改状态为已结算
+        ShopCommission shopCommission=new ShopCommission();
+        shopCommission.setId(billingId);
+        shopCommission.setUserId(shopWechat.getUserId());
+        shopCommission.setApplyTime(new Date());
+        int updateByPrimaryKeySelective=shopCommissionMapperExtend.updateByPrimaryKeySelective(shopCommission);
+        log.info("清单id{},修改状态为已结算结果{}", billingId, updateByPrimaryKeySelective);
+        //4修改网点余额
+        int updateShopAccountMoneyAndShopId= shopMapperExtend.updateShopAccountMoneyAndShopId(shopCommissionExtend.getShopId(),shopCommissionExtend.getCommission());
+        log.info("清单id{},修改网点余额结果{}", billingId, updateShopAccountMoneyAndShopId);
+        //5添加流水
+        ShopExpressive shopExpressive=new ShopExpressive();
+        shopExpressive.setMoney(shopCommissionExtend.getCommission());
+        shopExpressive.setType(CodeConstants.WithdrawCurrentType.COMMISSIONSETTLEMENT);
+        shopExpressive.setUserId(shopWechat.getUserId());
+        shopExpressive.setApplyTime(new Date());
+        shopExpressive.setShopId(shopCommissionExtend.getShopId());
+        shopExpressive.setExpressiveNo(System.currentTimeMillis()+"");
+        shopExpressiveMapper.insertSelective(shopExpressive);
 
     }
 
@@ -178,4 +202,6 @@ public class AdministratorServiceImpl implements AdministratorService {
     public String toString() {
         return super.toString();
     }
+
+
 }
