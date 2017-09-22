@@ -3,6 +3,8 @@ package com.har.unmanned.mfront.utils;
 
 import com.har.unmanned.mfront.config.Constants;
 
+import java.text.DecimalFormat;
+
 /**
  * 验证工具类
  *
@@ -40,5 +42,15 @@ public class CheckUtil {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 保留两位有效数字
+     * @param d
+     * @return
+     */
+    public static String m2(Double d){
+        DecimalFormat df = new DecimalFormat("#.00");
+        return df.format(d);
     }
 }

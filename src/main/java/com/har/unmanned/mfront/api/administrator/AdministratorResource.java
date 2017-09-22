@@ -63,7 +63,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {Object[]} Data.particulars          	    列表
      * @apiSuccess (200) {String} Data.particulars.headimgUrl      头像
      * @apiSuccess (200) {String} Data.particulars.name           	昵称
-     * @apiSuccess (200) {String} Data.particulars.theCumulative   累计消费
+     * @apiSuccess (200) {String} Data.particulars.amountZh   累计消费
      */
     String expenseCalendar(InputParameter inputParameter)throws Exception;
 
@@ -85,9 +85,9 @@ public interface AdministratorResource {
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.id
      * @apiSuccess (200) {String} Data.time		    时间
-     * @apiSuccess (200) {String} Data.amount		营业额
+     * @apiSuccess (200) {String} Data.amountZh		营业额
      * @apiSuccess (200) {String} Data.ratio		    当前返佣比例
-     * @apiSuccess (200) {String} Data.commission		佣金已结算
+     * @apiSuccess (200) {String} Data.commissionZh		佣金已结算
      * @apiSuccess (200) {String} Data.status		结算状态0、待结算1、已结算
      */
     String settlementRecords(InputParameter inputParameter)throws Exception;

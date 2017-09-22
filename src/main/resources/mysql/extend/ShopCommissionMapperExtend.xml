@@ -16,23 +16,25 @@
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <!--扩展字段-->
     <result column="time" property="time" jdbcType="VARCHAR" />
+    <result column="amountZh" property="amountZh" jdbcType="VARCHAR" />
+    <result column="commissionZh" property="commissionZh" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, shop_id, commission_no, start_time, end_time, order_num, amount, ratio, commission,
-    `status`, user_id, apply_time
+    sc.id, sc.shop_id, sc.commission_no, sc.start_time, sc.end_time, sc.order_num, sc.amount, sc.ratio, sc.commission,
+    sc.`status`, sc.user_id, sc.apply_time
   </sql>
   <!--查询网点佣金记录清单-->
   <select id="selectListByShopId" resultMap="BaseResultMap" parameterType="map">
     SELECT
-    id,date_format(start_time,'%Y-%c-%d') as time,amount/100 as amount,commission/100 as commission,ratio,status
-    from shop_commission where shop_id=#{shopId}
+    id,date_format(start_time,'%Y-%c-%d') as time,amount/100 as amountZh,commission/100 as commissionZh,ratio,status
+    from shop_commission where shop_id=#{shopId} order by start_time DESC
   </select>
   <!--查询该用户是否有当前结算清单-->
-  <select id="countByUserIdAndId" resultType="java.lang.Integer" parameterType="map">
+  <select id="countByUserIdAndId" resultMap="BaseResultMap" parameterType="map">
     SELECT
     <include refid="Base_Column_List" />
     from shop_commission sc,shop s
-    WHERE sc.shop_id=s.shop_id  and sc.id=#{id} and s.user_id=#{userId} and sc.status=0
+    WHERE sc.shop_id=s.id  and sc.id=#{id} and s.user_id=#{userId} and sc.status=0
   </select>
   <!--查询当月订单根据网点进行分组-->
   <select id="selectByShop" resultMap="BaseResultMap" parameterType="map">
