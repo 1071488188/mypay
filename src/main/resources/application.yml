@@ -10,7 +10,7 @@ spring:
  profiles:
     include: appConfig,wx
  datasource:
-    url: jdbc:mysql://192.168.3.211:3306/har_shop
+    url: jdbc:mysql://192.168.3.211:3306/har_shop?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
     username: harshop
     password: harshop
  redis:

@@ -23,5 +23,21 @@ public interface ShopCommissionMapperExtend extends ShopCommissionMapper{
      * @param userId
      * @return
      */
-    public int countByUserIdAndId(@Param("id") Long id,@Param("userId") Long userId);
+    public ShopCommissionExtend countByUserIdAndId(@Param("id") Long id,@Param("userId") Long userId);
+
+    /**
+     * 根据时间查询上月订单统计数据并去除已经统计过的网点数据
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public List<ShopCommissionExtend> selectByShop(@Param("startTime") String startTime,@Param("endTime") String endTime);
+
+    /**
+     * 批量插入生成待结算清单
+     * @param list
+     * @return
+     */
+    public int bulkInsert(@Param("list")  List<ShopCommissionExtend> list);
+
 }

@@ -10,6 +10,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @MapperScan("com.har.unmanned.mfront.dao")
+//@EnableScheduling
 public class HarUnmannedMfrontApplication {
 
     public static void main(String[] args) {

@@ -784,7 +784,30 @@ public class DateUtil {
         sec = (diff/1000-day*24*60*60-hour*60*60-min*60);  
         long[] times = {day, hour, min, sec};  
         return times;  
-    }  
+    }
+
+	/**
+	 * 获取上月第一天
+	 */
+	public static String firstDayOfLastMonth(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.add(Calendar.MONTH, -1);
+		calendar1.set(Calendar.DAY_OF_MONTH,1);
+		return sdf.format(calendar1.getTime());
+	}
+
+	/**
+	 * 获取上月最后一天
+	 * @return
+	 */
+	public static String lastMonth(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(Calendar.DAY_OF_MONTH, 0);
+		return sdf.format(calendar2.getTime());
+	}
+
 	
 	public static Date[] handleDate(String date){
 		String[] dateArr={};
@@ -805,20 +828,8 @@ public class DateUtil {
 		return null;
 	}
 	public static void main(String[] args) throws ParseException{
-		Date date1 = new Date();
-//		Date date2 =  convertToDate("2017-07-11 08:29:00");
-		Date date2 = convertStrToDate("20170711082900");
-		Date date3 = convertStrToDate("20170711082901");
-//		System.out.println(date1);
-//		System.out.println(date2);
-//		System.out.println(isSameDate(date1,date2));
-//		System.out.println(DateUtil.getCurrentTimeStamp());
-//		System.out.println(DateUtil.getCurrentDateYmd());
-		long[] time = getDistanceTimes(date1, date2);
-		System.out.println(time[0]+"天"+time[1]+"时"+time[2]+"分"+time[3]+"秒");
-		System.out.println(time[3]+time[2]*60+time[1]*60*60+time[0]*60*60*24);
-		System.out.println(date2.getTime()-date3.getTime());
-		
+		System.out.println(firstDayOfLastMonth());
+		System.out.println(lastMonth());
 		
 	}
 }

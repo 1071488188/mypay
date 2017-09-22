@@ -89,7 +89,7 @@ public class DispatchResourceImpl implements DispatchResource {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "更新配送单状态错误", reqParam);
-            throw new ApiBizException(ErrorCode.E00000016.CODE, ErrorCode.E00000016.MSG, reqParam);
+            throw new ApiBizException(ErrorCode.E00000023.CODE, ErrorCode.E00000023.MSG, reqParam);
         }
 
         log.info("{},{}", "更新配送单状态返回数据", respMessage.getRespMessage());
@@ -148,8 +148,7 @@ public class DispatchResourceImpl implements DispatchResource {
                 throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
             }
 
-            JSONObject retData = dispatchService.replenishmentList(reqParam);
-            respMessage.setData(retData);
+            dispatchService.confirmReplenishment(reqParam);
         } catch (ApiBizException e) {
             e.printStackTrace();
             log.error("{},{}", "确认补货错误", JSONObject.toJSON(e.getObject()));
@@ -157,7 +156,7 @@ public class DispatchResourceImpl implements DispatchResource {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "确认补货错误", reqParam);
-            throw new ApiBizException(ErrorCode.E00000018.CODE, ErrorCode.E00000018.MSG, reqParam);
+            throw new ApiBizException(ErrorCode.E00000025.CODE, ErrorCode.E00000025.MSG, reqParam);
         }
 
         log.info("{},{}", "确认补货返回数据", respMessage.getRespMessage());

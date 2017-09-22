@@ -11,7 +11,7 @@ import lombok.Data;
 public class DispatchItemDomain extends DispatchItem {
     // 商品名称
     private long shopId;
-    // 商品名称
+    //商品名称
     private String goodsName;
     // 商品规格
     private String spec;

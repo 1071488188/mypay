@@ -37,4 +37,11 @@ public interface ShopWechatQueryMapper {
      * @return
      */
     List<CodeGoodsDomain> selectGoodsInfo( @Param("shopId")Long shopId, @Param("ids") List ids);
+
+    /**
+     * 更新商品库存
+     * @param goodsId
+     * @param num
+     */
+    Integer updateGoodsStock(@Param("shopId") String shopId, @Param("goodsId")String goodsId, @Param("num")String num);
 }

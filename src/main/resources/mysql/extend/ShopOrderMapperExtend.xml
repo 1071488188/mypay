@@ -31,4 +31,5 @@
     ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY openid ORDER by amount desc
 
   </select>
+
 </mapper>

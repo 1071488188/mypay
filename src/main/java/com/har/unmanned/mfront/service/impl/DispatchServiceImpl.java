@@ -264,7 +264,7 @@ public class DispatchServiceImpl implements DispatchService {
         for (DispatchItemDomain domain : dispatchGoodsList) {
             if (CheckUtil.isNull(goodsIds.get(domain.getGoodsId()))) {
                 log.info("{},{},{}", "提交的商品与配送单商品不匹配", goodsIdsArray, JSONObject.toJSON(dispatchGoodsList));
-                throw new ApiBizException(ErrorCode.E00000017.CODE, "你还有商品未确认，请确认勾选后提交", param);
+                throw new ApiBizException(ErrorCode.E00000024.CODE, "你还有商品未确认，请确认勾选后提交", param);
             }
         }
 

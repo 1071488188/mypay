@@ -15,7 +15,7 @@
     </resultMap>
     <!-- 查询用户是否拥有某角色-->
     <select id="getuserRole" resultType="java.lang.Integer" parameterType="map">
-      SELECT COUNT (*) FROM sys_user sr,shop sp,sys_user_role so
+      SELECT COUNT(*) FROM sys_user sr,shop sp,sys_user_role so
       WHERE sr.user_id=sp.user_id and sr.user_id=so.user_id and  so.role_id=#{roleId}
       <if test="userId!='' and userId!=null">
           and  sr.user_id=#{userId}

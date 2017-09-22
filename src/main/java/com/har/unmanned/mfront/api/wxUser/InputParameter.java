@@ -19,14 +19,7 @@ public class InputParameter {
     @NotNull(message = "货架编号不能为空!", groups = {IndexGroup.class, OrderGroup.class})
     private String shopCode;
 
-    @NotNull(message = "页码不能为空!", groups = PageGroup.class)
-    @Min(value = 1, message = "页码输入错误", groups = PageGroup.class)
-    private Integer page;
-    @NotNull(message = "每页显示条数不能为空!", groups = PageGroup.class)
-    @Min(value = 1, message = "每页显示条数错误", groups = PageGroup.class)
-    private Integer pageSize;
-
-    @NotNull(message = "所选商品不能为空!", groups = OrderGroup.class)
+    @NotNull(message = "请选择商品!", groups = OrderGroup.class)
     private JSONArray goodsList;
 
     private String location;

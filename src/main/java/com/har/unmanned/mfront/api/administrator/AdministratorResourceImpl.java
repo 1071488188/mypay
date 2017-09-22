@@ -1,12 +1,12 @@
 package com.har.unmanned.mfront.api.administrator;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.BindManagerGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.CloseAnAccountGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.PageGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.WithdrawDepositGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
-import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.AdministratorService;
 import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +25,16 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Autowired
     AdministratorService administratorService;
     @Override
+    @GetMapping("/adminInit")
+    @ResponseBody
     public String adminInit() throws Exception {
+        log.info("------------------管理员初始化开始--------------------------------");
         JSONObject jsonObject=new JSONObject();
-        RespMessage respMessage=new RespMessage();
         int flag=administratorService.adminInit();
         jsonObject.put("whetherNetwork",flag);
         log.info("管理员初始化接口返回参数{}",jsonObject);
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).toString();
+        log.info("------------------管理员初始化结束--------------------------------");
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
     /**
@@ -43,7 +46,10 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Override
     @PostMapping("/bindManager")
     public String bindManager(@Validated({BindManagerGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
-        return null;
+        log.info("------------------绑定手机号开始-------------------------------");
+        administratorService.bindManager(inputParameter);
+        log.info("------------------绑定手机号结束-------------------------------");
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
     /**
@@ -55,7 +61,10 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Override
     @PostMapping("/withdrawDeposit")
     public String withdrawDeposit(@Validated({WithdrawDepositGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
-        return null;
+        log.info("------------------提现开始-------------------------------");
+        administratorService.withdrawDeposit(inputParameter);
+        log.info("------------------提现结束-------------------------------");
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
     /**
@@ -67,7 +76,10 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Override
     @GetMapping("/expenseCalendar")
     public String expenseCalendar(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
-        return null;
+        log.info("------------------消费记录开始-------------------------------");
+       JSONObject jsonObject= administratorService.expenseCalendar(inputParameter);
+        log.info("------------------消费记录开始-------------------------------");
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
     /**
@@ -79,7 +91,10 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Override
     @GetMapping("/settlementRecords")
     public String settlementRecords(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
-        return null;
+        log.info("------------------结算记录开始-------------------------------");
+        JSONArray jsonArray=administratorService.settlementRecords(inputParameter);
+        log.info("------------------结算记录结束-------------------------------");
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).getRespMessage().toString();
     }
 
     /**
@@ -91,7 +106,10 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Override
     @PostMapping("/closeAnAccount")
     public String closeAnAccount(@Validated({CloseAnAccountGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
-        return null;
+        log.info("------------------结算开始-------------------------------");
+        administratorService.closeAnAccount(inputParameter);
+        log.info("------------------结算结束-------------------------------");
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
     /**
@@ -102,6 +120,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     public String balanceDetails(@Validated({PageGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
-        return null;
+        log.info("------------------余额明细开始-------------------------------");
+        JSONArray jsonArray=administratorService.balanceDetails(inputParameter);
+        log.info("------------------余额明细结束-------------------------------");
+        return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).getRespMessage().toString();
     }
 }

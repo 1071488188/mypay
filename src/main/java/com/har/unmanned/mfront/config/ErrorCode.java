@@ -118,19 +118,68 @@ public class ErrorCode {
 
 		String CODE = "00000016";
 
-		String MSG = "配送单状态更新失败";
+		String MSG = "微信统一下单失败";
 	}
 
 	public interface E00000017 {
 
 		String CODE = "00000017";
 
-		String MSG = "提交的商品与配送单商品不匹配";
+		String MSG = "微信订单查询失败";
 	}
 
 	public interface E00000018 {
 
 		String CODE = "00000018";
+
+		String MSG = "微信订单回调失败";
+	}
+
+	public interface E00000019 {
+
+		String CODE = "00000019";
+
+		String MSG = "微信签名验证失败";
+	}
+
+	public interface E00000020 {
+
+		String CODE = "00000020";
+
+		String MSG = "微信订单支付失败";
+	}
+
+	public interface E00000021 {
+
+		String CODE = "00000021";
+
+		String MSG = "商品库存异常";
+	}
+
+	public interface E00000022 {
+
+		String CODE = "00000022";
+
+		String MSG = "商品库存扣减异常";
+	}
+
+	public interface E00000023 {
+
+		String CODE = "00000023";
+
+		String MSG = "配送单状态更新失败";
+	}
+
+	public interface E00000024 {
+
+		String CODE = "00000024";
+
+		String MSG = "提交的商品与配送单商品不匹配";
+	}
+
+	public interface E00000025 {
+
+		String CODE = "00000025";
 
 		String MSG = "补货失败";
 	}

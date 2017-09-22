@@ -43,7 +43,7 @@ public class CodeConstants {
 		public static final Integer SUCCESS= 1;
 	}
 
-	/** 支付订单状态 */
+	/** 货架库存状态 */
 	public static interface ShopStockStatus {
 
 		/** 0下架 */
@@ -51,5 +51,55 @@ public class CodeConstants {
 
 		/** 1上架 */
 		public static final Integer UP = 1;
+	}
+
+	/**
+	 * 提现流水类型
+	 */
+	public static interface WithdrawCurrentType{
+		/**
+		 * 佣金结算
+		 */
+		public static int COMMISSIONSETTLEMENT=0;
+		/**
+		 * 提现
+		 */
+		public static int WITHDRAWDEPOSIT=1;
+		/**
+		 * 打款失败回款
+		 */
+		public static int RETURNEDMONEY=2;
+	}
+
+	/**
+	 * 佣金结算状态
+	 */
+	public static interface CommissionStatus{
+		/**
+		 * 待结算
+		 */
+		public static int FORTHE=0;
+		/**
+		 * 已结算
+		 */
+		public static int HAVEALREADYSETTLED=1;
+	}
+
+	/**
+	 * 提现状态
+	 */
+	public static interface WithdrawalState{
+		/**
+		 * 待提现
+		 */
+		public static int FORWITHDRAWAL=0;
+		/**
+		 * 提现完成
+		 */
+		public static int WITHDRAWALTOCOMPLETE=1;
+		/**
+		 * 提现失败
+		 */
+		public static int WITHDRAWALOFFAILURE=2;
 	}
 }

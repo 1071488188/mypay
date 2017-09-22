@@ -33,6 +33,8 @@ public class ShopOrder implements Serializable {
 
     private Integer status;
 
+    private BigDecimal ratio;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -147,6 +149,14 @@ public class ShopOrder implements Serializable {
         this.status = status;
     }
 
+    public BigDecimal getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(BigDecimal ratio) {
+        this.ratio = ratio;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -167,6 +177,7 @@ public class ShopOrder implements Serializable {
         sb.append(", longitude=").append(longitude);
         sb.append(", latitude=").append(latitude);
         sb.append(", status=").append(status);
+        sb.append(", ratio=").append(ratio);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
