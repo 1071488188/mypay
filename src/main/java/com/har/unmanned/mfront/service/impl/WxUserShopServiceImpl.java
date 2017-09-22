@@ -55,7 +55,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     private String appsecret;
 
     @Override
-    public JSONObject selectGoodsList(String param) throws ApiBizException {
+    public JSONObject selectGoodsList(String param) throws Exception {
         JSONObject respJson = new JSONObject();
         log.info("service传入参数: " + param);
         ShopWechat shopWechat = userUtil.userInfo();
@@ -86,7 +86,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 
     @Override
     @Transactional(rollbackFor = ApiBizException.class)
-    public ShopOrder submitOrder(InputParameter param) throws ApiBizException, UnsupportedEncodingException {
+    public ShopOrder submitOrder(InputParameter param) throws Exception {
         log.info("----------------提交订单开始-----------------");
         log.info("提交订单service传入参数: " + param);
         ShopWechat shopWechat = userUtil.userInfo();
@@ -276,7 +276,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     }
 
     @Override
-    public JSONObject buyRecord() throws ApiBizException {
+    public JSONObject buyRecord() throws Exception {
         log.info("-----------------用户所购买的商品信息service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
@@ -311,7 +311,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     }
 
     @Override
-    public JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException {
+    public JSONObject userInfo() throws Exception {
         log.info("-----------------查询用户详情service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();

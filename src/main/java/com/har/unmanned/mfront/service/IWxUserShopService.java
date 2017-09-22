@@ -27,13 +27,13 @@ public abstract class IWxUserShopService {
      * @param param
      * @return
      */
-    public abstract JSONObject selectGoodsList(String param) throws ApiBizException;
+    public abstract JSONObject selectGoodsList(String param) throws Exception;
     /**
      * 提交订单
      * @param param
      * @return
      */
-    public abstract ShopOrder submitOrder(InputParameter param) throws ApiBizException, UnsupportedEncodingException;
+    public abstract ShopOrder submitOrder(InputParameter param) throws Exception;
 
     /**
      * 支付订单
@@ -53,12 +53,12 @@ public abstract class IWxUserShopService {
      * 用户购买记录
      * @return
      */
-    public abstract JSONObject buyRecord() throws ApiBizException;
+    public abstract JSONObject buyRecord() throws Exception;
 
     /**
      * 用户的一些基本信息
      * @return
      */
-    public abstract JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException;
+    public abstract JSONObject userInfo() throws Exception;
 
 }
