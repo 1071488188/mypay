@@ -3,7 +3,7 @@ package com.har.unmanned.mfront.api.smsvalidate;
 import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
-import com.har.unmanned.mfront.api.smsvalidate.validgroup.SendValidateGroup;
+import com.har.unmanned.mfront.api.smsvalidate.ValidGroup.SendValidateGroup;
 import com.har.unmanned.mfront.service.SecurityCodeService;
 import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
