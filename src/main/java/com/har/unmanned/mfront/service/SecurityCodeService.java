@@ -9,7 +9,7 @@ public interface SecurityCodeService {
      * @param reqParam
      * @throws Exception
      */
-    void sendValidate(JSONObject reqParam) throws Exception;
+    void sendValidateCode(JSONObject reqParam) throws Exception;
 
     /**
      * 验证验证码
@@ -17,5 +17,5 @@ public interface SecurityCodeService {
      * @param reqParam
      * @throws Exception
      */
-    void validateCode(JSONObject reqParam) throws Exception;
+    void checkValidateCode(JSONObject reqParam) throws Exception;
 }
