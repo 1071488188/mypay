@@ -25,12 +25,14 @@ public class CodeConstants {
 		/** 配送员 */
 		public static final Integer DISPATCHOR = 4;
 	}
+
 	/** 发送短信操作类型 */
 	public static interface SmsOptType {
 
 		/** 货架发送短信 */
 		public static final Integer  UNMANNED= 40;
 	}
+
 	/** 支付订单状态 */
 	public static interface OrderStatus {
 
@@ -39,5 +41,15 @@ public class CodeConstants {
 
 		/** 已支付 */
 		public static final Integer SUCCESS= 1;
+	}
+
+	/** 支付订单状态 */
+	public static interface ShopStockStatus {
+
+		/** 0下架 */
+		public static final Integer DOWN = 0;
+
+		/** 1上架 */
+		public static final Integer UP = 1;
 	}
 }

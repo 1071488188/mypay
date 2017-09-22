@@ -1,12 +1,15 @@
 package com.har.unmanned.mfront.api.dispatch;
 
 import com.alibaba.fastjson.JSONObject;
+import com.har.bigdata.exception.CommonExceptionLevel;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
 import com.har.unmanned.mfront.api.dispatch.validgroup.ValidateCodeGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
+import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.DispatchService;
+import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,56 +23,151 @@ import org.springframework.web.bind.annotation.*;
  **/
 @Slf4j
 @RestController
-@RequestMapping(value = "/smsValidate", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(value = "/api/v1/dispatch", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class DispatchResourceImpl implements DispatchResource {
     @Autowired
     DispatchService dispatchService;
 
     @Override
     @GetMapping("/dispatchList")
-    public JSONObject dispatchList(@Validated({PageGroup.class}) InputParameter inputParameter) throws Exception {
-        LogHelper.save(LogType.RECEIVE, "配送中心列表_开始", null);
-        log.info("param={}", inputParameter);
+    public JSONObject dispatchList(@Validated({PageGroup.class}) InputParameter inputParameter) throws ApiBizException {
+        log.info("param={}", JSONObject.toJSON(inputParameter));
+        LogHelper.save(LogType.RECEIVE, "配送中心列表_开始", JSONObject.toJSON(inputParameter));
         // 返回消息
         RespMessage respMessage = new RespMessage();
-        // 返回数据
-        JSONObject retJson;
-        // 请求参数
-        JSONObject reqParam = new JSONObject();
-        reqParam.put("page", inputParameter.getPage());
-        reqParam.put("pageSize", inputParameter.getPageSize());
-        reqParam.put("status", inputParameter.getStatus());
 
-        LogHelper.save(LogType.REQUEST, "配送中心列请求参数", reqParam);
-        log.info("配送中心列请求参数：" + reqParam);
-        retJson = this.dispatchService.dispatchList(reqParam);
+        try {
+            // 请求参数
+            JSONObject reqParam = new JSONObject();
+            reqParam.put("page", inputParameter.getPage());
+            reqParam.put("pageSize", inputParameter.getPageSize());
+            reqParam.put("status", inputParameter.getStatus());
 
-        LogHelper.save(LogType.RESPONSE, "配送中心列表响应", retJson);
-        log.info("配送中心列表响应：" + retJson);
-        respMessage.setRespCode(ErrorCode.E00000000.CODE);
-        respMessage.setRespDesc(ErrorCode.E00000000.MSG);
-        respMessage.setData(retJson);
+            log.info("{},{}", "配送中心请求参数", reqParam);
+            LogHelper.save(LogType.REQUEST, "配送中心列请求参数", reqParam);
+            JSONObject retJson = dispatchService.dispatchList(reqParam);
+
+            respMessage.setData(retJson);
+        } catch (ApiBizException e) {
+            e.printStackTrace();
+            log.error("{},{}", "配送中心错误", JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("{},{}", "配送中心错误", JSONObject.toJSON(inputParameter));
+            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter));
+        }
+
+        log.info("{},{}", "配送中心返回数据", respMessage.getRespMessage());
+        LogHelper.save(LogType.RECEIVE, "配送中心返回数据", respMessage.getRespMessage());
         return respMessage.getRespMessage();
     }
 
     @Override
-    public JSONObject updateDispatchStatus(JSONObject params) throws Exception {
-        return null;
+    @PostMapping("/updateDispatchStatus")
+    public JSONObject updateDispatchStatus(@RequestBody JSONObject reqParam) throws ApiBizException {
+        log.info("param={}", reqParam);
+        LogHelper.save(LogType.RECEIVE, "更新配送单状态", reqParam);
+        // 返回消息
+        RespMessage respMessage = new RespMessage();
+
+        try {
+            log.info("{},{}", "更新配送单状态请求参数", reqParam);
+            LogHelper.save(LogType.REQUEST, "更新配送单状态请求参数", reqParam);
+
+            if (CheckUtil.isNull(reqParam.getString("dispatchNo"))
+                    || CheckUtil.isNull(reqParam.getString("status"))) {
+                log.info("{},{},{}", "更新配送单状态", "参数不全", reqParam);
+                throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
+            }
+
+            dispatchService.updateDispatchStatus(reqParam);
+        } catch (ApiBizException e) {
+            e.printStackTrace();
+            log.error("{},{}", "更新配送单状态错误", JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("{},{}", "更新配送单状态错误", reqParam);
+            throw new ApiBizException(ErrorCode.E00000016.CODE, ErrorCode.E00000016.MSG, reqParam);
+        }
+
+        log.info("{},{}", "更新配送单状态返回数据", respMessage.getRespMessage());
+        LogHelper.save(LogType.RECEIVE, "更新配送单状态返回数据", respMessage.getRespMessage());
+        return respMessage.getRespMessage();
     }
 
     @Override
-    public JSONObject replenishmentList(JSONObject params) throws Exception {
-        return null;
+    @GetMapping("/replenishmentList")
+    public JSONObject replenishmentList(JSONObject reqParam) throws ApiBizException {
+        log.info("{},{}", "补货列表传入参数", reqParam);
+        LogHelper.save(LogType.RECEIVE, "补货列表传入参数", reqParam);
+        // 返回消息
+        RespMessage respMessage = new RespMessage();
+
+        try {
+            log.info("{},{}", "补货列表请求参数", reqParam);
+            LogHelper.save(LogType.REQUEST, "补货列表请求参数", reqParam);
+
+            if (CheckUtil.isNull(reqParam.getString("dispatchNo"))) {
+                log.info("{},{},{}", "补货列表", "参数不全", reqParam);
+                throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
+            }
+
+            JSONObject retData = dispatchService.replenishmentList(reqParam);
+            respMessage.setData(retData);
+        } catch (ApiBizException e) {
+            e.printStackTrace();
+            log.error("{},{}", "补货列表错误", JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("{},{}", "补货列表错误", reqParam);
+            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, reqParam);
+        }
+
+        log.info("{},{}", "补货列表返回数据", respMessage.getRespMessage());
+        LogHelper.save(LogType.RECEIVE, "补货列表返回数据", respMessage.getRespMessage());
+        return respMessage.getRespMessage();
     }
 
     @Override
-    public JSONObject confirmReplenishment(JSONObject params) throws Exception {
-        return null;
+    public JSONObject confirmReplenishment(JSONObject reqParam) throws ApiBizException {
+        log.info("{},{}", "确认补货传入参数", reqParam);
+        LogHelper.save(LogType.RECEIVE, "确认补货传入参数", reqParam);
+        // 返回消息
+        RespMessage respMessage = new RespMessage();
+
+        try {
+            log.info("{},{}", "确认补货请求参数", reqParam);
+            LogHelper.save(LogType.REQUEST, "确认补货请求参数", reqParam);
+
+            if (CheckUtil.isNull(reqParam.getString("dispatchNo")) ||
+                    CheckUtil.isNull(reqParam.getString("goodsIds"))) {
+                log.info("{},{},{}", "确认补货", "参数不全", reqParam);
+                throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
+            }
+
+            JSONObject retData = dispatchService.replenishmentList(reqParam);
+            respMessage.setData(retData);
+        } catch (ApiBizException e) {
+            e.printStackTrace();
+            log.error("{},{}", "确认补货错误", JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("{},{}", "确认补货错误", reqParam);
+            throw new ApiBizException(ErrorCode.E00000018.CODE, ErrorCode.E00000018.MSG, reqParam);
+        }
+
+        log.info("{},{}", "确认补货返回数据", respMessage.getRespMessage());
+        LogHelper.save(LogType.RECEIVE, "确认补货返回数据", respMessage.getRespMessage());
+        return respMessage.getRespMessage();
     }
 
     @Override
     @PostMapping("/validateCode")
-    public JSONObject validateCode(@Validated({ValidateCodeGroup.class}) @RequestBody InputParameter inputParameter) throws Exception {
+    public JSONObject validateCode(@Validated({ValidateCodeGroup.class}) @RequestBody InputParameter inputParameter) throws ApiBizException {
         return null;
     }
 }

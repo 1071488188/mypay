@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.har.unmanned.mfront.dao.extend.DispatchQueryMapper" >
-  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.DispatchDomain" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="type_id" property="typeId" jdbcType="BIGINT" />
-    <result column="dispatch_no" property="dispatchNo" jdbcType="VARCHAR" />
-    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
-    <result column="storage_id" property="storageId" jdbcType="BIGINT" />
-    <result column="dispatchor" property="dispatchor" jdbcType="BIGINT" />
-    <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP" />
-    <result column="orders_time" property="ordersTime" jdbcType="TIMESTAMP" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="bill_id" property="billId" jdbcType="VARCHAR" />
-    <!--扩展属性-->
-    <result column="storeAddress" property="storeAddress" jdbcType="VARCHAR"/>
-    <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR"/>
-    <collection property="carrierNote" ofType="com.har.unmanned.mfront.model.extend.DispatchItemDomain">
-      <id column="id" property="id" jdbcType="INTEGER"/>
-      <result column="dispatch_id" property="dispatchId" jdbcType="BIGINT"/>
-      <result column="quantity" property="quantity" jdbcType="INTEGER"/>
-      <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
-      <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
-      <result column="spec" property="spec" jdbcType="VARCHAR"/>
-    </collection>
-  </resultMap>
-  <!--配送列表-->
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain">
-   SELECT
-    dh.id,dh.dispatch_no , dh.create_time , dh.`status` ,se.address AS storeAddress,sp.address AS shopAddress
-  FROM dispatch dh
-  LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
-  LEFT JOIN store se ON se.id = dh.storage_id
-  LEFT JOIN shop sp ON sp.id = dh.shop_id
-  LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
-  LEFT JOIN code_goods cg ON cg.id = di.goods_id
-    <where>
-      <if test="openid != null and openid != ''">
-        and sw.openid = #{openid}
-      </if>
-      <if test="statusString != null and statusString != ''">
-        and dh.status in (${statusString})
-      </if>
-    </where>
-    ORDER BY dh.create_time DESC
-  </select>
+<mapper namespace="com.har.unmanned.mfront.dao.extend.DispatchQueryMapper">
+    <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.DispatchDomain">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="type_id" property="typeId" jdbcType="BIGINT"/>
+        <result column="dispatch_no" property="dispatchNo" jdbcType="VARCHAR"/>
+        <result column="shop_id" property="shopId" jdbcType="BIGINT"/>
+        <result column="storage_id" property="storageId" jdbcType="BIGINT"/>
+        <result column="dispatchor" property="dispatchor" jdbcType="BIGINT"/>
+        <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP"/>
+        <result column="orders_time" property="ordersTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="bill_id" property="billId" jdbcType="VARCHAR"/>
+        <!--扩展属性-->
+        <result column="storeAddress" property="storeAddress" jdbcType="VARCHAR"/>
+        <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR"/>
+        <collection property="carrierNote" ofType="com.har.unmanned.mfront.model.extend.DispatchItemDomain">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="dispatch_id" property="dispatchId" jdbcType="BIGINT"/>
+            <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+            <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
+            <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+            <result column="spec" property="spec" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <!--配送列表-->
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain">
+        SELECT
+          dh.id,dh.dispatch_no , dh.create_time , dh.`status` ,se.address AS storeAddress,sp.address AS shopAddress
+        FROM dispatch dh
+        LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
+        LEFT JOIN store se ON se.id = dh.storage_id
+        LEFT JOIN shop sp ON sp.id = dh.shop_id
+        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
+        LEFT JOIN code_goods cg ON cg.id = di.goods_id
+        <where>
+            <if test="openid != null and openid != ''">
+                and sw.openid = #{openid}
+            </if>
+            <if test="statusString != null and statusString != ''">
+                and dh.status in (${statusString})
+            </if>
+        </where>
+        ORDER BY dh.create_time DESC
+    </select>
 
-  <!--配送列表总数-->
-  <select id="dispatchCount" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain" resultType="java.lang.Integer">
-   SELECT
-   COUNT (dh.id)
-   FROM dispatch dh
-  LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
-  LEFT JOIN store se ON se.id = dh.storage_id
-  LEFT JOIN shop sp ON sp.id = dh.shop_id
-   <where>
-     <if test="openid != null and openid != ''">
-       and sw.openid = #{openid}
-     </if>
-     <if test="statusString != null and statusString != ''">
-       and dh.status in ${statusString}
-     </if>
-   </where>
-  </select>
+    <!--配送列表总数-->
+    <select id="dispatchCount" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain" resultType="java.lang.Integer">
+        SELECT
+          COUNT (dh.id)
+        FROM dispatch dh
+        LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
+        LEFT JOIN store se ON se.id = dh.storage_id
+        LEFT JOIN shop sp ON sp.id = dh.shop_id
+        <where>
+            <if test="openid != null and openid != ''">
+                and sw.openid = #{openid}
+            </if>
+            <if test="statusString != null and statusString != ''">
+                and dh.status in ${statusString}
+            </if>
+        </where>
+    </select>
 </mapper>

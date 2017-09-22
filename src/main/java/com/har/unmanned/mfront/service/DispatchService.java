@@ -16,7 +16,7 @@ public interface DispatchService {
      * @return
      * @throws Exception
      */
-    JSONObject dispatchList(JSONObject param) throws Exception;
+    JSONObject dispatchList(JSONObject param) throws ApiBizException;
 
     /**
      * 更新配送单状态
@@ -25,7 +25,7 @@ public interface DispatchService {
      * @return
      * @throws Exception
      */
-    void updateDispatchStatus(JSONObject param) throws Exception;
+    void updateDispatchStatus(JSONObject param) throws ApiBizException;
 
     /**
      * 补货列表
@@ -34,7 +34,7 @@ public interface DispatchService {
      * @return
      * @throws Exception
      */
-    JSONObject replenishmentList(JSONObject param) throws Exception;
+    JSONObject replenishmentList(JSONObject param) throws ApiBizException;
 
     /**
      * 确认补货
@@ -43,7 +43,7 @@ public interface DispatchService {
      * @return
      * @throws Exception
      */
-    void confirmReplenishment(JSONObject param) throws Exception,ApiBizException;
+    void confirmReplenishment(JSONObject param) throws ApiBizException;
 
     /**
      * 验证手机号
@@ -51,5 +51,5 @@ public interface DispatchService {
      * @return
      * @throws Exception
      */
-    JSONObject validateCode(JSONObject param) throws Exception;
+    JSONObject validateCode(JSONObject param) throws ApiBizException;
 }

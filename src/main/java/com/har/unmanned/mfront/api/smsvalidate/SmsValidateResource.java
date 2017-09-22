@@ -17,7 +17,7 @@ public interface SmsValidateResource {
      * @apiGroup smsValidate
      * @apiPermission none
      *
-     * @apiDescription 发送短信验证码
+     * @apiDescription 发送短信验证码git
      *
      * @apiParam {String} mobile  	手机号
      *

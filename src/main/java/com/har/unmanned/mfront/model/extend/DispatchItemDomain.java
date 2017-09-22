@@ -8,7 +8,9 @@ import lombok.Data;
  * @create 2017-09-19 18:24
  **/
 @Data
-public class DispatchItemDomain extends DispatchItem{
+public class DispatchItemDomain extends DispatchItem {
+    // 商品名称
+    private long shopId;
     // 商品名称
     private String goodsName;
     // 商品规格
@@ -17,11 +19,15 @@ public class DispatchItemDomain extends DispatchItem{
     private String goodsPicture;
     // 商品摆放层级
     private Integer layer;
-    //货架库存数量
+    // 货架库存数量
     private Integer stockQuantity;
-    //配送中数量
+    // 配送中数量
     private Integer dispatchQuantity;
-    //货架库存ID
+    // 货架库存ID
     private Integer shopStockId;
+    // 货架商品最低库存
+    private Integer shopMinQuantity;
+    // 货架商品最低库存
+    private Integer shopBaseQuantity;
 
 }
