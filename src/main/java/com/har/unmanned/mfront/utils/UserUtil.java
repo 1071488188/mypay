@@ -81,17 +81,4 @@ public class UserUtil {
         return wxUser;
     }
 
-    public static void main(String[] args) {
-        try {
-            String name= "哈哈哈";
-            name= Base64.encodeBase64String(name.getBytes("UTF-8"));
-            System.out.println("加密后"+name);
-            name=new String(Base64.decodeBase64(name), "UTF-8");
-            System.out.println("解密后"+name);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
 }

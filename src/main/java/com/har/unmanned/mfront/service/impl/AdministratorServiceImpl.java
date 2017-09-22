@@ -167,10 +167,10 @@ public class AdministratorServiceImpl implements AdministratorService {
         List<ShopCommissionExtend> shopCommissionExtendList = shopCommissionMapperExtend.selectListByShopId(shop.getId());
         if (!CheckUtil.isNull(shopCommissionExtendList) && shopCommissionExtendList.size() > 0) {
             log.info("查询网点佣金记录列表{}", shopCommissionExtendList.size());
-            jsonObject.put("totalCount",page1.getTotal());
-            jsonObject.put("totalList",shopCommissionExtendList);
-        }
 
+        }
+        jsonObject.put("totalCount",page1.getTotal());
+        jsonObject.put("totalList",shopCommissionExtendList);
         return jsonObject;
     }
 
@@ -241,8 +241,11 @@ public class AdministratorServiceImpl implements AdministratorService {
         if(!CheckUtil.isNull(list)&&list.size()>0){
             log.info("查询余额明细结果总条数{}", list.size());
         }
-        jsonObject.put("totalCount",list);
-        jsonObject.put("totalList",page1.getTotal());
+        Double money= Double.parseDouble(shop.getShopAccountMoney()+"");
+
+        jsonObject.put("shopAccountMoneyZh",CheckUtil.m2(Double.parseDouble((money/100)+"")));
+        jsonObject.put("totalList",list);
+        jsonObject.put("totalCount",page1.getTotal());
         return jsonObject;
     }
 

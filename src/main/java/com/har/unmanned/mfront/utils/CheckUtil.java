@@ -50,7 +50,7 @@ public class CheckUtil {
      * @return
      */
     public static String m2(Double d){
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#0.00");
         return df.format(d);
     }
 }

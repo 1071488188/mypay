@@ -2,6 +2,7 @@ package com.har.unmanned.mfront.model.extend;
 
 import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.model.ShopExpressive;
+import com.har.unmanned.mfront.utils.CheckUtil;
 import lombok.Data;
 
 /**
@@ -22,6 +23,13 @@ public class ShopExpressiveExtend extends ShopExpressive {
             return "打款失败退款";
         }
         return typeZh;
+    }
+
+    public String getMoneyZh() {
+        if(!CheckUtil.isNull(moneyZh)){
+            return  CheckUtil.m2(Double.parseDouble(moneyZh)) ;
+        }
+        return moneyZh;
     }
 
     public void setTypeZh(String typeZh) {

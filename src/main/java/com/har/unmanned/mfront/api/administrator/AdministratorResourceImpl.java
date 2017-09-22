@@ -92,9 +92,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @GetMapping("/settlementRecords")
     public String settlementRecords(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
         log.info("------------------结算记录开始-------------------------------");
-        JSONArray jsonArray=administratorService.settlementRecords(inputParameter);
+        JSONObject jsonObject=administratorService.settlementRecords(inputParameter);
         log.info("------------------结算记录结束-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).getRespMessage().toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
     /**
@@ -122,8 +122,8 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @GetMapping("/balanceDetails")
     public String balanceDetails(@Validated({PageGroup.class}) InputParameter inputParameter) throws Exception{
         log.info("------------------余额明细开始-------------------------------");
-        JSONArray jsonArray=administratorService.balanceDetails(inputParameter);
+        JSONObject jsonObject=administratorService.balanceDetails(inputParameter);
         log.info("------------------余额明细结束-------------------------------");
-        return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).getRespMessage().toString();
+        return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 }

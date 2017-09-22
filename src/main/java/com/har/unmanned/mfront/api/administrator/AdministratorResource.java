@@ -128,6 +128,7 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
+     * @apiSuccess (200) {String} Data.shopAccountMoneyZh		  账户余额
      * @apiSuccess (200) {Number} Data.totalCount			总条数
      * @apiSuccess (200) {Object[]} Data.totalList		响应数据
      * @apiSuccess (200) {String} Data.totalList.applyTimeZh		  时间
