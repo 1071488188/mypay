@@ -1,7 +1,6 @@
 package com.har.unmanned.mfront.utils;
 
 
-import com.har.unmanned.mfront.exception.ApiBizException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Cookie;
@@ -34,7 +33,7 @@ public class CookieUtil {
      * @param name    cookie Key
      * @return  value
      */
-    public static Object getCookieByName(HttpServletRequest request, String name) throws ApiBizException {
+    public static Object getCookieByName(HttpServletRequest request, String name) {
         try {
             Map<String, Object> cookieMap = ReadCookieMap(request);
 

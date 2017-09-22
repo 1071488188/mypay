@@ -27,7 +27,7 @@ public interface DispatchItemQueryMapper {
      * @param goodsIds
      * @return
      */
-    List<DispatchItemDomain> notConfirGoods(@Param("dispatchNo") String dispatchNo,@Param("goodsIds") String goodsIds);
+    List<DispatchItemDomain> notConfirmGoods(@Param("dispatchNo") String dispatchNo, @Param("goodsIds") String goodsIds);
 
     /**
      *  更新货架库存
@@ -36,4 +36,11 @@ public interface DispatchItemQueryMapper {
      * @return
      */
    int updateShopStock(@Param("shopStockId") String shopStockId,@Param("dispatchQuantity") String dispatchQuantity);
+
+    /**
+     * 获取货架最大层数
+     * @param dispatchNo
+     * @return
+     */
+   Integer getMaxLayer(@Param("dispatchNo") String dispatchNo);
 }

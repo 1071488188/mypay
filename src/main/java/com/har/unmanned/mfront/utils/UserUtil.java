@@ -6,10 +6,7 @@ import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.dao.extend.ShopWechatMapperExtend;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.ShopWechat;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +14,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Set;
 
 /**
  * 用户信息工具类
@@ -28,13 +24,14 @@ public class UserUtil {
 
     @Value("${client.client-secret}")
     String key;
+
     @Autowired
     ShopWechatMapperExtend shopWechatMapperExtend;
     /***
      * 从cookie中获取用户信息
      * @return 授权登录后的用户信息
      */
-    public ShopWechat userInfo() throws Exception {
+    public ShopWechat userInfo() throws ApiBizException {
         // 初始化返回用户信息
         //ShopWechat wxUser = new ShopWechat();
         //wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGM");

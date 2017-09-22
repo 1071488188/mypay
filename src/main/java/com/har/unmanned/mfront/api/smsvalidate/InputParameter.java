@@ -12,7 +12,19 @@ import javax.validation.constraints.Pattern;
  */
 @Data
 public class InputParameter {
-    @NotNull(message = "请输入手机号！", groups = SendValidateGroup.class)
-    @Pattern(regexp = "^[0-9]{11}$", message = "请输入正确手机号！", groups = SendValidateGroup.class)
-    private String mobile;//手机号
+    @NotNull(message = "请输入手机号", groups = SendValidateGroup.class)
+    @Pattern(regexp = "^[0-9]{11}$", message = "请输入正确手机号", groups = SendValidateGroup.class)
+    private String phone;// 手机号
+
+    @NotNull(message = "请输入短信内容", groups = SendValidateGroup.class)
+    @Pattern(regexp = "^[0-9]{11}$", message = "请输入短信内容", groups = SendValidateGroup.class)
+    private String content;// 短信内容
+
+    @NotNull(message = "请输入短信类型", groups = SendValidateGroup.class)
+    @Pattern(regexp = "^[0-9]{11}$", message = "请输入短信类型", groups = SendValidateGroup.class)
+    private String optType;// 短信类型
+
+    @NotNull(message = "请输入校验码", groups = SendValidateGroup.class)
+    @Pattern(regexp = "^[0-9]{11}$", message = "请输入校验码", groups = SendValidateGroup.class)
+    private String validateCode;// 短信类型
 }

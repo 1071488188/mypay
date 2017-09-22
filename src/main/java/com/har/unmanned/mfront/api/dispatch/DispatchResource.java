@@ -1,7 +1,7 @@
 package com.har.unmanned.mfront.api.dispatch;
 
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.har.unmanned.mfront.exception.ApiBizException;
 
 /**
  * 配送中心
@@ -27,18 +27,18 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object[]} Data			响应数据
-     * @apiSuccess (200) {String} totalCount        总数
-     * @apiSuccess (200) {String} Data.createTime		创建时间
-     * @apiSuccess (200) {String} Data.storeAddress     取货位置
-     * @apiSuccess (200) {String} Data.shopAddress      货架位置
-     * @apiSuccess (200) {String} Data.status       	状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）
-     * @apiSuccess (200) {String} Data.dispatchNo       配送单号
-     * @apiSuccess (200) {Object[]} Data.carrierNote    取货单
-     * @apiSuccess (200) {String} Data.carrierNote.goodsName    商品名称
-     * @apiSuccess (200) {String} Data.carrierNote.spec         商品规格
-     * @apiSuccess (200) {Number} Data.carrierNote.quantity     商品数量
+     * @apiSuccess (200) {String} Data.totalCount        总数
+     * @apiSuccess (200) {String} Data.dataList.createTime		创建时间
+     * @apiSuccess (200) {String} Data.dataList.storeAddress     取货位置
+     * @apiSuccess (200) {String} Data.dataList.shopAddress      货架位置
+     * @apiSuccess (200) {String} Data.dataList.status       	状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）
+     * @apiSuccess (200) {String} Data.dataList.dispatchNo       配送单号
+     * @apiSuccess (200) {Object[]} Data.dataList.carrierNote    取货单
+     * @apiSuccess (200) {String} Data.dataList.carrierNote.goodsName    商品名称
+     * @apiSuccess (200) {String} Data.dataList.carrierNote.spec         商品规格
+     * @apiSuccess (200) {Number} Data.dataList.carrierNote.quantity     商品数量
      */
-    JSONObject dispatchList(InputParameter inputParameter) throws Exception;
+    JSONObject dispatchList(InputParameter inputParameter) throws ApiBizException;
 
     /**
      * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
@@ -55,7 +55,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
-    JSONObject updateDispatchStatus(JSONObject params) throws Exception;
+    JSONObject updateDispatchStatus(JSONObject params) throws ApiBizException;
 
     /**
      * @api {get} /api/v1/dispatch/replenishmentList 3.api 补货列表
@@ -80,7 +80,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {Number} Data.goods.layer.goodsQuantity  商品数量
      * @apiSuccess (200) {Number} Data.goods.layer.goodsId        商品ID
      */
-    JSONObject replenishmentList(JSONObject params) throws Exception;
+    JSONObject replenishmentList(JSONObject params) throws ApiBizException;
 
     /**
      * @api {post} /api/v1/dispatch/confirmReplenishment 4.api 确认补货
@@ -97,7 +97,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
-    JSONObject confirmReplenishment(JSONObject params) throws Exception;
+    JSONObject confirmReplenishment(JSONObject params) throws ApiBizException;
 
     /**
      * @api {post} /api/v1/dispatch/validateCode 5.api 验证短信验证码
@@ -114,6 +114,6 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * */
-    JSONObject validateCode(InputParameter inputParameter) throws Exception;
+    JSONObject validateCode(InputParameter inputParameter) throws ApiBizException;
 
 }

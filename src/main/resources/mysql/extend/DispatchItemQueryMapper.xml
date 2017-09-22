@@ -1,53 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.har.unmanned.mfront.dao.extend.DispatchItemQueryMapper" >
-  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.DispatchItemDomain" >
-    <id column="ID" property="id" jdbcType="BIGINT" />
-    <result column="dispatch_id" property="dispatchId" jdbcType="BIGINT" />
-    <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
-    <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="price" property="price" jdbcType="INTEGER" />
-    <result column="amount" property="amount" jdbcType="INTEGER" />
+<mapper namespace="com.har.unmanned.mfront.dao.extend.DispatchItemQueryMapper">
+    <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.extend.DispatchItemDomain">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="dispatch_id" property="dispatchId" jdbcType="BIGINT"/>
+        <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="INTEGER"/>
 
-    <!--扩展字段-->
-    <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
-    <result column="goodsPicture" property="goodsPicture" jdbcType="VARCHAR"/>
-    <result column="layer" property="layer" jdbcType="INTEGER"/>
-    <result column="stockQuantity" property="stockQuantity" jdbcType="INTEGER"/>
-    <result column="dispatchQuantity" property="dispatchQuantity" jdbcType="INTEGER"/>
-    <result column="shopStockId" property="shopStockId" jdbcType="INTEGER"/>
-  </resultMap>
+        <!--扩展字段-->
+        <result column="shop_id" property="shopId" jdbcType="BIGINT"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="shop_min_quantity" property="shopMinQuantity" jdbcType="INTEGER"/>
+        <result column="shop_base_quantity" property="shopBaseQuantity" jdbcType="INTEGER"/>
+        <result column="goodsPicture" property="goodsPicture" jdbcType="VARCHAR"/>
+        <result column="layer" property="layer" jdbcType="INTEGER"/>
+        <result column="stockQuantity" property="stockQuantity" jdbcType="INTEGER"/>
+        <result column="dispatchQuantity" property="dispatchQuantity" jdbcType="INTEGER"/>
+        <result column="shopStockId" property="shopStockId" jdbcType="INTEGER"/>
+    </resultMap>
 
-  <!--配送单商品列表-->
-  <select id="dispatchGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT
-      cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price
-    FROM dispatch dh
-    LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
-    LEFT JOIN code_goods cg ON cg.id = di.goods_id
-    WHERE
-    dh.dispatch_no = #{dispatchNo}
-    ORDER BY cg.layer ASC
-  </select>
-  <!--货架商品列表-->
-  <select id="shopStockGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
-   SELECT
-    ss.goods_id,ss.layer,ss.quantity AS stockQuantity,ss.dispatch_quantity AS dispatchQuantity,ss.id AS shopStockId
-   FROM dispatch dh
-   LEFT JOIN shop_stock ss ON ss.shop_id = dh.shop_id
-   WHERE
-    dh.dispatch_no = #{dispatchNo}
-  </select>
-  <!--未确认商品-->
-  <select id="notConfirGoods" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT
-    cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price
-    FROM dispatch dh
-    LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
-    LEFT JOIN code_goods cg ON cg.id = di.goods_id
-    WHERE
-    dh.dispatch_no = #{dispatchNo}
-    AND di.goods_id NOT IN (${goodsIds})
-    ORDER BY cg.layer ASC
-  </select>
+    <!--配送单商品列表-->
+    <select id="dispatchGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+            dh.shop_id,
+            cg.`name` AS goodsName,
+            cg.shop_min_quantity,
+            cg.shop_base_quantity,
+            cg.image AS goodsPicture,
+            cg.layer,
+            di.goods_id,
+            di.quantity,
+            di.price
+        FROM dispatch dh
+        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
+        LEFT JOIN code_goods cg ON cg.id = di.goods_id
+        WHERE
+        dh.dispatch_no = #{dispatchNo}
+        ORDER BY cg.layer ASC
+    </select>
+    <!--货架商品列表-->
+    <select id="shopStockGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
+       SELECT
+          cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price
+        FROM
+          dispatch dh
+        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
+        LEFT JOIN code_goods cg ON cg.id = di.goods_id
+       WHERE
+        dh.dispatch_no = #{dispatchNo}
+    </select>
+    <!--配送单商品列表-->
+    <select id="notConfirmGoods" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+          cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price
+        FROM dispatch dh
+        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
+        LEFT JOIN code_goods cg ON cg.id = di.goods_id
+        WHERE
+            dh.dispatch_no = #{dispatchNo}
+            AND di.goods_id NOT IN (${goodsIds})
+        ORDER BY cg.layer ASC
+    </select>
+    <select id="getMaxLayer" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+            MAX(cg.layer)
+        FROM
+            dispatch dh
+        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
+        LEFT JOIN code_goods cg ON cg.id = di.goods_id
+        WHERE
+            dh.dispatch_no = #{dispatchNo}
+        ORDER BY
+            cg.layer DESC
+    </select>
 </mapper>

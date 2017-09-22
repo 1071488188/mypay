@@ -104,7 +104,7 @@ public class ErrorCode {
 
 		String CODE = "00000014";
 
-		String MSG = "存在重复的订阅条件";
+		String MSG = "配送中心查询失败";
 	}
 
 	public interface E00000015 {
@@ -161,5 +161,26 @@ public class ErrorCode {
 		String CODE = "00000022";
 
 		String MSG = "商品库存扣减异常";
+	}
+
+	public interface E00000023 {
+
+		String CODE = "00000023";
+
+		String MSG = "配送单状态更新失败";
+	}
+
+	public interface E00000024 {
+
+		String CODE = "00000024";
+
+		String MSG = "提交的商品与配送单商品不匹配";
+	}
+
+	public interface E00000025 {
+
+		String CODE = "00000025";
+
+		String MSG = "补货失败";
 	}
 }
