@@ -40,7 +40,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping
-    public JSONObject wxUserShop(@Validated(IndexGroup.class) InputParameter inputParameter) throws ApiBizException {
+    public JSONObject wxUserShop(@Validated(IndexGroup.class) InputParameter inputParameter) throws Exception {
         log.info("[wxShop]用户访问首页传入数据:" + inputParameter);
         LogHelper.save(LogType.RECEIVE, "[submitOrder]用户访问首页_开始", inputParameter);
         RespMessage respMessage = new RespMessage();
@@ -85,7 +85,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping("/buyRecord")
-    public JSONObject buyRecord() throws ApiBizException {
+    public JSONObject buyRecord() throws Exception {
         RespMessage respMessage = new RespMessage();
         // 返回数据
         log.info("[buyRecord]用户查询购买记录");
@@ -99,7 +99,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
 
     @Override
     @GetMapping("/userInfo")
-    public JSONObject userInfo() throws ApiBizException, UnsupportedEncodingException {
+    public JSONObject userInfo() throws Exception {
         log.info("[userInfo]查询用户信息");
         RespMessage respMessage = new RespMessage();
         // 返回数据
