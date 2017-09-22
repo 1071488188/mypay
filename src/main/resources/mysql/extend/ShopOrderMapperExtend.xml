@@ -18,6 +18,7 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <!--扩展字段-->
     <result column="headimg_url" property="headimgUrl" jdbcType="VARCHAR" />
+    <result column="amountZh" property="amountZh" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     ID, shop_id, openid, `name`, order_no, order_time, amount, commission, pay_no, pay_time,
@@ -29,8 +30,8 @@
   </select>
   <!--查询所有消费用户-->
   <select id="sumByShopId" resultMap="BaseResultMap" parameterType="map">
-    SELECT sw.name,sw.headimg_url, SUM(so.amount)/100 as amount  from shop_order so LEFT JOIN shop_wechat sw
-    ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY so.openid ORDER by amount desc
+    SELECT sw.name,sw.headimg_url, SUM(so.amount)/100 as amountZh  from shop_order so LEFT JOIN shop_wechat sw
+    ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY so.openid ORDER by amountZh desc
 
   </select>
 
