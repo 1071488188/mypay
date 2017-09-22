@@ -15,37 +15,37 @@ import java.util.TreeMap;
 
 @Service
 @Slf4j
-public class WxPayServiceImpl extends WxPayService {
-	@Value("${wx.pay.appid}")
-	private String appid;  //公众账号ID
-	@Value("${wx.pay.appsecret}")
-	private String appsecret;
-	@Value("${wx.pay.mch_id}")
-	private String mch_id;  //商户号
-	@Value("${wx.pay.notify_url}")
-	private String notify_url;  //后台通知地址
-	@Value("${wx.pay.trade_type}")
-	private String trade_type;  //交易类型
-	@Value("${wx.pay.charset}")
-	private String charset;  //编码格式
-	@Value("${wx.pay.unified_order_url}")
-	private String unified_order_url;  //统一下单地址
-	@Value("${wx.pay.close_order_url}")
-	private String close_order_url;  //关闭订单地址
-	@Value("${wx.pay.query_order_url}")
-	private String query_order_url;  //查询订单地址
-	@Value("${wx.pay.sign_type}")
-	private String sign_type;  //签名类型
+public class WxPayServiceImpl implements WxPayService {
+    @Value("${wx.pay.appid}")
+    private String appid;  //公众账号ID
+    @Value("${wx.pay.appsecret}")
+    private String appsecret;
+    @Value("${wx.pay.mch_id}")
+    private String mch_id;  //商户号
+    @Value("${wx.pay.notify_url}")
+    private String notify_url;  //后台通知地址
+    @Value("${wx.pay.trade_type}")
+    private String trade_type;  //交易类型
+    @Value("${wx.pay.charset}")
+    private String charset;  //编码格式
+    @Value("${wx.pay.unified_order_url}")
+    private String unified_order_url;  //统一下单地址
+    @Value("${wx.pay.close_order_url}")
+    private String close_order_url;  //关闭订单地址
+    @Value("${wx.pay.query_order_url}")
+    private String query_order_url;  //查询订单地址
+    @Value("${wx.pay.sign_type}")
+    private String sign_type;  //签名类型
 
 
-	@Override
-	public Map<String, String> paymentOrderHbxWeb(String openid, String total_fee, String body, String out_trade_no, String ip) throws Exception {
-	    log.info("-------------生成微信签名开始------------");
+    @Override
+    public Map<String, String> paymentOrderH5(String openid, String total_fee, String body, String out_trade_no, String ip) throws Exception {
+        log.info("-------------生成微信签名开始------------");
         String nonceStr = Sha1Util.getNonceStr();
         String timeStamp = DateUtil.getCurrentTimeStamp();
         TreeMap param = new TreeMap();
-		param.put("appid", appid);
-		param.put("mch_id", mch_id);
+        param.put("appid", appid);
+        param.put("mch_id", mch_id);
         param.put("nonce_str", nonceStr);
         param.put("body", body);
         param.put("out_trade_no", out_trade_no);
@@ -77,11 +77,11 @@ public class WxPayServiceImpl extends WxPayService {
         respMap.put("paySign", paySign);
         log.info("-------------生成微信签名结束------------");
         return respMap;
-	}
+    }
 
 
-	@Override
-	public Map<String, String> orderquery(String out_trade_no) throws Exception {
+    @Override
+    public Map<String, String> orderQuery(String out_trade_no) throws Exception {
         log.info("-------------查询微信订单开始------------");
         String nonceStr = Sha1Util.getNonceStr();
         TreeMap param = new TreeMap();
@@ -104,6 +104,6 @@ public class WxPayServiceImpl extends WxPayService {
         }
         log.info("-------------查询微信订单结束------------");
         return map;
-	}
+    }
 
 }
