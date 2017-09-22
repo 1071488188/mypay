@@ -26,6 +26,7 @@ import com.har.unmanned.mfront.utils.PageUtil;
 import com.har.unmanned.mfront.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,8 @@ public class DispatchServiceImpl implements DispatchService {
     private ShopStockMapper shopStockMapper;
     @Autowired
     private ShopStockExtendMapper shopStockExtendMapper;
+
+    @Value("${har.picPath}") String basePicPath;
 
     /***
      * 检查用户授权
@@ -121,7 +124,6 @@ public class DispatchServiceImpl implements DispatchService {
                 for (DispatchItemDomain itemDomain : item.getCarrierNote()) {
                     JSONObject carrierNoteJson = new JSONObject();
                     carrierNoteJson.put("goodsName", itemDomain.getGoodsName());//商品名称
-                    carrierNoteJson.put("spec", itemDomain.getSpec());//商品规格
                     carrierNoteJson.put("quantity", itemDomain.getQuantity());//商品数量
                     carrierNote.add(carrierNoteJson);
                 }
@@ -216,7 +218,7 @@ public class DispatchServiceImpl implements DispatchService {
                     JSONObject goods = new JSONObject();
                     goods.put("goodsName", dispatchGoods.getGoodsName());//商品名称
                     goods.put("goodsValue", dispatchGoods.getPrice());//商品单价
-                    goods.put("goodsPicture", dispatchGoods.getGoodsPicture());//商品图片
+                    goods.put("goodsPicture", basePicPath.concat(dispatchGoods.getGoodsPicture()));//商品图片
                     goods.put("goodsQuantity", dispatchGoods.getQuantity());//商品数量
                     goods.put("goodsId", dispatchGoods.getGoodsId());//商品ID
                     goodsArray.add(goods);
