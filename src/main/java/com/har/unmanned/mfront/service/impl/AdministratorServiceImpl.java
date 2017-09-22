@@ -195,6 +195,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         shopCommission.setId(billingId);
         shopCommission.setUserId(shopWechat.getUserId());
         shopCommission.setApplyTime(new Date());
+        shopCommission.setStatus(CodeConstants.CommissionStatus.HAVEALREADYSETTLED);
         int updateByPrimaryKeySelective = shopCommissionMapperExtend.updateByPrimaryKeySelective(shopCommission);
         log.info("清单id{},修改状态为已结算结果{}", billingId, updateByPrimaryKeySelective);
         //4修改网点余额
@@ -231,7 +232,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public  void withdrawDeposit(InputParameter inputParameter) throws Exception {
-        int reflectTheAmountOf=Integer.parseInt((Double.parseDouble(inputParameter.getReflectTheAmountOf())*100)+"");//提现金额
+        int reflectTheAmountOf=(int)(Double.parseDouble(inputParameter.getReflectTheAmountOf())*100);//提现金额
         log.info("提现传入金额{}", reflectTheAmountOf);
         //1得到当前网点账户
         Shop shop=getShop();
@@ -241,7 +242,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
         redisService.put(WITHDRAWALPREVENTIONANDREPEATSUBMISSION, shop.getId()+"", 10);
         //2、判断余额是否足够
-        if(shop.getShopAccountMoney()-reflectTheAmountOf<=0){
+        if(shop.getShopAccountMoney()-reflectTheAmountOf<0){
             throw new ApiBizException(ErrorCode.E00000001.CODE, "余额不足", inputParameter);
         }
         boolean deductBalence=deductBalence(inputParameter, reflectTheAmountOf, shop);
@@ -276,6 +277,7 @@ public class AdministratorServiceImpl implements AdministratorService {
             shopExpressive.setAccountNo(shop.getAccountNo());
             int flag1=shopExpressiveMapperExtend.insertSelective(shopExpressive);
             log.info("生成流水结果{}", flag1);
+            notSufficientFunds=true;
         }
 
         return notSufficientFunds;

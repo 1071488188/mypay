@@ -120,7 +120,8 @@ public class AdministratorResourceImpl implements AdministratorResource {
      * @return
      */
     @Override
-    public String balanceDetails(@Validated({PageGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
+    @GetMapping("/balanceDetails")
+    public String balanceDetails(@Validated({PageGroup.class}) InputParameter inputParameter) throws Exception{
         log.info("------------------余额明细开始-------------------------------");
         JSONArray jsonArray=administratorService.balanceDetails(inputParameter);
         log.info("------------------余额明细结束-------------------------------");
