@@ -36,7 +36,6 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} Data.dataList.dispatchNo       配送单号
      * @apiSuccess (200) {Object[]} Data.dataList.carrierNote    取货单
      * @apiSuccess (200) {String} Data.dataList.carrierNote.goodsName    商品名称
-     * @apiSuccess (200) {String} Data.dataList.carrierNote.spec         商品规格
      * @apiSuccess (200) {Number} Data.dataList.carrierNote.quantity     商品数量
      */
     JSONObject dispatchList(InputParameter inputParameter) throws ApiBizException;
@@ -74,7 +73,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {Object[]} Data			响应数据
      * @apiSuccess (200) {Number} Data.replenishmentNum 补货总数
      * @apiSuccess (200) {Number} Data.species 种类
-     * @apiSuccess (200) {Object[]} Data.goods		    层级(layer为：jsonObject的key)
+     * @apiSuccess (200) {Object[]} Data.goods		    层级为key，value为每层商品集合
      * @apiSuccess (200) {String} Data.goods.layer.goodsName      商品名称
      * @apiSuccess (200) {String} Data.goods.layer.goodsValue     商品单价
      * @apiSuccess (200) {String} Data.goods.layer.goodsPicture   商品图片路径
@@ -93,7 +92,7 @@ public interface DispatchResource {
      * @apiDescription 确认补货
      *
      * @apiParam {String} dispatchNo 	        配送单号
-     * @apiParam {Object[]} goodsIds	            商品ID(已确认商品)
+     * @apiParam {Object[]} goodsIds	            商品IDs(已确认商品集合)
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
