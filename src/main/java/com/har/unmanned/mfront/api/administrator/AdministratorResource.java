@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 public interface AdministratorResource {
     /**
      * @api {get} /api/v1/admin/adminInit 1.api 是否为网点管理员初始化接口
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName adminInit
      * @apiGroup admin
@@ -25,6 +26,7 @@ public interface AdministratorResource {
     String adminInit()throws Exception;
     /**
      * @api {post} /api/v1/admin/bindManager 2.api 绑定手机号
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName bindManager
      * @apiGroup admin
@@ -43,6 +45,7 @@ public interface AdministratorResource {
 
     /**
      * @api {get} /api/v1/admin/expenseCalendar 3.api 消费记录
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName expenseCalendar
      * @apiGroup admin
@@ -66,6 +69,7 @@ public interface AdministratorResource {
 
     /**
      * @api {get} /api/v1/admin/settlementRecords 4.api 结算记录
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName settlementRecords
      * @apiGroup admin
@@ -90,6 +94,7 @@ public interface AdministratorResource {
 
     /**
      * @api {post} /api/v1/admin/closeAnAccount 5.api 结算
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName closeAnAccount
      * @apiGroup admin
@@ -107,6 +112,7 @@ public interface AdministratorResource {
 
     /**
      * @api {get} /api/v1/admin/balanceDetails 6.api 余额明细
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName balanceDetails
      * @apiGroup admin
@@ -128,6 +134,7 @@ public interface AdministratorResource {
 
     /**
      * @api {post} /api/v1/admin/withdrawDeposit 7.api 提现
+     * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName withdrawDeposit
      * @apiGroup admin

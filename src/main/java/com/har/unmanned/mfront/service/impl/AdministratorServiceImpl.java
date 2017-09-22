@@ -112,13 +112,14 @@ public class AdministratorServiceImpl implements AdministratorService {
         SysUserExample sysUserExample = new SysUserExample();
         SysUserExample.Criteria criteria = sysUserExample.createCriteria();
         criteria.andMobileEqualTo(cellPhoneNumber);
-        sysUserExample.setOrderByClause(" userId asc");
+        sysUserExample.setOrderByClause(" user_id asc");
         List<SysUser> sysUserList = sysUserMapper.selectByExample(sysUserExample);
         log.info("系统用户查询结果", sysUserList);
         SysUser sysUser = sysUserList.get(0);
         ShopWechat shopWechat = userUtil.userInfo();
         shopWechat.setUserId(sysUser.getUserId());
-        shopWechatMapper.updateByExampleSelective(shopWechat, null);
+        shopWechat.setPhone(cellPhoneNumber);
+        shopWechatMapper.updateByPrimaryKeySelective(shopWechat);
 
     }
 

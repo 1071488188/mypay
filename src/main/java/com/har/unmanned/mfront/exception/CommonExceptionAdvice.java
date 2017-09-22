@@ -7,6 +7,7 @@ import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -32,6 +33,7 @@ import java.util.Set;
 @ControllerAdvice
 @ResponseBody
 @Slf4j
+@Order(1)
 public class CommonExceptionAdvice {
 
 
