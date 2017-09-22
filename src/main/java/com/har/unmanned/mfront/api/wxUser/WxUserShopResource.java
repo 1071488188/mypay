@@ -43,7 +43,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品库存数量
      * */
-    JSONObject wxUserShop(InputParameter inputParameter) throws ApiBizException;
+    JSONObject wxUserShop(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {post} /api/v1/wxUserShop/submitOrder 2.api 提交订单
@@ -68,7 +68,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} Data.orderNo  订单号
      * @apiSuccess (200) {String} Data.singData	支付签名数据
      * */
-    JSONObject submitOrder(InputParameter inputParameter) throws ApiBizException;
+    JSONObject submitOrder(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {get} /api/v1/wxUserShop/buyRecord 3.api 购买记录
@@ -92,7 +92,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品的购买数量
      * */
-    JSONObject buyRecord() throws ApiBizException;
+    JSONObject buyRecord() throws Exception;
 
     /**
      * @api {get} /api/v1/wxUserShop/userInfo 4.api 用户信息
@@ -110,5 +110,5 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} Data.name	用户昵称
      * @apiSuccess (200) {String} Data.headimgUrl 用户头像
      * */
-    JSONObject userInfo() throws ApiBizException;
+    JSONObject userInfo() throws Exception;
 }

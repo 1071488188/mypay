@@ -26,6 +26,8 @@ public class AdministratorResourceImpl implements AdministratorResource {
     @Autowired
     AdministratorService administratorService;
     @Override
+    @GetMapping("/adminInit")
+    @ResponseBody
     public String adminInit() throws Exception {
         log.info("------------------管理员初始化开始--------------------------------");
         JSONObject jsonObject=new JSONObject();
@@ -33,7 +35,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
         jsonObject.put("whetherNetwork",flag);
         log.info("管理员初始化接口返回参数{}",jsonObject);
         log.info("------------------管理员初始化结束--------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
     /**
@@ -48,7 +50,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
         log.info("------------------绑定手机号开始-------------------------------");
         administratorService.bindManager(inputParameter);
         log.info("------------------绑定手机号结束-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
     /**
@@ -63,7 +65,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
         log.info("------------------提现开始-------------------------------");
         administratorService.withdrawDeposit(inputParameter);
         log.info("------------------提现结束-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
     /**
@@ -78,7 +80,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
         log.info("------------------消费记录开始-------------------------------");
        JSONObject jsonObject= administratorService.expenseCalendar(inputParameter);
         log.info("------------------消费记录开始-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
     /**
@@ -93,7 +95,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
         log.info("------------------结算记录开始-------------------------------");
         JSONArray jsonArray=administratorService.settlementRecords(inputParameter);
         log.info("------------------结算记录结束-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).getRespMessage().toString();
     }
 
     /**
@@ -108,7 +110,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
         log.info("------------------结算开始-------------------------------");
         administratorService.closeAnAccount(inputParameter);
         log.info("------------------结算结束-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).toString();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
     /**
@@ -122,6 +124,6 @@ public class AdministratorResourceImpl implements AdministratorResource {
         log.info("------------------余额明细开始-------------------------------");
         JSONArray jsonArray=administratorService.balanceDetails(inputParameter);
         log.info("------------------余额明细结束-------------------------------");
-        return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).toString();
+        return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonArray).getRespMessage().toString();
     }
 }

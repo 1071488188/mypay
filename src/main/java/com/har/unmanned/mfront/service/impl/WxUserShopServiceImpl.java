@@ -53,7 +53,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     private static final String UNMANNED = "unmanned:order:";
 
     @Override
-    public JSONObject selectGoodsList(String param) throws ApiBizException {
+    public JSONObject selectGoodsList(String param) throws Exception {
         JSONObject respJson = new JSONObject();
         log.info("service传入参数: " + param);
         ShopWechat shopWechat = userUtil.userInfo();
@@ -84,7 +84,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject submitOrder(InputParameter param) throws ApiBizException {
+    public JSONObject submitOrder(InputParameter param) throws Exception {
         log.info("service传入参数: " + param);
         ShopWechat shopWechat = userUtil.userInfo();
         log.info("获取到的授权用户信息: " + JSONObject.toJSONString(shopWechat));
@@ -182,7 +182,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     }
 
     @Override
-    public JSONObject buyRecord() throws ApiBizException {
+    public JSONObject buyRecord() throws Exception {
         log.info("-----------------用户所购买的商品信息service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
@@ -216,7 +216,7 @@ public class WxUserShopServiceImpl extends IWxUserShopService {
     }
 
     @Override
-    public JSONObject userInfo() throws ApiBizException {
+    public JSONObject userInfo() throws Exception {
         log.info("-----------------查询用户详情service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
