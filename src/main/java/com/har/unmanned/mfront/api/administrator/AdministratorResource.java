@@ -83,12 +83,14 @@ public interface AdministratorResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
-     * @apiSuccess (200) {String} Data.id
-     * @apiSuccess (200) {String} Data.time		    时间
-     * @apiSuccess (200) {String} Data.amountZh		营业额
-     * @apiSuccess (200) {String} Data.ratio		    当前返佣比例
-     * @apiSuccess (200) {String} Data.commissionZh		佣金已结算
-     * @apiSuccess (200) {String} Data.status		结算状态0、待结算1、已结算
+     * @apiSuccess (200) {Number} Data.totalCount			总条数
+     * @apiSuccess (200) {Object[]} Data.totalList		列表
+     * @apiSuccess (200) {String} Data.totalList.id
+     * @apiSuccess (200) {String} Data.totalList.time		    时间
+     * @apiSuccess (200) {String} Data.totalList.amountZh		营业额
+     * @apiSuccess (200) {String} Data.totalList.ratio		    当前返佣比例
+     * @apiSuccess (200) {String} Data.totalList.commissionZh		佣金已结算
+     * @apiSuccess (200) {String} Data.totalList.status		结算状态0、待结算1、已结算
      */
     String settlementRecords(InputParameter inputParameter)throws Exception;
 
@@ -125,10 +127,13 @@ public interface AdministratorResource {
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
-     * @apiSuccess (200) {Object[]} Data			响应数据
-     * @apiSuccess (200) {String} Data.applyTimeZh		  时间
-     * @apiSuccess (200) {String} Data.typeZh		      明细名称
-     * @apiSuccess (200) {String} Data.moneyZh		      金额
+     * @apiSuccess (200) {Object} Data			响应数据
+     * @apiSuccess (200) {String} Data.shopAccountMoneyZh		  账户余额
+     * @apiSuccess (200) {Number} Data.totalCount			总条数
+     * @apiSuccess (200) {Object[]} Data.totalList		响应数据
+     * @apiSuccess (200) {String} Data.totalList.applyTimeZh		  时间
+     * @apiSuccess (200) {String} Data.totalList.typeZh		      明细名称
+     * @apiSuccess (200) {String} Data.totalList.moneyZh		      金额
      */
     String balanceDetails(InputParameter inputParameter)throws Exception;
 

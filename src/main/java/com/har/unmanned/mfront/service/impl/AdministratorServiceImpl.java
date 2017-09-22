@@ -2,6 +2,7 @@ package com.har.unmanned.mfront.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.har.unmanned.mfront.api.administrator.InputParameter;
 import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
@@ -146,27 +147,31 @@ public class AdministratorServiceImpl implements AdministratorService {
         jsonObject.put("theNumberOfConsumer", countByShopId);
         log.info("查询累计消费人数{}", countByShopId);
         //3查询列表
-        PageUtil.startPage(page, pageSize);
+        Page page1=PageUtil.startPage(page, pageSize);
         List<ShopOrderExtend> shopOrderExtendList = shopOrderMapperExtend.sumByShopId(shop.getId());
+        log.info("总条数{}", page1.getTotal());
         jsonObject.put("particulars", shopOrderExtendList);
         log.info("查询列表{}", shopOrderExtendList);
         return jsonObject;
     }
 
     @Override
-    public JSONArray settlementRecords(InputParameter inputParameter) throws Exception {
-        JSONArray jsonArray = new JSONArray();
+    public JSONObject settlementRecords(InputParameter inputParameter) throws Exception {
+        JSONObject jsonObject =new JSONObject();
+
         Integer page = inputParameter.getPage();
         Integer pageSize = inputParameter.getPageSize();
         Shop shop = getShop();
         //2查询网点佣金记录列表
-        PageUtil.startPage(page, pageSize);
+       Page page1= PageUtil.startPage(page, pageSize);
         List<ShopCommissionExtend> shopCommissionExtendList = shopCommissionMapperExtend.selectListByShopId(shop.getId());
         if (!CheckUtil.isNull(shopCommissionExtendList) && shopCommissionExtendList.size() > 0) {
             log.info("查询网点佣金记录列表{}", shopCommissionExtendList.size());
-            jsonArray.add(shopCommissionExtendList);
+
         }
-        return jsonArray;
+        jsonObject.put("totalCount",page1.getTotal());
+        jsonObject.put("totalList",shopCommissionExtendList);
+        return jsonObject;
     }
 
     @Override
@@ -224,20 +229,24 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public JSONArray balanceDetails(InputParameter inputParameter) throws Exception {
-        JSONArray jsonArray=new JSONArray();
+    public JSONObject balanceDetails(InputParameter inputParameter) throws Exception {
+        JSONObject jsonObject =new JSONObject();
         int pageSize = inputParameter.getPageSize();
         int page = inputParameter.getPage();
         //1查询当前管理员所在网点
         Shop shop=getShop();
         //2查询网点余额明细
-        PageUtil.startPage(page, pageSize);
+        Page page1=PageUtil.startPage(page, pageSize);
         List<ShopExpressiveExtend> list=shopExpressiveMapperExtend.selectBalanceOfSubsidiary(shop.getId());
         if(!CheckUtil.isNull(list)&&list.size()>0){
             log.info("查询余额明细结果总条数{}", list.size());
         }
-        jsonArray.add(list);
-        return jsonArray;
+        Double money= Double.parseDouble(shop.getShopAccountMoney()+"");
+
+        jsonObject.put("shopAccountMoneyZh",CheckUtil.m2(Double.parseDouble((money/100)+"")));
+        jsonObject.put("totalList",list);
+        jsonObject.put("totalCount",page1.getTotal());
+        return jsonObject;
     }
 
     @Override

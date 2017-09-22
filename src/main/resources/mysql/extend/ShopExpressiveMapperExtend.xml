@@ -24,7 +24,7 @@
   <select id="selectBalanceOfSubsidiary" resultMap="BaseResultMap" parameterType="map">
     select
     date_format(apply_time,'%Y-%c-%d %h:%i:%s') as applyTimeZh,type ,
-    case when type=0 then +(money/100) when type=1 then -(money/100) when type=2 then +(money/100) end as moneyZh
+    case when type=0 then +money when type=1 then -money when type=2 then +money end as moneyZh
     from shop_expressive where shop_id=#{shopId}
   </select>
 
