@@ -25,8 +25,12 @@
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="shop_account_money" property="shopAccountMoney" jdbcType="INTEGER" />
   </resultMap>
-  <!--修改网点余额-->
+  <!--增加网点余额-->
   <update id="updateShopAccountMoneyAndShopId" parameterType="map">
     update shop set shop_account_money=shop_account_money+#{shopAccountMoney} where id=#{id}
+  </update>
+  <!--扣减网点余额-->
+  <update id="deductTheBalanceOfTheBranch" parameterType="map">
+    update shop set shop_account_money=shop_account_money-#{shopAccountMoney} where id=#{id} and shop_account_money-#{shopAccountMoney}>=0
   </update>
 </mapper>

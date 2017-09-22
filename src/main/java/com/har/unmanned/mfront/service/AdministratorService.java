@@ -58,4 +58,11 @@ public interface AdministratorService {
      * @throws Exception
      */
     JSONArray balanceDetails(InputParameter inputParameter)throws Exception;
+
+    /**
+     * 提现
+     * @param inputParameter
+     * @throws Exception
+     */
+    void withdrawDeposit(InputParameter inputParameter)throws Exception;
 }

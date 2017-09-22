@@ -70,4 +70,21 @@ public class CodeConstants {
 		 */
 		public static int HAVEALREADYSETTLED=1;
 	}
+	/**
+	 * 提现状态
+	 */
+	public static interface WithdrawalState{
+		/**
+		 * 待提现
+		 */
+		public static int FORWITHDRAWAL=0;
+		/**
+		 * 提现完成
+		 */
+		public static int WITHDRAWALTOCOMPLETE=1;
+		/**
+		 * 提现失败
+		 */
+		public static int WITHDRAWALOFFAILURE=2;
+	}
 }

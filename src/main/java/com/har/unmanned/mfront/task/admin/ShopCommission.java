@@ -43,14 +43,14 @@ public class ShopCommission {
             //1、查询上月未结算记录
             List<ShopCommissionExtend> shopCommissionExtendList=shopCommissionMapperExtend.selectByShop(startTime,endTime);
             if(!CheckUtil.isNull(shopCommissionExtendList)&&shopCommissionExtendList.size()>0){
-                Date dateStartTime=DateUtil.convertToDate(startTime);
-                Date dateEndTime=DateUtil.convertToDate(endTime);
+                Date dateStartTime=DateUtil.convertToDate(startTime+" 00:00:00");
+                Date dateEndTime=DateUtil.convertToDate(endTime+" 00:00:00");
                 log.info("查询上月未结算记录条数{}",shopCommissionExtendList.size());
                 //2生成未结算集合
                 List<ShopCommissionExtend> shopCommissionExtends=new ArrayList<>();
                 int size=shopCommissionExtendList.size();
                 for(int i=0;i<size;i++){
-                    ShopCommissionExtend commissionExtend=shopCommissionExtendList.get(0);
+                    ShopCommissionExtend commissionExtend=shopCommissionExtendList.get(i);
                     ShopCommissionExtend shopCommissionExtend=new ShopCommissionExtend();
                     shopCommissionExtend.setStartTime(dateStartTime);
                     shopCommissionExtend.setEndTime(dateEndTime);
@@ -61,13 +61,14 @@ public class ShopCommission {
                     shopCommissionExtend.setShopId(commissionExtend.getShopId());
                     shopCommissionExtend.setStatus(CodeConstants.CommissionStatus.FORTHE);
                     shopCommissionExtend.setCommissionNo(UUID.randomUUID().toString().replace("-",""));
+                    shopCommissionExtend.setRatio(commissionExtend.getRatio());
                     shopCommissionExtends.add(shopCommissionExtend);
                     //3、每500条执行一次插入
                     try {
-                        if(i<size&&i%500==0){
+                        if(i!=0&&i<size&&i%500==0){
                             shopCommissionMapperExtend.bulkInsert(shopCommissionExtends);
                             shopCommissionExtends.clear();
-                        }else if(i>size-500){
+                        }else if(i==size-1){
                             shopCommissionMapperExtend.bulkInsert(shopCommissionExtends);
                             shopCommissionExtends.clear();
                         }

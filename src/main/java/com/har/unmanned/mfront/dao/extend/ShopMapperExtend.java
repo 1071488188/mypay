@@ -8,10 +8,18 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ShopMapperExtend extends ShopMapper {
     /**
-     * 修改网点余额
+     * 增加网点余额
      * @param shopAccountMoney
      * @param id
      * @return
      */
     public int updateShopAccountMoneyAndShopId(@Param("id") Long id,@Param("shopAccountMoney") int shopAccountMoney);
+
+    /**
+     * 扣减网点余额
+     * @param id
+     * @param shopAccountMoney
+     * @return
+     */
+    public int deductTheBalanceOfTheBranch(@Param("id") Long id,@Param("shopAccountMoney") int shopAccountMoney);
 }
