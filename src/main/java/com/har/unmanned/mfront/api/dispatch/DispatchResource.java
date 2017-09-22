@@ -26,8 +26,9 @@ public interface DispatchResource {
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
-     * @apiSuccess (200) {Object[]} Data			响应数据
+     * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.totalCount        总数
+     * @apiSuccess (200) {Object[]} Data.dataList        数据集合
      * @apiSuccess (200) {String} Data.dataList.createTime		创建时间
      * @apiSuccess (200) {String} Data.dataList.storeAddress     取货位置
      * @apiSuccess (200) {String} Data.dataList.shopAddress      货架位置
@@ -100,7 +101,7 @@ public interface DispatchResource {
     JSONObject confirmReplenishment(JSONObject params) throws ApiBizException;
 
     /**
-     * @api {post} /api/v1/dispatch/validateCode 5.api 验证短信验证码
+     * @api {post} /api/v1/dispatch/bindUser 5.api 用户绑定
      * @apiVersion 1.0.0
      * @apiName validateCode api 验证短信验证码
      * @apiGroup dispatch
