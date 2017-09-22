@@ -38,7 +38,7 @@
    WHERE
     dh.dispatch_no = #{dispatchNo}
   </select>
-  <!--配送单商品列表-->
+  <!--未确认商品-->
   <select id="notConfirGoods" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT
     cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price

@@ -113,4 +113,53 @@ public class ErrorCode {
 
 		String MSG = "权限不足";
 	}
+
+	public interface E00000016 {
+
+		String CODE = "00000016";
+
+		String MSG = "微信统一下单失败";
+	}
+
+	public interface E00000017 {
+
+		String CODE = "00000017";
+
+		String MSG = "微信订单查询失败";
+	}
+
+	public interface E00000018 {
+
+		String CODE = "00000018";
+
+		String MSG = "微信订单回调失败";
+	}
+
+	public interface E00000019 {
+
+		String CODE = "00000019";
+
+		String MSG = "微信签名验证失败";
+	}
+
+	public interface E00000020 {
+
+		String CODE = "00000020";
+
+		String MSG = "微信订单支付失败";
+	}
+
+	public interface E00000021 {
+
+		String CODE = "00000021";
+
+		String MSG = "商品库存异常";
+	}
+
+	public interface E00000022 {
+
+		String CODE = "00000022";
+
+		String MSG = "商品库存扣减异常";
+	}
 }

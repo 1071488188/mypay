@@ -1,6 +1,8 @@
 package com.har.unmanned.mfront.utils;
 
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -8,6 +10,7 @@ import org.dom4j.Element;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.jdom.JDOMException;
 
 /**
  * json与xml转换工具类
@@ -15,7 +18,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 @SuppressWarnings("rawtypes")
 public class Xml2JsonUtil {
-	/*private static String xml = "<?xml version='1.0' encoding='UTF-8'?>"
+	private static String xml = "<?xml version='1.0' encoding='UTF-8'?>"
 			+ "<response>"
 			+ "<code_query_list><brandId>0020</brandId><cardId>9999990024000117739</cardId><crtDt>20150605</crtDt><phoneNum>18501770977</phoneNum><preSeriesCode>sys</preSeriesCode><seriesCode>8740003435733678</seriesCode><stat>2</stat><txnAt>10000</txnAt></code_query_list>"
 			+ "<code_query_list><brandId>0020</brandId><cardId>9999990024000117739</cardId><crtDt>20150605</crtDt><phoneNum>18501770977</phoneNum><preSeriesCode>8740003435733678</preSeriesCode><seriesCode>8740021238421512</seriesCode><stat>2</stat><txnAt>9999</txnAt></code_query_list>"
@@ -35,7 +38,7 @@ public class Xml2JsonUtil {
 			+ "<sporder_id>200912180001</sporder_id>"
 			+ "<game_userid>13813834333</game_userid>"
 			+ "<game_state>0</game_state>"
-			+ "</orderinfo>";*/
+			+ "</orderinfo>";
 	/**
 	 * xml转jsonObject(获取所有节点的键值对)
 	 * @param xml
@@ -92,5 +95,14 @@ public class Xml2JsonUtil {
 			}
 		}
 		return xmlJson;
+	}
+
+	public static void main(String[] args) throws JDOMException, IOException {
+		System.out.println(XMLUtil.doXMLParse(xml));
+		Map<String, String> map = XMLUtil.doXMLParse(xml);
+		System.out.println(map.get("code_query_list"));
+		String s = map.get("code_query_list");
+		Map<String, String> map1 = XMLUtil.doXMLParse(s);
+		System.out.println(map1.get("brandId"));
 	}
 }

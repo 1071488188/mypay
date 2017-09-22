@@ -117,7 +117,7 @@ public class WeiXinUtils {
 	 * 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。
 	 */
 	@SuppressWarnings("null")
-	public synchronized static boolean isValidSign(TreeMap<String,String> treeMap, String paternerKey){
+	public synchronized static boolean isValidSign(Map<String,String> treeMap, String paternerKey){
 		Set<Entry<String, String>> entry = treeMap.entrySet();
 		StringBuffer sb = new StringBuffer();
 		String signback = null;
