@@ -24,7 +24,7 @@ public class HarUnmannedMfrontApplicationTests {
 		param.put("mch_id", "1303699301");
 		param.put("nonce_str", nonceStr);
 		param.put("body", "微信支付");
-		param.put("out_trade_no", "20170921192631583840726520");
+		param.put("out_trade_no", "20170921192631363840726520");
 		param.put("total_fee", "120");
 		param.put("spbill_create_ip", "192.168.70.5");
 		param.put("notify_url", "http:///har-unmanned-mfront/api/v1/wxUserShop/wxPayCallBack");
