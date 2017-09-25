@@ -24,24 +24,24 @@ public interface AdministratorResource {
      * @apiSuccess (200) {Number} Data.whetherNetwork 是否为网点管理员，0、否1、是
      */
     String adminInit()throws Exception;
-    /**
-     * @api {post} /api/v1/admin/bindManager 2.api 绑定手机号
-     * @apiHeader {String} currenturl 当前url
-     * @apiVersion 1.0.0
-     * @apiName bindManager
-     * @apiGroup admin
-     * @apiPermission none
-     *
-     * @apiDescription 绑定手机号
-     *
-     * @apiParam {String} cellPhoneNumber  手机号
-     * @apiParam {String} verificationCode  验证码
-     *
-     * @apiSuccess (200) {String} RespCode          响应编码，8位
-     * @apiSuccess (200) {String} RespDesc          响应描述
-     * @apiSuccess (200) {Object} Data
-     */
-    String bindManager(InputParameter inputParameter) throws Exception;
+//    /**
+//     * @api {post} /api/v1/admin/bindManager 2.api 绑定手机号
+//     * @apiHeader {String} currenturl 当前url
+//     * @apiVersion 1.0.0
+//     * @apiName bindManager
+//     * @apiGroup admin
+//     * @apiPermission none
+//     *
+//     * @apiDescription 绑定手机号
+//     *
+//     * @apiParam {String} cellPhoneNumber  手机号
+//     * @apiParam {String} verificationCode  验证码
+//     *
+//     * @apiSuccess (200) {String} RespCode          响应编码，8位
+//     * @apiSuccess (200) {String} RespDesc          响应描述
+//     * @apiSuccess (200) {Object} Data
+//     */
+//    String bindManager(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {get} /api/v1/admin/expenseCalendar 3.api 消费记录

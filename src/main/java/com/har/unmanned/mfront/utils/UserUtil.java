@@ -46,7 +46,7 @@ public class UserUtil {
             wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGG");
 //            log.info("=====获取到的cookie=====" + cookieStr);
 //            if (StringUtils.isNotBlank(cookieStr)) {
-//                // TODO 验签，只要解析成功，即表示验签通过
+//                // TODO 验签，只要解析成功，即表示验签通过绑定
 //                Object body = Jwts.parser().setSigningKey(key.getBytes()).parse(cookieStr).getBody();
 //                DefaultClaims claims = (DefaultClaims) body;
 //                wxUser = new ShopWechat();

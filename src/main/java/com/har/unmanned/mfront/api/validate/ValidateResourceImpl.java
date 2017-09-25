@@ -1,9 +1,9 @@
-package com.har.unmanned.mfront.api.smsvalidate;
+package com.har.unmanned.mfront.api.validate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
-import com.har.unmanned.mfront.api.smsvalidate.ValidGroup.SendValidateGroup;
+import com.har.unmanned.mfront.api.validate.ValidGroup.SendValidateGroup;
 import com.har.unmanned.mfront.service.SecurityCodeService;
 import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 短信接口
+ * 短信接口验证
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/sms", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-public class SmsValidateResourceImpl implements SmsValidateResource {
+@RequestMapping(value = "/validation", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+public class ValidateResourceImpl implements ValidateResource {
     @Autowired
     private SecurityCodeService securityCodeService;
 
@@ -49,25 +49,12 @@ public class SmsValidateResourceImpl implements SmsValidateResource {
     }
 
     @Override
-    @PostMapping("/checkValidateCode")
-    public JSONObject checkValidateCode(@Validated({SendValidateGroup.class}) @RequestBody InputParameter inputParameter) throws Exception {
-        log.info("{},{}", "检查校验码请求参数", JSONObject.toJSON(inputParameter));
-        LogHelper.save(LogType.RECEIVE, "检查校验码_开始", JSONObject.toJSON(inputParameter));
-        // 返回消息
-        RespMessage respMessage = new RespMessage();
-        //分装发送验证码请求参数
-        JSONObject reqParam = new JSONObject();
-        reqParam.put("mobile", inputParameter.getPhone());// 手机号
-        reqParam.put("validateCode", inputParameter.getValidateCode());// 校验码
-
-        log.info("{},{}", "检查校验码请求参数", reqParam);
-        LogHelper.save(LogType.REQUEST, "检查校验码请求参数", reqParam);
-        securityCodeService.checkValidateCode(reqParam);
-
-        log.info("{},{}", "检查校验码请求成功", reqParam);
-        LogHelper.save(LogType.RESPONSE, "检查校验码响应", null);
-
-        return respMessage.getRespMessage();
+    public JSONObject permissionsValidation() throws Exception {
+        return null;
     }
 
+    @Override
+    public JSONObject bindingPhone(InputParameter inputParameter) throws Exception {
+        return null;
+    }
 }

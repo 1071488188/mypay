@@ -1,7 +1,7 @@
-package com.har.unmanned.mfront.api.smsvalidate;
+package com.har.unmanned.mfront.api.validate;
 
 
-import com.har.unmanned.mfront.api.smsvalidate.ValidGroup.SendValidateGroup;
+import com.har.unmanned.mfront.api.validate.ValidGroup.SendValidateGroup;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
