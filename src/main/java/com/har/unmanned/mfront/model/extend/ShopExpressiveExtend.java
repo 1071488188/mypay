@@ -2,6 +2,7 @@ package com.har.unmanned.mfront.model.extend;
 
 import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.model.ShopExpressive;
+import com.har.unmanned.mfront.utils.CheckUtil;
 import lombok.Data;
 
 /**

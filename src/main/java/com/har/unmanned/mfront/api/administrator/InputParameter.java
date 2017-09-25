@@ -6,10 +6,7 @@ import com.har.unmanned.mfront.api.administrator.ValidGroup.PageGroup;
 import com.har.unmanned.mfront.api.administrator.ValidGroup.WithdrawDepositGroup;
 import lombok.Data;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 /**
  * 管理员入参实体
@@ -32,6 +29,7 @@ public class InputParameter {
     private Integer page;//页码
     @NotNull(message = "每页显示条数不能为空!", groups = PageGroup.class)
     @Min(value = 1, message = "每页显示条数错误", groups = PageGroup.class)
+    @Max(value = 20, message = "每页显示条数错误", groups = PageGroup.class)
     private Integer pageSize;//每页显示条数
     @NotNull(message = "参数不能为空!", groups = CloseAnAccountGroup.class)
     private String billingId;//结算清单id

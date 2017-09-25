@@ -11,6 +11,7 @@ import com.har.unmanned.mfront.model.ShopWechat;
 import com.har.unmanned.mfront.service.impl.RedisServiceImpl;
 import com.har.unmanned.mfront.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -89,6 +90,11 @@ public class WxAuthResource extends ApiBaseController {
                 ShopWechat AccessTokenUser = new ShopWechat();
                 AccessTokenUser.setOpenid(wxUser.getOpenid());
                 if (CheckUtil.isNull(findUser)) {
+                   String userName= wxUser.getName();
+                    if(!CheckUtil.isNull(userName)){
+                        userName= Base64.encodeBase64String(userName.getBytes("UTF-8"));
+                        wxUser.setName(userName);
+                    }
                     // 保存用户信息
                     shopWechatMapper.insertSelective(wxUser);
                 }

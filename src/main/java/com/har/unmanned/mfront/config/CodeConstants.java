@@ -102,4 +102,14 @@ public class CodeConstants {
 		 */
 		public static int WITHDRAWALOFFAILURE=2;
 	}
+
+	/** 货架状态 */
+	public static interface ShopStatus{
+		/** 上架 */
+		public static int ON = 1;
+		/** 下架 */
+		public static int OFF = 0;
+		/** 删除 */
+		public static int DELETE = 2;
+	}
 }

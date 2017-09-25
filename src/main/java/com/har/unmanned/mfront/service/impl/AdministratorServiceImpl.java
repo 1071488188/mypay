@@ -2,6 +2,7 @@ package com.har.unmanned.mfront.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.har.unmanned.mfront.api.administrator.InputParameter;
 import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
@@ -15,6 +16,7 @@ import com.har.unmanned.mfront.model.extend.ShopCommissionExtend;
 import com.har.unmanned.mfront.model.extend.ShopExpressiveExtend;
 import com.har.unmanned.mfront.model.extend.ShopOrderExtend;
 import com.har.unmanned.mfront.service.AdministratorService;
+import com.har.unmanned.mfront.service.SecurityCodeService;
 import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.PageUtil;
 import com.har.unmanned.mfront.utils.UserUtil;
@@ -50,6 +52,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     ShopMapperExtend shopMapperExtend;
     @Autowired
     ShopExpressiveMapperExtend shopExpressiveMapperExtend;
+    @Autowired
+    private SecurityCodeService securityCodeService;
     @Autowired
     RedisServiceImpl redisService;
     private static int roleId = 3;//网点管理员权限
@@ -98,16 +102,23 @@ public class AdministratorServiceImpl implements AdministratorService {
         String cellPhoneNumber = inputParameter.getCellPhoneNumber();//手机号
         String verificationCode = inputParameter.getVerificationCode();//验证码
         log.info("手机号{},验证码{}", cellPhoneNumber,verificationCode);
+        JSONObject jsonObject=new JSONObject();
+        //1验证验证码是否正确
+        jsonObject.put("mobile",cellPhoneNumber);
+        jsonObject.put("validate_code_input",verificationCode);
+        securityCodeService.checkValidateCode(jsonObject);
+        //2判断当前用户是否已经是管理员
         int flag = adminInit();
         if (flag == 1) {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "您已经是网点管理员!", inputParameter);
         }
-        //根据手机号查询当前手机号是否为网点管理员
+        //3根据手机号查询当前手机号是否为网点管理员
         int count = sysUserMapperExtend.getuserRole(null, roleId, cellPhoneNumber);
         log.info("根据手机号查询当前手机号是否为网点管理员,手机号{},查询结果{}", cellPhoneNumber,count);
         if (count == 0) {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号暂无网点管理员数据!", inputParameter);
         }
+        //4查询出当前手机号所存在的管理员信息
         SysUserExample sysUserExample = new SysUserExample();
         SysUserExample.Criteria criteria = sysUserExample.createCriteria();
         criteria.andMobileEqualTo(cellPhoneNumber);
@@ -115,6 +126,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         List<SysUser> sysUserList = sysUserMapper.selectByExample(sysUserExample);
         log.info("系统用户查询结果", sysUserList);
         SysUser sysUser = sysUserList.get(0);
+        //5将手机号和管理员id写入微信用户表
         ShopWechat shopWechat = userUtil.userInfo();
         shopWechat.setUserId(sysUser.getUserId());
         shopWechat.setPhone(cellPhoneNumber);
@@ -135,27 +147,31 @@ public class AdministratorServiceImpl implements AdministratorService {
         jsonObject.put("theNumberOfConsumer", countByShopId);
         log.info("查询累计消费人数{}", countByShopId);
         //3查询列表
-        PageUtil.startPage(page, pageSize);
+        Page page1=PageUtil.startPage(page, pageSize);
         List<ShopOrderExtend> shopOrderExtendList = shopOrderMapperExtend.sumByShopId(shop.getId());
+        log.info("总条数{}", page1.getTotal());
         jsonObject.put("particulars", shopOrderExtendList);
         log.info("查询列表{}", shopOrderExtendList);
         return jsonObject;
     }
 
     @Override
-    public JSONArray settlementRecords(InputParameter inputParameter) throws Exception {
-        JSONArray jsonArray = new JSONArray();
+    public JSONObject settlementRecords(InputParameter inputParameter) throws Exception {
+        JSONObject jsonObject =new JSONObject();
+
         Integer page = inputParameter.getPage();
         Integer pageSize = inputParameter.getPageSize();
         Shop shop = getShop();
         //2查询网点佣金记录列表
-        PageUtil.startPage(page, pageSize);
+       Page page1= PageUtil.startPage(page, pageSize);
         List<ShopCommissionExtend> shopCommissionExtendList = shopCommissionMapperExtend.selectListByShopId(shop.getId());
         if (!CheckUtil.isNull(shopCommissionExtendList) && shopCommissionExtendList.size() > 0) {
             log.info("查询网点佣金记录列表{}", shopCommissionExtendList.size());
-            jsonArray.add(shopCommissionExtendList);
+
         }
-        return jsonArray;
+        jsonObject.put("totalCount",page1.getTotal());
+        jsonObject.put("totalList",shopCommissionExtendList);
+        return jsonObject;
     }
 
     @Override
@@ -213,20 +229,24 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public JSONArray balanceDetails(InputParameter inputParameter) throws Exception {
-        JSONArray jsonArray=new JSONArray();
+    public JSONObject balanceDetails(InputParameter inputParameter) throws Exception {
+        JSONObject jsonObject =new JSONObject();
         int pageSize = inputParameter.getPageSize();
         int page = inputParameter.getPage();
         //1查询当前管理员所在网点
         Shop shop=getShop();
         //2查询网点余额明细
-        PageUtil.startPage(page, pageSize);
+        Page page1=PageUtil.startPage(page, pageSize);
         List<ShopExpressiveExtend> list=shopExpressiveMapperExtend.selectBalanceOfSubsidiary(shop.getId());
         if(!CheckUtil.isNull(list)&&list.size()>0){
             log.info("查询余额明细结果总条数{}", list.size());
         }
-        jsonArray.add(list);
-        return jsonArray;
+        Double money= Double.parseDouble(shop.getShopAccountMoney()+"");
+
+        jsonObject.put("shopAccountMoneyZh",CheckUtil.m2(Double.parseDouble((money/100)+"")));
+        jsonObject.put("totalList",list);
+        jsonObject.put("totalCount",page1.getTotal());
+        return jsonObject;
     }
 
     @Override

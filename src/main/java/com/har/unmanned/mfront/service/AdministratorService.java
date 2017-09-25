@@ -42,7 +42,7 @@ public interface AdministratorService {
      * @return
      * @throws Exception
      */
-    public JSONArray settlementRecords(InputParameter inputParameter)throws Exception;
+    public JSONObject settlementRecords(InputParameter inputParameter)throws Exception;
 
     /**
      * 结算
@@ -57,7 +57,7 @@ public interface AdministratorService {
      * @return
      * @throws Exception
      */
-    JSONArray balanceDetails(InputParameter inputParameter)throws Exception;
+    JSONObject balanceDetails(InputParameter inputParameter)throws Exception;
 
     /**
      * 提现

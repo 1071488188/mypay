@@ -35,6 +35,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.recentPurchaseList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.recentPurchaseList.quantity   商品库存数量
      * @apiSuccess (200) {Number} Data.recentPurchaseList.layer   商品摆放位置
+     * @apiSuccess (200) {Number} Data.recentPurchaseList.status   商品状态(0: 已售完, 1: 未售完)
      * @apiSuccess (200) {Object} Data.dataList   数据的集合, {'1':[], '2':[]}这种结构
      * @apiSuccess (200) {Number} Data.dataList.layer   货架的层级(1, 2, 3, 4, 5)
      * @apiSuccess (200) {Object[]} Data.dataList.goodsList  每一层所对应的商品
@@ -67,7 +68,13 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} RespDesc      响应描述
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.orderNo  订单号
-     * @apiSuccess (200) {String} Data.singData	支付签名数据
+     * @apiSuccess (200) {Object} Data.singData	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.appId	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.timeStamp	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.nonceStr	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.package	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.signType	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.paySign	支付签名数据
      * */
     JSONObject submitOrder(InputParameter inputParameter) throws Exception;
 
@@ -79,6 +86,8 @@ public interface WxUserShopResource {
      * @apiPermission none
      *
      * @apiDescription 用户的消费记录
+     *
+     * @apiParam {String} shopCode 货架编号
      *
      * @apiSuccess (200) {String} RespCode      响应编码，8位
      * @apiSuccess (200) {String} RespDesc      响应描述
@@ -93,7 +102,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品的购买数量
      * */
-    JSONObject buyRecord() throws Exception;
+    JSONObject buyRecord(InputParameter inputParameter) throws Exception;
 
     /**
      * @api {get} /api/v1/wxUserShop/userInfo 4.api 用户信息
@@ -109,6 +118,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.name	用户昵称
      * @apiSuccess (200) {String} Data.headimgUrl 用户头像
+     * @apiSuccess (200) {String} Data.shopCode 货架编号
      * */
     JSONObject userInfo() throws Exception;
 }
