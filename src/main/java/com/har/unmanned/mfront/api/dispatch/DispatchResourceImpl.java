@@ -6,6 +6,7 @@ import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
 import com.har.unmanned.mfront.api.dispatch.validgroup.ValidateCodeGroup;
+import com.har.unmanned.mfront.api.dispatch.validgroup.DispatchGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.DispatchService;
@@ -63,10 +64,10 @@ public class DispatchResourceImpl implements DispatchResource {
         return respMessage.getRespMessage();
     }
 
-    @Override
+//    @Override
     @PostMapping("/updateDispatchStatus")
     public JSONObject updateDispatchStatus(@RequestBody JSONObject reqParam) throws ApiBizException {
-        log.info("param={}", reqParam);
+        log.info("{},{}", "更新配送单状态", reqParam);
         LogHelper.save(LogType.RECEIVE, "更新配送单状态", reqParam);
         // 返回消息
         RespMessage respMessage = new RespMessage();
@@ -81,7 +82,7 @@ public class DispatchResourceImpl implements DispatchResource {
                 throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
             }
 
-            dispatchService.updateDispatchStatus(reqParam);
+//            dispatchService.updateDispatchStatus(reqParam);
         } catch (ApiBizException e) {
             e.printStackTrace();
             log.error("{},{}", "更新配送单状态错误", JSONObject.toJSON(e.getObject()));
@@ -99,13 +100,17 @@ public class DispatchResourceImpl implements DispatchResource {
 
     @Override
     @GetMapping("/replenishmentList")
-    public JSONObject replenishmentList(JSONObject reqParam) throws ApiBizException {
-        log.info("{},{}", "补货列表传入参数", reqParam);
-        LogHelper.save(LogType.RECEIVE, "补货列表传入参数", reqParam);
+    public JSONObject replenishmentList(@Validated({DispatchGroup.class}) InputParameter inputParameter) throws ApiBizException {
+        log.info("{},{}", "补货列表传入参数", JSONObject.toJSON(inputParameter));
+        LogHelper.save(LogType.RECEIVE, "补货列表传入参数", JSONObject.toJSON(inputParameter));
         // 返回消息
         RespMessage respMessage = new RespMessage();
 
         try {
+            // 请求参数
+            JSONObject reqParam = new JSONObject();
+            reqParam.put("dispatchNo", inputParameter.getDispatchNo());
+
             log.info("{},{}", "补货列表请求参数", reqParam);
             LogHelper.save(LogType.REQUEST, "补货列表请求参数", reqParam);
 
@@ -122,8 +127,8 @@ public class DispatchResourceImpl implements DispatchResource {
             throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("{},{}", "补货列表错误", reqParam);
-            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, reqParam);
+            log.error("{},{}", "补货列表错误", JSONObject.toJSON(inputParameter));
+            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter));
         }
 
         log.info("{},{}", "补货列表返回数据", respMessage.getRespMessage());
@@ -132,7 +137,8 @@ public class DispatchResourceImpl implements DispatchResource {
     }
 
     @Override
-    public JSONObject confirmReplenishment(JSONObject reqParam) throws ApiBizException {
+    @PostMapping("/confirmReplenishment")
+    public JSONObject confirmReplenishment(@RequestBody JSONObject reqParam) throws ApiBizException {
         log.info("{},{}", "确认补货传入参数", reqParam);
         LogHelper.save(LogType.RECEIVE, "确认补货传入参数", reqParam);
         // 返回消息

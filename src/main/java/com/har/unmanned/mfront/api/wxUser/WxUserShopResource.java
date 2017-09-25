@@ -57,9 +57,6 @@ public interface WxUserShopResource {
      * @apiDescription 提交订单
      *
      * @apiParam {String} shopCode 货架编号
-     * @apiParam {String} location 地理位置信息
-     * @apiParam {Number} longitude 经度
-     * @apiParam {Number} latitude 纬度
      * @apiParam {Object[]} goodsList 	所购买的商品的集合
      * @apiParam {String} goodsList.goodsId 	商品id
      * @apiParam {Number} goodsList.goodsNum 商品的个数
@@ -69,12 +66,12 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.orderNo  订单号
      * @apiSuccess (200) {Object} Data.singData	支付签名数据
-     * @apiSuccess (200) {String} Data.singData.appId	支付签名数据
-     * @apiSuccess (200) {String} Data.singData.timeStamp	支付签名数据
-     * @apiSuccess (200) {String} Data.singData.nonceStr	支付签名数据
-     * @apiSuccess (200) {String} Data.singData.package	支付签名数据
-     * @apiSuccess (200) {String} Data.singData.signType	支付签名数据
-     * @apiSuccess (200) {String} Data.singData.paySign	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.appId	公众号id
+     * @apiSuccess (200) {String} Data.singData.timeStamp	时间戳
+     * @apiSuccess (200) {String} Data.singData.nonceStr	随机字符串
+     * @apiSuccess (200) {String} Data.singData.package	订单详情扩展字符串
+     * @apiSuccess (200) {String} Data.singData.signType	签名方式
+     * @apiSuccess (200) {String} Data.singData.paySign	签名
      * */
     JSONObject submitOrder(InputParameter inputParameter) throws Exception;
 

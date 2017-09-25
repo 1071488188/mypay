@@ -76,6 +76,27 @@ public class DispatchServiceImpl implements DispatchService {
         return wechatUser;
     }
 
+    /**
+     * 检查配送单状态
+     * @param dispatchNo    配送单单号
+     * @return  配送单状态
+     */
+    private Integer getDispatchStatus(String dispatchNo){
+        Integer status = -1;
+
+        // 检查配送单状态
+        DispatchExample example = new DispatchExample();
+        DispatchExample.Criteria criteria = example.or();
+        criteria.andDispatchNoEqualTo(dispatchNo);
+        List<Dispatch> dispatchesList = dispatchMapper.selectByExample(example);
+
+        if (!dispatchesList.isEmpty() && dispatchesList.size() > 0) {
+            status = dispatchesList.get(0).getStatus();
+        }
+
+        return status;
+    }
+
     @Override
     public JSONObject dispatchList(JSONObject param) throws ApiBizException {
         log.info("{},{}", "配送中心列表传入参数", param);
@@ -86,7 +107,7 @@ public class DispatchServiceImpl implements DispatchService {
 
         //############################请求数据#######################################
         // 数据状态
-        String status = param.getString("status");
+        int status = param.getInteger("status");
         // 页数
         int page = param.getInteger("page");
         // 条数
@@ -99,7 +120,7 @@ public class DispatchServiceImpl implements DispatchService {
         // 参数封装
         DispatchDomain dispatchDomain = new DispatchDomain();
         dispatchDomain.setOpenid(wechatUser.getOpenid());
-        dispatchDomain.setStatusString(status);
+        dispatchDomain.setStatus(status);
         // 配送单总数
         int count = dispatchQueryMapper.dispatchCount(dispatchDomain);
         retData.put("totalCount", count);// 总条数
@@ -250,9 +271,16 @@ public class DispatchServiceImpl implements DispatchService {
         // 检查授权
         checkUserAuth();
 
+        // 检查配送单状态
+        Integer status = getDispatchStatus(dispatchNo);
+        if (status != CodeConstants.DispatchStatus.IN_DELIVERY) {
+            log.info("{},{},{}", "该配送单暂不能操作", param, status);
+            throw new ApiBizException(ErrorCode.E00000024.CODE, "该配送单暂不能操作", param);
+        }
+
         Map<Long, Long> goodsIds = new HashMap<>();
         for (int i = 0; i < goodsIdsArray.size(); i++) {
-            Long goodsId = (Long) goodsIdsArray.get(i);
+            Long goodsId = new Long(goodsIdsArray.get(i).toString());
 
             goodsIds.put(goodsId, goodsId);
         }
@@ -316,11 +344,17 @@ public class DispatchServiceImpl implements DispatchService {
 
                 shopStockMapper.insertSelective(shopStock);
             } else {
-                // TODO 更新
+                // 更新库存信息
+                shopStock.setId(shopStockGoods.getId());
                 shopStock.setQuantity(shopStockGoods.getQuantity());
                 shopStock.setId(shopStockGoods.getId());
-
                 shopStockExtendMapper.updateShopStock(shopStock);
+
+                // 更新配送单信息
+                JSONObject updateParam = new JSONObject();
+                updateParam.put("dispatchNo",dispatchNo);
+                updateParam.put("status",CodeConstants.DispatchStatus.SHELVES);
+                updateDispatchStatus(updateParam);
             }
         }
     }
