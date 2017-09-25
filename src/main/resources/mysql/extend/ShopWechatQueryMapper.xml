@@ -59,7 +59,9 @@
     WHERE
     so.openid = #{openId}
     AND so.status = 1
-    AND so.shop_id = #{shopId}
+    <if test="shopId != null and shopId != ''" >
+      AND so.shop_id = #{shopId}
+    </if>
   </select>
   <select id="selectShopGoodsList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
     SELECT

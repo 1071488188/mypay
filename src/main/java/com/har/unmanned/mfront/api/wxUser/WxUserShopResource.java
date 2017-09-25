@@ -68,7 +68,13 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} RespDesc      响应描述
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.orderNo  订单号
-     * @apiSuccess (200) {String} Data.singData	支付签名数据
+     * @apiSuccess (200) {Object} Data.singData	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.appId	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.timeStamp	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.nonceStr	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.package	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.signType	支付签名数据
+     * @apiSuccess (200) {String} Data.singData.paySign	支付签名数据
      * */
     JSONObject submitOrder(InputParameter inputParameter) throws Exception;
 

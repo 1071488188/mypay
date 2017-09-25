@@ -310,11 +310,15 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         log.info("-----------------用户所购买的商品信息service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
-        ShopExample example = new ShopExample();
-        ShopExample.Criteria criteria = example.createCriteria();
-        criteria.andShopCodeEqualTo(shopCode);
-        List<Shop> shops = shopMapper.selectByExample(example);
-        List<ShopOrderDomain> shopOrderDomains = shopWechatQueryMapper.selectBuyHistory(shopWechat.getOpenid(), shops.get(0).getId().toString());
+        //ShopExample example = new ShopExample();
+        //ShopExample.Criteria criteria = example.createCriteria();
+        //criteria.andShopCodeEqualTo(shopCode);
+        //List<Shop> shops = shopMapper.selectByExample(example);
+        //if (shops.isEmpty()) {
+        //    throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, shopCode);
+        //}
+        List<ShopOrderDomain> shopOrderDomains = shopWechatQueryMapper.selectBuyHistory(shopWechat.getOpenid(), null);
+        //List<ShopOrderDomain> shopOrderDomains = shopWechatQueryMapper.selectBuyHistory(shopWechat.getOpenid(), shops.get(0).getId().toString());
         log.info("用户所购买的商品信息: " + JSONObject.toJSONString(shopOrderDomains));
         JSONArray dataList = new JSONArray(); // 用户所购买的商品集合
         if (shopOrderDomains.isEmpty()) { //如果没有购买
