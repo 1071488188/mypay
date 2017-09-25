@@ -43,7 +43,7 @@ public class UserUtil {
             // 将cookie中取出的token转换成OAuth2格式
             String cookieStr = (String) CookieUtil.getCookieByName(request, Constants.ACCESS_TOKEN);
             wxUser=new ShopWechat();
-            wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGG");
+            wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVZHANG");
 //            log.info("=====获取到的cookie=====" + cookieStr);
 //            if (StringUtils.isNotBlank(cookieStr)) {
 //                // TODO 验签，只要解析成功，即表示验签通过

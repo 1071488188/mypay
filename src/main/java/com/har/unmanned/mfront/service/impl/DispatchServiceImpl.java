@@ -124,7 +124,7 @@ public class DispatchServiceImpl implements DispatchService {
                 for (DispatchItemDomain itemDomain : item.getCarrierNote()) {
                     JSONObject carrierNoteJson = new JSONObject();
                     carrierNoteJson.put("goodsName", itemDomain.getGoodsName());//商品名称
-                    carrierNoteJson.put("quantity", itemDomain.getQuantity());//商品数量
+                    carrierNoteJson.put("quantity", itemDomain.getStockQuantity());//商品数量
                     carrierNote.add(carrierNoteJson);
                 }
                 jsonObject.put("carrierNote", carrierNote);//取货单

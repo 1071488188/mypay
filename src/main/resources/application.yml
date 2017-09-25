@@ -1,6 +1,6 @@
 server:
   port: 8082
-  context-path: /har-unmanned-mfront/api/v1
+  context-path: /har-unmanned-mfront/
 #系统相关常量
 client:
   client-id: service-account-1
