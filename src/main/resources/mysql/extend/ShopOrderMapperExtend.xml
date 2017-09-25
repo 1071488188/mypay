@@ -30,7 +30,7 @@
   </select>
   <!--查询所有消费用户-->
   <select id="sumByShopId" resultMap="BaseResultMap" parameterType="map">
-    SELECT sw.name,sw.headimg_url, SUM(so.amount)/100 as amountZh  from shop_order so LEFT JOIN shop_wechat sw
+    SELECT sw.name,sw.headimg_url, FORMAT(SUM(so.amount)/100,2)  as amountZh  from shop_order so LEFT JOIN shop_wechat sw
     ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY so.openid ORDER by amountZh desc
 
   </select>

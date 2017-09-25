@@ -12,15 +12,4 @@ import lombok.Data;
 public class ShopOrderExtend extends ShopOrder {
     private String headimgUrl;
     private String amountZh;
-
-    public String getAmountZh() {
-        if(!CheckUtil.isNull(amountZh)){
-            return  CheckUtil.m2(Double.parseDouble(amountZh)) ;
-        }
-        return amountZh;
-    }
-
-    public void setAmountZh(String amountZh) {
-        this.amountZh = amountZh;
-    }
 }

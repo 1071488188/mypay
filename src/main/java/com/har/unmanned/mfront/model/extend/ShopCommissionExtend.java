@@ -16,25 +16,4 @@ public class ShopCommissionExtend extends ShopCommission {
     private String amountZh;
     private String commissionZh;
 
-    public String getAmountZh() {
-        if(!CheckUtil.isNull(amountZh)){
-          return  CheckUtil.m2(Double.parseDouble(amountZh)) ;
-        }
-        return amountZh;
-    }
-
-    public void setAmountZh(String amountZh) {
-        this.amountZh = amountZh;
-    }
-
-    public String getCommissionZh() {
-        if(!CheckUtil.isNull(commissionZh)){
-            return  CheckUtil.m2(Double.parseDouble(commissionZh)) ;
-        }
-        return commissionZh;
-    }
-
-    public void setCommissionZh(String commissionZh) {
-        this.commissionZh = commissionZh;
-    }
 }

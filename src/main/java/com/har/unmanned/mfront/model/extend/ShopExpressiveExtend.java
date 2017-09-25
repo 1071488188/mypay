@@ -25,13 +25,6 @@ public class ShopExpressiveExtend extends ShopExpressive {
         return typeZh;
     }
 
-    public String getMoneyZh() {
-        if(!CheckUtil.isNull(moneyZh)){
-            return  CheckUtil.m2(Double.parseDouble(moneyZh)) ;
-        }
-        return moneyZh;
-    }
-
     public void setTypeZh(String typeZh) {
         this.typeZh = typeZh;
     }

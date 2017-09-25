@@ -23,9 +23,10 @@
   <!--查询余额明细-->
   <select id="selectBalanceOfSubsidiary" resultMap="BaseResultMap" parameterType="map">
     select
-    date_format(apply_time,'%Y-%c-%d %h:%i:%s') as applyTimeZh,type ,
-    case when type=0 then +money when type=1 then -money when type=2 then +money end as moneyZh
-    from shop_expressive where shop_id=#{shopId}
+    date_format(apply_time,'%Y-%c-%d %h:%i:%s') as applyTimeZh,`type`,
+    case when type=0 then CONCAT("+￥",FORMAT(money/100,2) ) when type=1 then CONCAT("-￥",FORMAT(money/100,2) )
+    when type=2 then CONCAT("+￥",FORMAT(money/100,2) ) end as moneyZh
+    from shop_expressive where shop_id=#{shopId} ORDER BY apply_time desc
   </select>
 
 </mapper>
