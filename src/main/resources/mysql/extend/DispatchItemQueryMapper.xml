@@ -24,11 +24,12 @@
     <!--配送单商品列表-->
     <select id="dispatchGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
+            dh.id,
             dh.shop_id,
-            cg.`name` AS goodsName,
+            cg.`name` goodsName,
             cg.shop_min_quantity,
             cg.shop_base_quantity,
-            cg.image AS goodsPicture,
+            cg.image goodsPicture,
             cg.layer,
             di.goods_id,
             di.quantity,
@@ -43,26 +44,21 @@
     <!--货架商品列表-->
     <select id="shopStockGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
        SELECT
-          cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price
+            ss.id,
+            cg.`name` goodsName,
+            cg.image goodsPicture,
+            ss.layer,
+            ss.goods_id,
+            ss.quantity,
+            cg.price
         FROM
-          dispatch dh
-        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
-        LEFT JOIN code_goods cg ON cg.id = di.goods_id
-       WHERE
-        dh.dispatch_no = #{dispatchNo}
+            shop_stock ss
+        LEFT JOIN code_goods cg ON cg.id = ss.goods_id
+        LEFT JOIN dispatch dh ON dh.shop_id = ss.shop_id
+        WHERE ss.shop_id = dh.shop_id
+        AND dh.dispatch_no = #{dispatchNo}
     </select>
-    <!--配送单商品列表-->
-    <select id="notConfirmGoods" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT
-          cg.`name` AS goodsName,cg.image AS goodsPicture,cg.layer,di.goods_id ,di.quantity,di.price
-        FROM dispatch dh
-        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
-        LEFT JOIN code_goods cg ON cg.id = di.goods_id
-        WHERE
-            dh.dispatch_no = #{dispatchNo}
-            AND di.goods_id NOT IN (${goodsIds})
-        ORDER BY cg.layer ASC
-    </select>
+    <!-- 获取最大层数 -->
     <select id="getMaxLayer" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
             MAX(cg.layer)
