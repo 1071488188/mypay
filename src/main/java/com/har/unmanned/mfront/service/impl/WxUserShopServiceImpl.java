@@ -115,22 +115,15 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         ShopExample shopExample = new ShopExample();
         ShopExample.Criteria criteria = shopExample.createCriteria();
         criteria.andShopCodeEqualTo(param.getShopCode());
-        criteria.andStatusEqualTo(1);
+        criteria.andStatusEqualTo(CodeConstants.ShopStatus.ON); // 货架上架
         List<Shop> shops = shopMapper.selectByExample(shopExample);
-        // 1. 货架不存在
+        // 货架不存在
         if (shops.isEmpty()) {
             log.error("查询货架信息异常:" + param);
             throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, param.getShopCode());
         }
         Shop shop = shops.get(0);
-        // 2. 货架已下架
-        if (shop.getStatus().intValue() != CodeConstants.ShopStatus.ON) {
-            String string = JSONObject.toJSONString(shop);
-            log.error("该货架已下架:" + string);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, string);
-        }
         log.info("获取到的货架信息:" + JSONObject.toJSONString(shop));
-
 
         /** 3. 生成订单记录 */
         JSONArray goodsList = param.getGoodsList();
@@ -163,25 +156,25 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         try {
             // 1. 门店销售单
             ShopOrder shopOrder = new ShopOrder();
-            shopOrder.setShopId(shop.getId());
-            shopOrder.setOpenid(shopWechat.getOpenid());
-            shopOrder.setName(shopWechat.getName());
-            shopOrder.setOrderNo(StringUtil.getRandomStrByCurrentTime(5, RandomUtils.generateNumberString(4)));
-            shopOrder.setOrderTime(new Date());
-            shopOrder.setAmount(totalMoney); // 单位(分)
+            shopOrder.setShopId(shop.getId()); //设置门店id
+            shopOrder.setOpenid(shopWechat.getOpenid()); //下单人员
+            shopOrder.setName(shopWechat.getName()); //微信号昵称
+            shopOrder.setOrderNo(StringUtil.getRandomStrByCurrentTime(5, RandomUtils.generateNumberString(4))); //订单号
+            shopOrder.setOrderTime(new Date()); //下单时间
+            shopOrder.setAmount(totalMoney); // 订单金额, 单位(分)
             BigDecimal ratio = shop.getRatio();
             if (CheckUtil.isNull(ratio) || ratio.intValue() == 0) {
-                shopOrder.setRatio(new BigDecimal(0));
-                shopOrder.setCommission(0); // 单位(分)
+                shopOrder.setRatio(new BigDecimal(0)); //佣金比例
+                shopOrder.setCommission(0); // 佣金, 单位(分)
             } else {
                 BigDecimal commission = ratio.divide(new BigDecimal(100)).multiply(new BigDecimal(totalMoney));
                 DecimalFormat format = new DecimalFormat("0");
                 shopOrder.setRatio(ratio);
                 shopOrder.setCommission(Integer.parseInt(format.format(commission))); // 单位(分)
             }
-            shopOrder.setLocation(param.getLocation());
-            shopOrder.setLatitude(param.getLatitude());
-            shopOrder.setLongitude(param.getLongitude());
+            shopOrder.setLocation(shop.getAddress()); //下单具体位置
+            shopOrder.setLatitude(shop.getLatitude()); //下单经纬度
+            shopOrder.setLongitude(shop.getLongitude());
             shopOrder.setStatus(CodeConstants.OrderStatus.UNPAID); //未支付
             shopOrderMapper.insert(shopOrder);
             // 2. 订单明细
