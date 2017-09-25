@@ -40,23 +40,6 @@ public interface DispatchResource {
      */
     JSONObject dispatchList(InputParameter inputParameter) throws ApiBizException;
 
-//    /**
-//     * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
-//     * @apiVersion 1.0.0
-//     * @apiName updateDispatchStatus
-//     * @apiGroup dispatch
-//     * @apiPermission none
-//     *
-//     * @apiDescription 更新配送单状态
-//     *
-//     * @apiParam {String} dispatchNo 	配送单号
-//     * @apiParam {Number} status 	    状态（2: 派送中、3: 已完成）
-//     *
-//     * @apiSuccess (200) {String} RespCode          响应编码，8位
-//     * @apiSuccess (200) {String} RespDesc          响应描述
-//     */
-//    JSONObject updateDispatchStatus(JSONObject params) throws ApiBizException;
-
     /**
      * @api {get} /api/v1/dispatch/replenishmentList 3.api 补货列表
      * @apiVersion 1.0.0
