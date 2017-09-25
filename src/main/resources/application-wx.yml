@@ -29,7 +29,6 @@ wx:
     appid: wx6b09d460cd913b96 #公众账号ID
     appsecret: daeb1993ddee0822edcbeeffa35dedcf
     mch_id: 1303699301 #商户号
-    spbill_create_ip: 103.44.145.245 #终端IP
     notify_url: http:///har-unmanned-mfront/api/v1/wxUserShop/wxPayCallBack  #后台通知地址
     trade_type: JSAPI #交易类型
     charset: utf-8

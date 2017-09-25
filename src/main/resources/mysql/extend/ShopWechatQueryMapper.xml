@@ -35,12 +35,12 @@
   </resultMap>
   <select id="selectGoodsInfo" resultType="com.har.unmanned.mfront.model.extend.CodeGoodsDomain">
     SELECT
-      cg.classify_id classifyId,cg.`name`,cg.spec,cg.price,cg.store_unit storeUnit,cg.shop_unit shopUnit,cg.ratio,cg.layer,
-      cg.create_time createTime,cg.creator,cg.update_time updateTime,cg.updator,cg.`status`,cg.image,cg.id, ss.quantity
+    cg.classify_id classifyId,cg.`name`,cg.spec,cg.price,cg.store_unit storeUnit,cg.shop_unit shopUnit,cg.ratio,cg.layer,
+    cg.create_time createTime,cg.creator,cg.update_time updateTime,cg.updator,cg.`status`,cg.image,cg.id, ss.quantity
     FROM shop_stock ss
     LEFT JOIN code_goods cg ON ss.goods_id = cg.id
     WHERE ss.shop_id = #{shopId}
-    AND ss.`status` = 0
+    AND ss.`status` = 1
     AND cg.`status` = 0
     AND cg.id IN
     <foreach item="id" collection="ids" open="(" separator="," close=")">
@@ -49,32 +49,37 @@
   </select>
   <select id="selectBuyHistory" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
-      so.shop_id shopId, so.openid,	so.`name`,	so.order_no orderNo, so.order_time orderTime,	so.amount,	so.commission, so.pay_no payNo,	so.pay_time payTime,
-      so.location,	so.longitude,	so.latitude, so.`status`, soi.order_id orderId,	soi.goods_id goodsId, DATE_FORMAT(so.pay_time,'%Y.%m.%d %H:%m:%s') payTimeString,
-      soi.shop_id ishopId, soi.shop_code shopCode,	soi.quantity,	soi.price,	soi.amount iamount,	soi.order_time iorderTime, so.ID, soi.ID IID, cg.`name` iname
+    so.shop_id shopId, so.openid,	so.`name`,	so.order_no orderNo, so.order_time orderTime,	so.amount,	so.commission, so.pay_no payNo,	so.pay_time payTime,
+    so.location,	so.longitude,	so.latitude, so.`status`, soi.order_id orderId,	soi.goods_id goodsId, DATE_FORMAT(so.pay_time,'%Y.%m.%d %H:%m:%s') payTimeString,
+    soi.shop_id ishopId, soi.shop_code shopCode,	soi.quantity,	soi.price,	soi.amount iamount,	soi.order_time iorderTime, so.ID, soi.ID IID, cg.`name` iname
     FROM
-      shop_order so
+    shop_order so
     LEFT JOIN shop_order_item soi ON so.ID = soi.order_id
     LEFT JOIN code_goods cg ON soi.goods_id = cg.id
     WHERE
-      so.openid = #{openId}
+    so.openid = #{openId}
     AND so.status = 1
+    <if test="shopId != null and shopId != ''" >
+      AND so.shop_id = #{shopId}
+    </if>
   </select>
   <select id="selectShopGoodsList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
     SELECT
-      ss.shop_id shopId, ss.goods_id goodsId, ss.quantity, ss.initial_quantity initialQuantity,	ss.initial_time initialTime, ss.layer, ss.dispatch_quantity dispatchQuantity,
-      ss.min_quantity minQuantity,ss.shop_base_quantity shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId
+    ss.shop_id shopId, ss.goods_id goodsId, ss.quantity, ss.initial_quantity initialQuantity,	ss.initial_time initialTime, ss.layer, ss.dispatch_quantity dispatchQuantity,
+    ss.min_quantity minQuantity,ss.shop_base_quantity shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId
     FROM
-      shop s
+    shop s
     LEFT JOIN shop_stock ss ON s.id = ss.shop_id
     LEFT JOIN code_goods cg ON ss.goods_id = cg.id
     WHERE s.shop_code = #{shopCode}
     AND cg.`status` = 0
+    AND ss.quantity > 0
+    AND s.`status` = 1
     ORDER BY ss.layer ASC
   </select>
   <select id="selectRecentlyBuyList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
     SELECT
-      SUM(soi.quantity) totalNum, soi.goods_id goodsId, cg.`name`, ROUND(cg.price / 100,2) price, cg.image, ss.quantity, ss.layer
+      SUM(soi.quantity) totalNum, SUM(soi.amount) totalMoney,soi.goods_id goodsId, cg.`name`, ROUND(cg.price / 100,2) price, cg.image, ss.quantity, ss.layer, IF(ss.quantity > 0, 1, 0) `status`
     FROM shop_order so
     LEFT JOIN shop_order_item soi ON so.ID = soi.order_id
     LEFT JOIN code_goods cg ON soi.goods_id = cg.id
@@ -82,9 +87,9 @@
     WHERE so.openid = #{openId}
     AND soi.shop_id = #{shopId}
     AND so.`status` = 1
-    AND ss.`status` = 0
+    AND ss.`status` = 1
     GROUP BY soi.goods_id
-    ORDER BY totalNum DESC
+    ORDER BY totalNum DESC, totalMoney DESC
     LIMIT 0,2
   </select>
 

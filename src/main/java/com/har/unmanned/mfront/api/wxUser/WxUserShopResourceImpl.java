@@ -1,8 +1,6 @@
 package com.har.unmanned.mfront.api.wxUser;
 
 import com.alibaba.fastjson.JSONObject;
-import com.har.bigdata.exception.CommonException;
-import com.har.bigdata.exception.CommonExceptionLevel;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.wxUser.validGroup.IndexGroup;
@@ -20,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,11 +82,11 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      */
     @Override
     @GetMapping("/buyRecord")
-    public JSONObject buyRecord() throws Exception {
+    public JSONObject buyRecord(@Validated(IndexGroup.class) InputParameter params) throws Exception {
         RespMessage respMessage = new RespMessage();
         // 返回数据
         log.info("[buyRecord]用户查询购买记录");
-        JSONObject respJson = wxUserShopService.buyRecord();
+        JSONObject respJson = wxUserShopService.buyRecord(params.getShopCode());
         log.info("[buyRecord]用户查询购买记录响应数据:" + respJson);
         respMessage.setRespCode(ErrorCode.E00000000.CODE);
         respMessage.setRespDesc(ErrorCode.E00000000.MSG);

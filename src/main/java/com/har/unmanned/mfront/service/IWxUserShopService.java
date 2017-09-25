@@ -20,45 +20,45 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2017/3/1 14:57.
  */
-public abstract class IWxUserShopService {
+public interface IWxUserShopService {
 
     /**
      * h5微商城首页
      * @param param
      * @return
      */
-    public abstract JSONObject selectGoodsList(String param) throws Exception;
+    JSONObject selectGoodsList(String param) throws Exception;
     /**
      * 提交订单
      * @param param
      * @return
      */
-    public abstract ShopOrder submitOrder(InputParameter param) throws Exception;
+    ShopOrder submitOrder(InputParameter param) throws Exception;
 
     /**
      * 支付订单
      * @param shopOrder
      * @return
      */
-    public abstract JSONObject payOrder(ShopOrder shopOrder) throws Exception;
+    JSONObject payOrder(ShopOrder shopOrder) throws Exception;
 
     /**
      * 微信回调
      * @param param
      * @return
      */
-    public abstract void callBack(String param) throws Exception;
+    void callBack(String param) throws Exception;
 
     /**
      * 用户购买记录
      * @return
      */
-    public abstract JSONObject buyRecord() throws Exception;
+    JSONObject buyRecord(String shopCode) throws Exception;
 
     /**
      * 用户的一些基本信息
      * @return
      */
-    public abstract JSONObject userInfo() throws Exception;
+    JSONObject userInfo() throws Exception;
 
 }

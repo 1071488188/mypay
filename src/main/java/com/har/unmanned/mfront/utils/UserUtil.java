@@ -37,7 +37,8 @@ public class UserUtil {
         // 初始化返回用户信息
         //ShopWechat wxUser = new ShopWechat();
         //wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGM");
-        ShopWechat wxUser = null;
+        //wxUser.setName("5rWL6K+V");
+       ShopWechat wxUser = null;
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             // 将cookie中取出的token转换成OAuth2格式
             String cookieStr = (String) CookieUtil.getCookieByName(request, Constants.ACCESS_TOKEN);
@@ -77,7 +78,7 @@ public class UserUtil {
 //            } else {
 //                log.info("获取用户信息失败，用户未授权");
 //                throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
-//            }
+//            }*/
         return wxUser;
     }
 

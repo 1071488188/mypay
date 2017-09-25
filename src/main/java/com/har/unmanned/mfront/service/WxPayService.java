@@ -6,7 +6,7 @@ import java.util.Map;
  * @author cc
  * @create 2017/09/19 18:24
  **/
-public abstract class WxPayService {
+public interface WxPayService {
     /**
      * 微信支付统一下单(web)
      * @param openid 用户标识符
@@ -17,15 +17,15 @@ public abstract class WxPayService {
      * @return
      * @throws Exception
      */
-    public abstract Map<String, String> paymentOrderHbxWeb(String openid, String total_fee,String body,
-                                                   String out_trade_no, String ip) throws Exception;
+    Map<String, String> paymentOrderH5(String openid, String total_fee,String body,
+                                       String out_trade_no, String ip) throws Exception;
 
     /**
-     * 查询订单(app)
+     * 查询订单(h5)
      * @param out_trade_no  商户订单号
      * @return
      * @throws Exception
      */
-    public abstract Map<String, String> orderquery(String out_trade_no) throws Exception;
+    Map<String, String> orderQuery(String out_trade_no) throws Exception;
 
 }

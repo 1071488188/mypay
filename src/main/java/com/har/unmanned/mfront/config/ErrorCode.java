@@ -3,12 +3,12 @@ package com.har.unmanned.mfront.config;
 public class ErrorCode {
 
 	public interface E00000000 {
-		
+
 		String CODE = "00000000";
-		
+
 		String MSG = "响应成功";
 	}
-	
+
 	public interface E00000001 {
 
 		String CODE = "00000001";
@@ -22,32 +22,32 @@ public class ErrorCode {
 
 		String MSG = "响应失败";
 	}
-	
+
 	public interface E00000003 {
-		
+
 		String CODE = "00000003";
-		
+
 		String MSG = "用户未登录";
 	}
-	
+
 	public interface E00000004 {
-		
+
 		String CODE = "00000004";
-		
+
 		String MSG = "登录超时";
 	}
-	
+
 	public interface E00000005 {
-		
+
 		String CODE = "00000005";
-		
+
 		String MSG = "数据解析异常";
 	}
-	
+
 	public interface E00000006 {
-		
+
 		String CODE = "00000006";
-		
+
 		String MSG = "用户未授权";
 	}
 
@@ -182,5 +182,12 @@ public class ErrorCode {
 		String CODE = "00000025";
 
 		String MSG = "补货失败";
+	}
+
+	public interface E00000026 {
+
+		String CODE = "00000026";
+
+		String MSG = "提交订单失败";
 	}
 }

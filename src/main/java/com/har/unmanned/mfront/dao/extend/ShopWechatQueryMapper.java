@@ -29,7 +29,7 @@ public interface ShopWechatQueryMapper {
      * 用户购买记录
      * @return
      */
-    List<ShopOrderDomain> selectBuyHistory(String openId);
+    List<ShopOrderDomain> selectBuyHistory(@Param("openId")String openId, @Param("shopId")String shopId);
 
     /**
      * 根据id查询多个商品
