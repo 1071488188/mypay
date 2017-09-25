@@ -31,8 +31,8 @@ public class DispatchResourceImpl implements DispatchResource {
     @Override
     @GetMapping("/dispatchList")
     public JSONObject dispatchList(@Validated({PageGroup.class}) InputParameter inputParameter) throws ApiBizException {
-        log.info("param={}", JSONObject.toJSON(inputParameter));
-        LogHelper.save(LogType.RECEIVE, "配送中心列表_开始", JSONObject.toJSON(inputParameter));
+        log.info("{},{}", "配送列表传入数据", JSONObject.toJSON(inputParameter));
+        LogHelper.save(LogType.RECEIVE, "配送列表_开始", JSONObject.toJSON(inputParameter));
         // 返回消息
         RespMessage respMessage = new RespMessage();
 
@@ -43,23 +43,23 @@ public class DispatchResourceImpl implements DispatchResource {
             reqParam.put("pageSize", inputParameter.getPageSize());
             reqParam.put("status", inputParameter.getStatus());
 
-            log.info("{},{}", "配送中心请求参数", reqParam);
-            LogHelper.save(LogType.REQUEST, "配送中心列请求参数", reqParam);
+            log.info("{},{}", "配送列表请求参数", reqParam);
+            LogHelper.save(LogType.REQUEST, "配送列表列请求参数", reqParam);
             JSONObject retJson = dispatchService.dispatchList(reqParam);
 
             respMessage.setData(retJson);
         } catch (ApiBizException e) {
             e.printStackTrace();
-            log.error("{},{}", "配送中心错误", JSONObject.toJSON(e.getObject()));
+            log.error("{},{}", "配送列表错误", JSONObject.toJSON(e.getObject()));
             throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("{},{}", "配送中心错误", JSONObject.toJSON(inputParameter));
+            log.error("{},{}", "配送列表错误", JSONObject.toJSON(inputParameter));
             throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter));
         }
 
-        log.info("{},{}", "配送中心返回数据", respMessage.getRespMessage());
-        LogHelper.save(LogType.RECEIVE, "配送中心返回数据", respMessage.getRespMessage());
+        log.info("{},{}", "配送列表返回数据", respMessage.getRespMessage());
+        LogHelper.save(LogType.RECEIVE, "配送列表返回数据", respMessage.getRespMessage());
         return respMessage.getRespMessage();
     }
 

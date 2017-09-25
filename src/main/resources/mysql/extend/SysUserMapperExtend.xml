@@ -15,18 +15,23 @@
     </resultMap>
     <!-- 查询用户是否拥有某角色-->
     <select id="getuserRole" resultType="java.lang.Integer" parameterType="map">
-      SELECT COUNT(*) FROM sys_user sr,shop sp,sys_user_role so
-      WHERE sr.user_id=sp.user_id and sr.user_id=so.user_id and  so.role_id=#{roleId}
-      <if test="userId!='' and userId!=null">
-          and  sr.user_id=#{userId}
-      </if>
+        SELECT COUNT(*) FROM sys_user sr,shop sp,sys_user_role so
+        WHERE sr.user_id=sp.user_id and sr.user_id=so.user_id and so.role_id=#{roleId}
+        <if test="userId!='' and userId!=null">
+            and sr.user_id=#{userId}
+        </if>
         <if test="mobile!='' and mobile!=null">
-            and  sr.mobile=#{mobile}
+            and sr.mobile=#{mobile}
         </if>
     </select>
 
     <select id="queryUserRole" resultType="java.lang.Integer" parameterType="map">
-        SELECT COUNT (*) FROM ,sys_user sr,shop sp,sys_user_role so
-        WHERE sr.user_id=#{userId} and  so.role_id=#{roleId}
+        SELECT
+            COUNT(sr.user_id)
+        FROM
+            sys_user sr LEFT JOIN sys_user_role so ON so.user_id = sr.user_id
+        WHERE
+          sr.user_id=#{userId}
+          and so.role_id=#{roleId}
     </select>
 </mapper>
