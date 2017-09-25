@@ -1,6 +1,5 @@
 package com.har.unmanned.mfront.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.har.unmanned.mfront.api.administrator.InputParameter;
@@ -16,7 +15,7 @@ import com.har.unmanned.mfront.model.extend.ShopCommissionExtend;
 import com.har.unmanned.mfront.model.extend.ShopExpressiveExtend;
 import com.har.unmanned.mfront.model.extend.ShopOrderExtend;
 import com.har.unmanned.mfront.service.AdministratorService;
-import com.har.unmanned.mfront.service.SecurityCodeService;
+import com.har.unmanned.mfront.service.ValidateService;
 import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.PageUtil;
 import com.har.unmanned.mfront.utils.UserUtil;
@@ -53,7 +52,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Autowired
     ShopExpressiveMapperExtend shopExpressiveMapperExtend;
     @Autowired
-    private SecurityCodeService securityCodeService;
+    private ValidateService securityCodeService;
     @Autowired
     RedisServiceImpl redisService;
     private static int roleId = 3;//网点管理员权限

@@ -27,7 +27,7 @@ public interface ValidateResource {
     JSONObject sendValidateCode(InputParameter inputParameter) throws Exception;
 
     /**
-     * @api {get} /api/v1/validation/permissionsValidation 2.api 当前用户权限验证
+     * @api {get} /api/v1/validation/permissionsValidation 2.api 初始化权限验证
      * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName permissionsValidation
@@ -60,6 +60,7 @@ public interface ValidateResource {
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
+     * @apiSuccess (200) {String} Data.roleType		角色类型3、网点管理员4、配送员
      */
     JSONObject bindingPhone(InputParameter inputParameter) throws Exception;
 

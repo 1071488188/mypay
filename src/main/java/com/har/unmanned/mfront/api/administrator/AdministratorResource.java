@@ -1,7 +1,5 @@
 package com.har.unmanned.mfront.api.administrator;
 
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * 管理员接口
  * @apiDefine admin 管理员接口
@@ -9,42 +7,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface AdministratorResource {
     /**
-     * @api {get} /api/v1/admin/adminInit 1.api 是否为网点管理员初始化接口
-     * @apiHeader {String} currenturl 当前url
-     * @apiVersion 1.0.0
-     * @apiName adminInit
-     * @apiGroup admin
-     * @apiPermission none
-     *
-     * @apiDescription 是否为网点管理员初始化接口
-     *
-     * @apiSuccess (200) {String} RespCode          响应编码，8位
-     * @apiSuccess (200) {String} RespDesc          响应描述
-     * @apiSuccess (200) {Object} Data
-     * @apiSuccess (200) {Number} Data.whetherNetwork 是否为网点管理员，0、否1、是
-     */
-    String adminInit()throws Exception;
-//    /**
-//     * @api {post} /api/v1/admin/bindManager 2.api 绑定手机号
-//     * @apiHeader {String} currenturl 当前url
-//     * @apiVersion 1.0.0
-//     * @apiName bindManager
-//     * @apiGroup admin
-//     * @apiPermission none
-//     *
-//     * @apiDescription 绑定手机号
-//     *
-//     * @apiParam {String} cellPhoneNumber  手机号
-//     * @apiParam {String} verificationCode  验证码
-//     *
-//     * @apiSuccess (200) {String} RespCode          响应编码，8位
-//     * @apiSuccess (200) {String} RespDesc          响应描述
-//     * @apiSuccess (200) {Object} Data
-//     */
-//    String bindManager(InputParameter inputParameter) throws Exception;
-
-    /**
-     * @api {get} /api/v1/admin/expenseCalendar 3.api 消费记录
+     * @api {get} /api/v1/admin/expenseCalendar 1.api 消费记录
      * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName expenseCalendar
@@ -68,7 +31,7 @@ public interface AdministratorResource {
     String expenseCalendar(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {get} /api/v1/admin/settlementRecords 4.api 结算记录
+     * @api {get} /api/v1/admin/settlementRecords 2.api 结算记录
      * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName settlementRecords
@@ -95,7 +58,7 @@ public interface AdministratorResource {
     String settlementRecords(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {post} /api/v1/admin/closeAnAccount 5.api 结算
+     * @api {post} /api/v1/admin/closeAnAccount 3.api 结算
      * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName closeAnAccount
@@ -113,7 +76,7 @@ public interface AdministratorResource {
     String closeAnAccount(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {get} /api/v1/admin/balanceDetails 6.api 余额明细
+     * @api {get} /api/v1/admin/balanceDetails 4.api 余额明细
      * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName balanceDetails
@@ -138,7 +101,7 @@ public interface AdministratorResource {
     String balanceDetails(InputParameter inputParameter)throws Exception;
 
     /**
-     * @api {post} /api/v1/admin/withdrawDeposit 7.api 提现
+     * @api {post} /api/v1/admin/withdrawDeposit 5.api 提现
      * @apiHeader {String} currenturl 当前url
      * @apiVersion 1.0.0
      * @apiName withdrawDeposit

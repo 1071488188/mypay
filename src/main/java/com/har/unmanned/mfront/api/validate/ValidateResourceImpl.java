@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.validate.ValidGroup.SendValidateGroup;
-import com.har.unmanned.mfront.service.SecurityCodeService;
+import com.har.unmanned.mfront.service.ValidateService;
 import com.har.unmanned.mfront.utils.RespMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/validation", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class ValidateResourceImpl implements ValidateResource {
     @Autowired
-    private SecurityCodeService securityCodeService;
+    private ValidateService securityCodeService;
 
     @Override
     @PostMapping("/sendValidateCode")
@@ -35,8 +35,6 @@ public class ValidateResourceImpl implements ValidateResource {
         //分装发送验证码请求参数
         JSONObject reqParam = new JSONObject();
         reqParam.put("mobile", inputParameter.getPhone());//手机号
-        reqParam.put("content", inputParameter.getContent());//短信内容
-        reqParam.put("opt_type", inputParameter.getOptType());//发送短信操作类型
 
         log.info("{},{}", "发送短信请求参数", reqParam);
         LogHelper.save(LogType.REQUEST, "发送短信请求参数", reqParam);
