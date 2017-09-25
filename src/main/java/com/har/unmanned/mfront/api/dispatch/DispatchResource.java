@@ -82,21 +82,4 @@ public interface DispatchResource {
      */
     JSONObject confirmReplenishment(JSONObject params) throws ApiBizException;
 
-    /**
-     * @api {post} /api/v1/dispatch/bindUser 5.api 用户绑定
-     * @apiVersion 1.0.0
-     * @apiName validateCode api 验证短信验证码
-     * @apiGroup dispatch
-     * @apiPermission none
-     *
-     * @apiDescription 验证短信验证码
-     *
-     * @apiParam {String} mobile  	    手机号
-     * @apiParam {String} validateCode  验证码
-     *
-     * @apiSuccess (200) {String} RespCode          响应编码，8位
-     * @apiSuccess (200) {String} RespDesc          响应描述
-     * */
-    JSONObject validateCode(InputParameter inputParameter) throws ApiBizException;
-
 }
