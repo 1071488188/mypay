@@ -14,4 +14,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class CodeGoodsDomain extends CodeGoods {
     private Integer quantity;  // 商品的货架库存数量
+
 }

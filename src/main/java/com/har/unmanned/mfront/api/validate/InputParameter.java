@@ -14,15 +14,17 @@ import javax.validation.constraints.Pattern;
  */
 @Data
 public class InputParameter {
+
     @NotNull(message = "请输入手机号", groups = {SendValidateGroup.class,BindingPhoneGroup.class})
     @Pattern(regexp = "^[0-9]{11}$", message = "请输入正确手机号", groups = {SendValidateGroup.class,BindingPhoneGroup.class})
-    private String phone;// 手机号
+    private String cellPhoneNumber;// 手机号
 
     @NotNull(message = "请输入校验码", groups = BindingPhoneGroup.class)
-    @Pattern(regexp = "^[0-9]{11}$", message = "请输入校验码", groups = BindingPhoneGroup.class)
-    private String validateCode;// 验证码
+    @Pattern(regexp = "^[0-9]{6}$", message = "请输入校验码", groups = BindingPhoneGroup.class)
+    private String verificationCode;// 验证码
 
     @NotNull(message = "传入参数不完整", groups = BindingPhoneGroup.class)
     @Pattern(regexp = "^[3-4]{1}$", message = "传入参数不完整", groups = BindingPhoneGroup.class)
     private String roleType;//角色类型3、网点管理员4、配送员
+
 }
