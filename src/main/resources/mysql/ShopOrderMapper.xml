@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.har.unmanned.mfront.dao.ShopOrderMapper">
-  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.ShopOrder">
-    <id column="ID" jdbcType="BIGINT" property="id" />
-    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
-    <result column="openid" jdbcType="VARCHAR" property="openid" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
-    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
-    <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="commission" jdbcType="INTEGER" property="commission" />
-    <result column="pay_no" jdbcType="VARCHAR" property="payNo" />
-    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
-    <result column="location" jdbcType="VARCHAR" property="location" />
-    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
-    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="ratio" jdbcType="DECIMAL" property="ratio" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.har.unmanned.mfront.dao.ShopOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.ShopOrder" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="commission" property="commission" jdbcType="INTEGER" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="ratio" property="ratio" jdbcType="DECIMAL" />
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -47,25 +47,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -76,43 +76,43 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     ID, shop_id, openid, `name`, order_no, order_time, amount, commission, pay_no, pay_time, 
     `location`, longitude, latitude, `status`, ratio
   </sql>
-  <select id="selectByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" >
     select
-    <if test="distinct">
+    <if test="distinct" >
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
     from shop_order
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null">
+    <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from shop_order
     where ID = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from shop_order
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample">
+  <delete id="deleteByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" >
     delete from shop_order
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.har.unmanned.mfront.model.ShopOrder">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+  <insert id="insert" parameterType="com.har.unmanned.mfront.model.ShopOrder" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shop_order (shop_id, openid, `name`, 
@@ -126,160 +126,160 @@
       #{location,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, 
       #{status,jdbcType=INTEGER}, #{ratio,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.ShopOrder">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+  <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.ShopOrder" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shop_order
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
         shop_id,
       </if>
-      <if test="openid != null">
+      <if test="openid != null" >
         openid,
       </if>
-      <if test="name != null">
+      <if test="name != null" >
         `name`,
       </if>
-      <if test="orderNo != null">
+      <if test="orderNo != null" >
         order_no,
       </if>
-      <if test="orderTime != null">
+      <if test="orderTime != null" >
         order_time,
       </if>
-      <if test="amount != null">
+      <if test="amount != null" >
         amount,
       </if>
-      <if test="commission != null">
+      <if test="commission != null" >
         commission,
       </if>
-      <if test="payNo != null">
+      <if test="payNo != null" >
         pay_no,
       </if>
-      <if test="payTime != null">
+      <if test="payTime != null" >
         pay_time,
       </if>
-      <if test="location != null">
+      <if test="location != null" >
         `location`,
       </if>
-      <if test="longitude != null">
+      <if test="longitude != null" >
         longitude,
       </if>
-      <if test="latitude != null">
+      <if test="latitude != null" >
         latitude,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         `status`,
       </if>
-      <if test="ratio != null">
+      <if test="ratio != null" >
         ratio,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
         #{shopId,jdbcType=BIGINT},
       </if>
-      <if test="openid != null">
+      <if test="openid != null" >
         #{openid,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
+      <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="orderNo != null">
+      <if test="orderNo != null" >
         #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderTime != null">
+      <if test="orderTime != null" >
         #{orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="amount != null">
+      <if test="amount != null" >
         #{amount,jdbcType=INTEGER},
       </if>
-      <if test="commission != null">
+      <if test="commission != null" >
         #{commission,jdbcType=INTEGER},
       </if>
-      <if test="payNo != null">
+      <if test="payNo != null" >
         #{payNo,jdbcType=VARCHAR},
       </if>
-      <if test="payTime != null">
+      <if test="payTime != null" >
         #{payTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="location != null">
+      <if test="location != null" >
         #{location,jdbcType=VARCHAR},
       </if>
-      <if test="longitude != null">
+      <if test="longitude != null" >
         #{longitude,jdbcType=DECIMAL},
       </if>
-      <if test="latitude != null">
+      <if test="latitude != null" >
         #{latitude,jdbcType=DECIMAL},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="ratio != null">
+      <if test="ratio != null" >
         #{ratio,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" resultType="java.lang.Integer">
+  <select id="countByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" resultType="java.lang.Integer" >
     select count(*) from shop_order
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <update id="updateByExampleSelective" parameterType="map" >
     update shop_order
-    <set>
-      <if test="record.id != null">
+    <set >
+      <if test="record.id != null" >
         ID = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.shopId != null">
+      <if test="record.shopId != null" >
         shop_id = #{record.shopId,jdbcType=BIGINT},
       </if>
-      <if test="record.openid != null">
+      <if test="record.openid != null" >
         openid = #{record.openid,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
+      <if test="record.name != null" >
         `name` = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.orderNo != null">
+      <if test="record.orderNo != null" >
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.orderTime != null">
+      <if test="record.orderTime != null" >
         order_time = #{record.orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.amount != null">
+      <if test="record.amount != null" >
         amount = #{record.amount,jdbcType=INTEGER},
       </if>
-      <if test="record.commission != null">
+      <if test="record.commission != null" >
         commission = #{record.commission,jdbcType=INTEGER},
       </if>
-      <if test="record.payNo != null">
+      <if test="record.payNo != null" >
         pay_no = #{record.payNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.payTime != null">
+      <if test="record.payTime != null" >
         pay_time = #{record.payTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.location != null">
+      <if test="record.location != null" >
         `location` = #{record.location,jdbcType=VARCHAR},
       </if>
-      <if test="record.longitude != null">
+      <if test="record.longitude != null" >
         longitude = #{record.longitude,jdbcType=DECIMAL},
       </if>
-      <if test="record.latitude != null">
+      <if test="record.latitude != null" >
         latitude = #{record.latitude,jdbcType=DECIMAL},
       </if>
-      <if test="record.status != null">
+      <if test="record.status != null" >
         `status` = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.ratio != null">
+      <if test="record.ratio != null" >
         ratio = #{record.ratio,jdbcType=DECIMAL},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExample" parameterType="map" >
     update shop_order
     set ID = #{record.id,jdbcType=BIGINT},
       shop_id = #{record.shopId,jdbcType=BIGINT},
@@ -296,424 +296,59 @@
       latitude = #{record.latitude,jdbcType=DECIMAL},
       `status` = #{record.status,jdbcType=INTEGER},
       ratio = #{record.ratio,jdbcType=DECIMAL}
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.har.unmanned.mfront.model.ShopOrder">
+  <update id="updateByPrimaryKeySelective" parameterType="com.har.unmanned.mfront.model.ShopOrder" >
     update shop_order
-    <set>
-      <if test="shopId != null">
+    <set >
+      <if test="shopId != null" >
         shop_id = #{shopId,jdbcType=BIGINT},
       </if>
-      <if test="openid != null">
+      <if test="openid != null" >
         openid = #{openid,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
+      <if test="name != null" >
         `name` = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="orderNo != null">
+      <if test="orderNo != null" >
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderTime != null">
+      <if test="orderTime != null" >
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="amount != null">
+      <if test="amount != null" >
         amount = #{amount,jdbcType=INTEGER},
       </if>
-      <if test="commission != null">
+      <if test="commission != null" >
         commission = #{commission,jdbcType=INTEGER},
       </if>
-      <if test="payNo != null">
+      <if test="payNo != null" >
         pay_no = #{payNo,jdbcType=VARCHAR},
       </if>
-      <if test="payTime != null">
+      <if test="payTime != null" >
         pay_time = #{payTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="location != null">
+      <if test="location != null" >
         `location` = #{location,jdbcType=VARCHAR},
       </if>
-      <if test="longitude != null">
+      <if test="longitude != null" >
         longitude = #{longitude,jdbcType=DECIMAL},
       </if>
-      <if test="latitude != null">
+      <if test="latitude != null" >
         latitude = #{latitude,jdbcType=DECIMAL},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         `status` = #{status,jdbcType=INTEGER},
       </if>
-      <if test="ratio != null">
+      <if test="ratio != null" >
         ratio = #{ratio,jdbcType=DECIMAL},
       </if>
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.har.unmanned.mfront.model.ShopOrder">
-    update shop_order
-    set shop_id = #{shopId,jdbcType=BIGINT},
-      openid = #{openid,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR},
-      order_no = #{orderNo,jdbcType=VARCHAR},
-      order_time = #{orderTime,jdbcType=TIMESTAMP},
-      amount = #{amount,jdbcType=INTEGER},
-      commission = #{commission,jdbcType=INTEGER},
-      pay_no = #{payNo,jdbcType=VARCHAR},
-      pay_time = #{payTime,jdbcType=TIMESTAMP},
-      `location` = #{location,jdbcType=VARCHAR},
-      longitude = #{longitude,jdbcType=DECIMAL},
-      latitude = #{latitude,jdbcType=DECIMAL},
-      `status` = #{status,jdbcType=INTEGER},
-      ratio = #{ratio,jdbcType=DECIMAL}
-    where ID = #{id,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.har.unmanned.mfront.model.ShopOrder">
-    <id column="ID" jdbcType="BIGINT" property="id" />
-    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
-    <result column="openid" jdbcType="VARCHAR" property="openid" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
-    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
-    <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="commission" jdbcType="INTEGER" property="commission" />
-    <result column="pay_no" jdbcType="VARCHAR" property="payNo" />
-    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
-    <result column="location" jdbcType="VARCHAR" property="location" />
-    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
-    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="ratio" jdbcType="DECIMAL" property="ratio" />
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    ID, shop_id, openid, `name`, order_no, order_time, amount, commission, pay_no, pay_time, 
-    `location`, longitude, latitude, `status`, ratio
-  </sql>
-  <select id="selectByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    'true' as QUERYID,
-    <include refid="Base_Column_List" />
-    from shop_order
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from shop_order
-    where ID = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from shop_order
-    where ID = #{id,jdbcType=BIGINT}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample">
-    delete from shop_order
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.har.unmanned.mfront.model.ShopOrder">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into shop_order (shop_id, openid, `name`, 
-      order_no, order_time, amount, 
-      commission, pay_no, pay_time, 
-      `location`, longitude, latitude, 
-      `status`, ratio)
-    values (#{shopId,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{orderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, #{amount,jdbcType=INTEGER}, 
-      #{commission,jdbcType=INTEGER}, #{payNo,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
-      #{location,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, 
-      #{status,jdbcType=INTEGER}, #{ratio,jdbcType=DECIMAL})
-  </insert>
-  <insert id="insertSelective" parameterType="com.har.unmanned.mfront.model.ShopOrder">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into shop_order
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
-        shop_id,
-      </if>
-      <if test="openid != null">
-        openid,
-      </if>
-      <if test="name != null">
-        `name`,
-      </if>
-      <if test="orderNo != null">
-        order_no,
-      </if>
-      <if test="orderTime != null">
-        order_time,
-      </if>
-      <if test="amount != null">
-        amount,
-      </if>
-      <if test="commission != null">
-        commission,
-      </if>
-      <if test="payNo != null">
-        pay_no,
-      </if>
-      <if test="payTime != null">
-        pay_time,
-      </if>
-      <if test="location != null">
-        `location`,
-      </if>
-      <if test="longitude != null">
-        longitude,
-      </if>
-      <if test="latitude != null">
-        latitude,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="ratio != null">
-        ratio,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
-        #{shopId,jdbcType=BIGINT},
-      </if>
-      <if test="openid != null">
-        #{openid,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="orderNo != null">
-        #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null">
-        #{orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="amount != null">
-        #{amount,jdbcType=INTEGER},
-      </if>
-      <if test="commission != null">
-        #{commission,jdbcType=INTEGER},
-      </if>
-      <if test="payNo != null">
-        #{payNo,jdbcType=VARCHAR},
-      </if>
-      <if test="payTime != null">
-        #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="location != null">
-        #{location,jdbcType=VARCHAR},
-      </if>
-      <if test="longitude != null">
-        #{longitude,jdbcType=DECIMAL},
-      </if>
-      <if test="latitude != null">
-        #{latitude,jdbcType=DECIMAL},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="ratio != null">
-        #{ratio,jdbcType=DECIMAL},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.har.unmanned.mfront.model.ShopOrderExample" resultType="java.lang.Integer">
-    select count(*) from shop_order
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update shop_order
-    <set>
-      <if test="record.id != null">
-        ID = #{record.id,jdbcType=BIGINT},
-      </if>
-      <if test="record.shopId != null">
-        shop_id = #{record.shopId,jdbcType=BIGINT},
-      </if>
-      <if test="record.openid != null">
-        openid = #{record.openid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.name != null">
-        `name` = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderNo != null">
-        order_no = #{record.orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderTime != null">
-        order_time = #{record.orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=INTEGER},
-      </if>
-      <if test="record.commission != null">
-        commission = #{record.commission,jdbcType=INTEGER},
-      </if>
-      <if test="record.payNo != null">
-        pay_no = #{record.payNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payTime != null">
-        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.location != null">
-        `location` = #{record.location,jdbcType=VARCHAR},
-      </if>
-      <if test="record.longitude != null">
-        longitude = #{record.longitude,jdbcType=DECIMAL},
-      </if>
-      <if test="record.latitude != null">
-        latitude = #{record.latitude,jdbcType=DECIMAL},
-      </if>
-      <if test="record.status != null">
-        `status` = #{record.status,jdbcType=INTEGER},
-      </if>
-      <if test="record.ratio != null">
-        ratio = #{record.ratio,jdbcType=DECIMAL},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update shop_order
-    set ID = #{record.id,jdbcType=BIGINT},
-      shop_id = #{record.shopId,jdbcType=BIGINT},
-      openid = #{record.openid,jdbcType=VARCHAR},
-      `name` = #{record.name,jdbcType=VARCHAR},
-      order_no = #{record.orderNo,jdbcType=VARCHAR},
-      order_time = #{record.orderTime,jdbcType=TIMESTAMP},
-      amount = #{record.amount,jdbcType=INTEGER},
-      commission = #{record.commission,jdbcType=INTEGER},
-      pay_no = #{record.payNo,jdbcType=VARCHAR},
-      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
-      `location` = #{record.location,jdbcType=VARCHAR},
-      longitude = #{record.longitude,jdbcType=DECIMAL},
-      latitude = #{record.latitude,jdbcType=DECIMAL},
-      `status` = #{record.status,jdbcType=INTEGER},
-      ratio = #{record.ratio,jdbcType=DECIMAL}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.har.unmanned.mfront.model.ShopOrder">
-    update shop_order
-    <set>
-      <if test="shopId != null">
-        shop_id = #{shopId,jdbcType=BIGINT},
-      </if>
-      <if test="openid != null">
-        openid = #{openid,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="orderNo != null">
-        order_no = #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null">
-        order_time = #{orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="amount != null">
-        amount = #{amount,jdbcType=INTEGER},
-      </if>
-      <if test="commission != null">
-        commission = #{commission,jdbcType=INTEGER},
-      </if>
-      <if test="payNo != null">
-        pay_no = #{payNo,jdbcType=VARCHAR},
-      </if>
-      <if test="payTime != null">
-        pay_time = #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="location != null">
-        `location` = #{location,jdbcType=VARCHAR},
-      </if>
-      <if test="longitude != null">
-        longitude = #{longitude,jdbcType=DECIMAL},
-      </if>
-      <if test="latitude != null">
-        latitude = #{latitude,jdbcType=DECIMAL},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="ratio != null">
-        ratio = #{ratio,jdbcType=DECIMAL},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.har.unmanned.mfront.model.ShopOrder">
+  <update id="updateByPrimaryKey" parameterType="com.har.unmanned.mfront.model.ShopOrder" >
     update shop_order
     set shop_id = #{shopId,jdbcType=BIGINT},
       openid = #{openid,jdbcType=VARCHAR},

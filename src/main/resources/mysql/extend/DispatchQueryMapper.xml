@@ -16,25 +16,31 @@
         <!--扩展属性-->
         <result column="storeAddress" property="storeAddress" jdbcType="VARCHAR"/>
         <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR"/>
-        <collection property="carrierNote" ofType="com.har.unmanned.mfront.model.extend.DispatchItemDomain">
-            <id column="id" property="id" jdbcType="INTEGER"/>
-            <result column="dispatch_id" property="dispatchId" jdbcType="BIGINT"/>
-            <result column="quantity" property="quantity" jdbcType="INTEGER"/>
-            <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
-            <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
-            <result column="spec" property="spec" jdbcType="VARCHAR"/>
+        <collection select="dispatchItemForGoodsId"
+                    property="carrierNote"
+                    ofType="com.har.unmanned.mfront.model.extend.DispatchItemDomain"
+                    column="{dispatchId = id}">
         </collection>
     </resultMap>
+
+    <resultMap id="dispatchItem" type="com.har.unmanned.mfront.model.extend.DispatchItemDomain">
+        <result column="goodsId" property="goodsId" jdbcType="BIGINT"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="stockQuantity" property="stockQuantity" jdbcType="INTEGER"/>
+    </resultMap>
     <!--配送列表-->
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain">
+    <select id="dispatchList" resultMap="BaseResultMap" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain">
         SELECT
-          dh.id,dh.dispatch_no , dh.create_time , dh.`status` ,se.address AS storeAddress,sp.address AS shopAddress
+            dh.id,
+            dh.dispatch_no,
+            dh.create_time,
+            dh.`status`,
+            se.address AS storeAddress,
+            sp.address AS shopAddress
         FROM dispatch dh
         LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
         LEFT JOIN store se ON se.id = dh.storage_id
         LEFT JOIN shop sp ON sp.id = dh.shop_id
-        LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
-        LEFT JOIN code_goods cg ON cg.id = di.goods_id
         <where>
             <if test="openid != null and openid != ''">
                 and sw.openid = #{openid}
@@ -46,10 +52,21 @@
         ORDER BY dh.create_time DESC
     </select>
 
+    <select id="dispatchItemForGoodsId" parameterType="java.util.HashMap" resultMap="dispatchItem">
+        SELECT
+            di.goods_id goodsId,
+            cg.name goodsName,
+            di.quantity stockQuantity
+        FROM
+            dispatch_item di LEFT JOIN code_goods cg ON cg.id = di.goods_id
+        WHERE
+            dispatch_id = #{dispatchId}
+    </select>
+
     <!--配送列表总数-->
     <select id="dispatchCount" parameterType="com.har.unmanned.mfront.model.extend.DispatchDomain" resultType="java.lang.Integer">
         SELECT
-          COUNT (dh.id)
+          COUNT(dh.id)
         FROM dispatch dh
         LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
         LEFT JOIN store se ON se.id = dh.storage_id
@@ -59,7 +76,7 @@
                 and sw.openid = #{openid}
             </if>
             <if test="statusString != null and statusString != ''">
-                and dh.status in ${statusString}
+                and dh.status in (#{statusString})
             </if>
         </where>
     </select>
