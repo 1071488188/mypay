@@ -35,7 +35,7 @@
           and so.role_id=#{roleId}
     </select>
     <!--根据用户id查询用户权限并返回权限类型-->
-    <select id="getUserAndRole" resultMap="BaseResultMap" parameterMap="map">
+    <select id="getUserAndRole" resultMap="BaseResultMap" parameterType="map">
         SELECT sr.role_id as roleType,sr.user_id  FROM sys_user sr,sys_user_role so
         WHERE sr.user_id = so.user_id AND so.role_id IN (3, 4)
         <if test="status!=null">
@@ -50,7 +50,7 @@
         ORDER BY sr.user_id DESC LIMIT 1
     </select>
     <!--查询某角色是否已经被绑定-->
-    <select id="distributionIsBinding" resultType="java.lang.Integer" parameterMap="map">
+    <select id="distributionIsBinding" resultType="java.lang.Integer" parameterType="map">
       SELECT COUNT (*) from sys_user sr,shop_wechat sw,sys_role sys_user_role sur
       where su.user_id=sw.user_id and sw.user_id=sur.user_id and sur.role_id=#{roleId}
         <if test="status!=null">
