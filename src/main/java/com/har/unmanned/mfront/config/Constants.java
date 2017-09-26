@@ -29,6 +29,8 @@ public class Constants {
     //------------------------保存微信token到redis里面key-------------------
     public static final String WX_TOKEN="access_token";
 
+    public static final String WX_TICKET="wx_ticket";
+
     /**
      * 存在头部信息中的常量key
      */

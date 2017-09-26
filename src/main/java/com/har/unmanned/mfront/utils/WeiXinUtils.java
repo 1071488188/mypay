@@ -1,15 +1,19 @@
 package com.har.unmanned.mfront.utils;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.har.unmanned.mfront.config.Constants;
+import com.har.unmanned.mfront.config.ErrorCode;
+import com.har.unmanned.mfront.exception.ApiBizException;
+import com.har.unmanned.mfront.service.impl.RedisServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
+import org.springframework.stereotype.Component;
 
-import javax.net.ssl.SSLContext;
-import java.io.*;
+import java.io.IOException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -17,15 +21,21 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+@Slf4j
+@Component
 public class WeiXinUtils {
 	@Value("${wx.pay.charset}")
-	private static String charset;
+	private String charset;
+	@Value("${wx.pay.ticketUrl}")
+	private String ticketUrl;
+	@Autowired
+	private RedisServiceImpl redisService;
 	/**
 	 * 创建支付包Package
 	 * @param treeMap
 	 * @return
 	 */
-	public static String createPackage(TreeMap<String,String> treeMap , String paternerKey){
+	public String createPackage(TreeMap<String,String> treeMap , String paternerKey){
 		String string1=originalString(treeMap);
 		String stringSignTemp = string1 + "key="+paternerKey;
 		System.out.println(stringSignTemp);
@@ -37,7 +47,7 @@ public class WeiXinUtils {
 	 * @param treeMap
 	 * @return
 	 */
-	public static String createSign(TreeMap<String,String> treeMap, String paternerKey){
+	public String createSign(TreeMap<String,String> treeMap, String paternerKey){
 		String string1=originalString(treeMap);
 		String stringSignTemp = string1 + "key="+paternerKey;
 		System.out.println(stringSignTemp);
@@ -49,7 +59,7 @@ public class WeiXinUtils {
 	 * @param
 	 * @return
 	 */
-	public static String createPaySign(TreeMap<String,String> param, String paternerKey){
+	public String createPaySign(TreeMap<String,String> param, String paternerKey){
 		String string1=originalString(param);
 		String stringSignTemp = string1 + "key="+paternerKey;
 		System.out.println("签名调试输出："+stringSignTemp);
@@ -62,7 +72,7 @@ public class WeiXinUtils {
 	 * @return
 	 */
 	@SuppressWarnings("null")
-	private static String originalString(TreeMap<String,String> treeMap){
+	private String originalString(TreeMap<String,String> treeMap){
 		Set<Entry<String, String>> entry = treeMap.entrySet();
 		StringBuffer sb = new StringBuffer();
 		for(Entry<String,String> obj : entry){
@@ -75,7 +85,7 @@ public class WeiXinUtils {
 		return sb.toString();
 	}
 	@SuppressWarnings({ "unused", "null" })
-	private static String originalURLString(TreeMap<String,String> treeMap){
+	private String originalURLString(TreeMap<String,String> treeMap){
 		Set<Entry<String, String>> entry = treeMap.entrySet();
 		StringBuffer sb = new StringBuffer();
 		try {
@@ -95,7 +105,7 @@ public class WeiXinUtils {
 	 * 创建微信支付订单号
 	 * @return
 	 */
-	public static String getOutTradeNo(){
+	public String getOutTradeNo(){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
 		String body=String.valueOf((int)(Math.random()*100000000));
 		String outTradeNo="WXP"+sdf.format(new Date())+body;
@@ -106,7 +116,7 @@ public class WeiXinUtils {
 	 * 创建格式为yyyyMMddHHmmss的当前时间串
 	 * @return
 	 */
-	public static String getNowTime(){
+	public String getNowTime(){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		return sdf.format(new Date());
 	}
@@ -117,7 +127,7 @@ public class WeiXinUtils {
 	 * 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。
 	 */
 	@SuppressWarnings("null")
-	public synchronized static boolean isValidSign(Map<String,String> treeMap, String paternerKey){
+	public synchronized boolean isValidSign(Map<String,String> treeMap, String paternerKey){
 		Set<Entry<String, String>> entry = treeMap.entrySet();
 		StringBuffer sb = new StringBuffer();
 		String signback = null;
@@ -153,7 +163,7 @@ public class WeiXinUtils {
 	 * @return
 	 */
 	@SuppressWarnings("null")
-	public synchronized static boolean isWXSign(TreeMap<String,String> treeMap){
+	public synchronized boolean isWXSign(TreeMap<String,String> treeMap){
 		Set<Entry<String, String>> entry = treeMap.entrySet();
 		StringBuffer sb = new StringBuffer();
 		String appSignature = null;
@@ -185,7 +195,7 @@ public class WeiXinUtils {
 			return false;
 		}
 	}
-	public static TreeMap<String,String> mapToTreeMap(Map<Object,Object> map){
+	public TreeMap<String,String> mapToTreeMap(Map<Object,Object> map){
 		TreeMap<String, String> treeMap = new TreeMap<String, String>();
 		Set<Entry<Object, Object>> entry = map.entrySet();
 		for (Entry<Object, Object> key : entry) {
@@ -193,13 +203,35 @@ public class WeiXinUtils {
 		}
 		return treeMap;
 	}
-	public static TreeMap<String,String> strmapToTreeMap(Map<String,String> map){
+	public TreeMap<String,String> strmapToTreeMap(Map<String,String> map){
 		TreeMap<String, String> treeMap = new TreeMap<String, String>();
 		Set<Entry<String, String>> entry = map.entrySet();
 		for (Entry<String, String> key : entry) {
 			treeMap.put(key.getKey().toString(), key.getValue().toString());
 		}
 		return treeMap;
+	}
+
+	public String getTicket(String accessToken) throws IOException, ApiBizException {
+		String ticket = redisService.get(Constants.WX_TICKET);
+		if (CheckUtil.isNull(ticket)) {
+			// 获取ticket_url
+			String ticket_url = MessageFormat.format(ticketUrl, new String[]{accessToken});
+			String s = WxHttpUtil.sendGet(ticket_url, "utf-8");
+			// 如果请求成功
+			JSONObject jsonObject = JSONObject.parseObject(s);
+			try {
+				if (null != jsonObject) {
+					ticket = jsonObject.getString("ticket");
+					redisService.put(Constants.WX_TICKET, ticket, 5400);
+				}
+			} catch (Exception e) {
+				// 获取失败
+				log.error("获取ticket失败 errcode:{" + jsonObject.getInteger("errcode") + "} errmsg:{" + jsonObject.getString("errmsg") + "}");
+				throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, jsonObject);
+			}
+		}
+		return ticket;
 	}
 
 	final static String KEYSTORE_FILE = "E:/apiclient_cert.p12";//支付证书地址

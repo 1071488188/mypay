@@ -48,6 +48,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     private WxPayService wxPayService;
     @Autowired
     private RedisServiceImpl redisService;
+    @Autowired
+    private WeiXinUtils weiXinUtils;
     @Value("${har.picPath}")
     private String picPath;
     private static final String UNMANNED = "unmanned:order:";
@@ -235,7 +237,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                 log.error("微信回调异常: " + map.get("err_code_des"));
                 throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
             }
-            boolean validSign = WeiXinUtils.isValidSign(map, appsecret);
+            boolean validSign = weiXinUtils.isValidSign(map, appsecret);
             if (!validSign) {
                 log.error("微信签名验证异常: " + param);
                 throw new ApiBizException(ErrorCode.E00000019.CODE, ErrorCode.E00000019.MSG, param, CommonExceptionLevel.WARN);

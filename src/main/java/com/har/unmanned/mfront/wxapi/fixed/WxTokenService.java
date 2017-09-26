@@ -57,7 +57,7 @@ public class WxTokenService {
 	public String getToken() throws ApiBizException {
 		String retoken="";
 		Object object=service.get(Constants.WX_TOKEN);
-		if(!CheckUtil.isNull(retoken)){
+		if(!CheckUtil.isNull(object)){
 			retoken=object+"";
 			log.info("redis保存的token{}",retoken);
 		}else{

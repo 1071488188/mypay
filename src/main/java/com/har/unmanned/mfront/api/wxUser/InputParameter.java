@@ -19,6 +19,8 @@ public class InputParameter {
     @NotNull(message = "货架编号不能为空!", groups = {IndexGroup.class, OrderGroup.class})
     private String shopCode;
 
+    private String url;
+
     @NotNull(message = "请选择商品!", groups = OrderGroup.class)
     private JSONArray goodsList;
 
