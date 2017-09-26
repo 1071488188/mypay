@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RedisServiceImpl extends IRedisService<String> {
-	private static final String TOKEN_REDIS_KEY = "TOKEN_REDIS_KEY:access_token";
+	private static final String TOKEN_REDIS_KEY = "HAR_UNMANNED_MFRONT:access_token";
 	@Override
 	protected String getRedisKey() {
 		// TODO Auto-generated method stub
