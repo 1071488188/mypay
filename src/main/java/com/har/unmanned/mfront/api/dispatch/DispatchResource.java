@@ -41,23 +41,6 @@ public interface DispatchResource {
     JSONObject dispatchList(InputParameter inputParameter) throws ApiBizException;
 
     /**
-     * @api {post} /api/v1/dispatch/updateDispatchStatus 2.api 更新配送单状态
-     * @apiVersion 1.0.0
-     * @apiName updateDispatchStatus
-     * @apiGroup dispatch
-     * @apiPermission none
-     *
-     * @apiDescription 更新配送单状态
-     *
-     * @apiParam {String} dispatchNo 	配送单号
-     * @apiParam {Number} status 	    状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）
-     *
-     * @apiSuccess (200) {String} RespCode          响应编码，8位
-     * @apiSuccess (200) {String} RespDesc          响应描述
-     */
-    JSONObject updateDispatchStatus(JSONObject params) throws ApiBizException;
-
-    /**
      * @api {get} /api/v1/dispatch/replenishmentList 3.api 补货列表
      * @apiVersion 1.0.0
      * @apiName replenishmentList
@@ -80,7 +63,7 @@ public interface DispatchResource {
      * @apiSuccess (200) {Number} Data.goods.layer.goodsQuantity  商品数量
      * @apiSuccess (200) {Number} Data.goods.layer.goodsId        商品ID
      */
-    JSONObject replenishmentList(JSONObject params) throws ApiBizException;
+    JSONObject replenishmentList(InputParameter inputParameter) throws ApiBizException;
 
     /**
      * @api {post} /api/v1/dispatch/confirmReplenishment 4.api 确认补货
@@ -98,22 +81,5 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} RespDesc          响应描述
      */
     JSONObject confirmReplenishment(JSONObject params) throws ApiBizException;
-
-    /**
-     * @api {post} /api/v1/dispatch/bindUser 5.api 用户绑定
-     * @apiVersion 1.0.0
-     * @apiName validateCode api 验证短信验证码
-     * @apiGroup dispatch
-     * @apiPermission none
-     *
-     * @apiDescription 验证短信验证码
-     *
-     * @apiParam {String} mobile  	    手机号
-     * @apiParam {String} validateCode  验证码
-     *
-     * @apiSuccess (200) {String} RespCode          响应编码，8位
-     * @apiSuccess (200) {String} RespDesc          响应描述
-     * */
-    JSONObject validateCode(InputParameter inputParameter) throws ApiBizException;
 
 }

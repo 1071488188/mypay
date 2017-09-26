@@ -13,21 +13,6 @@ public interface AdministratorService {
      * 验证是否有权限
      */
     public void verifyPermissions() throws Exception;
-
-    /**
-     * 初始化是否为网点管理员
-     * @return
-     * @throws Exception
-     */
-    public  int adminInit()throws Exception;
-
-    /**
-     * 绑定手机号
-     * @param inputParameter
-     * @throws Exception
-     */
-    public void bindManager(InputParameter inputParameter) throws Exception;
-
     /**
      * 消费记录
      * @param inputParameter

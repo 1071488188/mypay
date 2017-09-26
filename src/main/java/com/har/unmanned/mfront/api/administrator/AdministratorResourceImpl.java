@@ -24,34 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class AdministratorResourceImpl implements AdministratorResource {
     @Autowired
     AdministratorService administratorService;
-    @Override
-    @GetMapping("/adminInit")
-    @ResponseBody
-    public String adminInit() throws Exception {
-        log.info("------------------管理员初始化开始--------------------------------");
-        JSONObject jsonObject=new JSONObject();
-        int flag=administratorService.adminInit();
-        jsonObject.put("whetherNetwork",flag);
-        log.info("管理员初始化接口返回参数{}",jsonObject);
-        log.info("------------------管理员初始化结束--------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
-    }
-
-    /**
-     * 绑定手机号
-     *
-     * @param inputParameter
-     * @return
-     */
-    @Override
-    @PostMapping("/bindManager")
-    public String bindManager(@Validated({BindManagerGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
-        log.info("------------------绑定手机号开始-------------------------------");
-        administratorService.bindManager(inputParameter);
-        log.info("------------------绑定手机号结束-------------------------------");
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
-    }
-
     /**
      * 提现
      *

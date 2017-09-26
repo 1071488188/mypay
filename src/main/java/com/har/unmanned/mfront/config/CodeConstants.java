@@ -112,4 +112,16 @@ public class CodeConstants {
 		/** 删除 */
 		public static int DELETE = 2;
 	}
+
+	/** 配送单状态 */
+	public static interface DispatchStatus{
+		/** 0、待审核（订单创建）*/
+		public static int PENDING_AUDIT = 0;
+		/** 1、待出库（审核已通过，仓库货物扣减） */
+		public static int PENDING_DELIVERY = 1;
+		/** 2、配送中（配送人员收到货物确认配送） */
+		public static int IN_DELIVERY = 2;
+		/** 3、已上架（配送人员完成配送） */
+		public static int SHELVES = 3;
+	}
 }

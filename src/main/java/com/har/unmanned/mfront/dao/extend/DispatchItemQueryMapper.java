@@ -22,22 +22,6 @@ public interface DispatchItemQueryMapper {
     List<DispatchItemDomain> shopStockGoodsList(@Param("dispatchNo") String dispatchNo);
 
     /**
-     *  未确认商品
-     * @param dispatchNo
-     * @param goodsIds
-     * @return
-     */
-    List<DispatchItemDomain> notConfirmGoods(@Param("dispatchNo") String dispatchNo, @Param("goodsIds") String goodsIds);
-
-    /**
-     *  更新货架库存
-     * @param shopStockId
-     * @param dispatchQuantity
-     * @return
-     */
-   int updateShopStock(@Param("shopStockId") String shopStockId,@Param("dispatchQuantity") String dispatchQuantity);
-
-    /**
      * 获取货架最大层数
      * @param dispatchNo
      * @return

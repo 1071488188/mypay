@@ -33,4 +33,5 @@ public class InputParameter {
     private Integer pageSize;//每页显示条数
     @NotNull(message = "参数不能为空!", groups = CloseAnAccountGroup.class)
     private String billingId;//结算清单id
+
 }
