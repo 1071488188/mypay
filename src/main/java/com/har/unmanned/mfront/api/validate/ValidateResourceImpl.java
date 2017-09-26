@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/validation", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(value = "/api/v1/validation", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class ValidateResourceImpl implements ValidateResource {
     @Autowired
     private ValidateService securityCodeService;

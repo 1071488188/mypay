@@ -9,6 +9,7 @@ import com.har.unmanned.mfront.api.administrator.ValidGroup.WithdrawDepositGroup
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.service.AdministratorService;
 import com.har.unmanned.mfront.utils.RespMessage;
+import com.har.unmanned.mfront.utils.aop.ControlLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/admin", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(value = "/api/v1/admin", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class AdministratorResourceImpl implements AdministratorResource {
     @Autowired
     AdministratorService administratorService;
@@ -32,6 +33,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/withdrawDeposit")
+    @ControlLog(description="dsfs")
     public String withdrawDeposit(@Validated({WithdrawDepositGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
         log.info("------------------提现开始-------------------------------");
         administratorService.withdrawDeposit(inputParameter);
