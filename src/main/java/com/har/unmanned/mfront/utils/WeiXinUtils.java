@@ -1,6 +1,8 @@
 package com.har.unmanned.mfront.utils;
 
 
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 
@@ -10,6 +12,7 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -17,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+@Slf4j
 public class WeiXinUtils {
 	@Value("${wx.pay.charset}")
 	private static String charset;
@@ -200,6 +204,27 @@ public class WeiXinUtils {
 			treeMap.put(key.getKey().toString(), key.getValue().toString());
 		}
 		return treeMap;
+	}
+
+	public static String getTicket(String accessToken, String ticketUrl) throws IOException {
+
+		String ticket = null;
+		// 获取ticket_url
+		String ticket_url = MessageFormat.format(ticketUrl, new String[]{accessToken});
+		String s = WxHttpUtil.sendGet(ticket_url, "uft-8");
+		// 如果请求成功
+		JSONObject jsonObject = JSONObject.parseObject(s);
+		if (null != jsonObject) {
+			try {
+
+				ticket = jsonObject.getString("ticket");
+			} catch (Exception e) {
+				// 获取失败
+				log.error("获取ticket失败 errcode:{" + jsonObject.getInteger("errcode") + "} errmsg:{" + jsonObject.getString("errmsg") + "}");
+			}
+		}
+
+		return ticket;
 	}
 
 	final static String KEYSTORE_FILE = "E:/apiclient_cert.p12";//支付证书地址

@@ -45,6 +45,10 @@ public class WxAuthUtil {
     @Value("${wx.auth.secret}")
     public String secret;
 
+    @Value("${wx.pay.ticketUrl}")
+    public String ticketUrl;
+
+
     public String index = "/#/index";
 
 
@@ -55,25 +59,53 @@ public class WxAuthUtil {
      * @return
      * @throws Exception
      */
-    @ResponseBody
-    @RequestMapping(value = "/getWxSignPar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String getWxSignPar(HttpServletRequest request, String url) throws Exception {
-        RespMessage respMessage = new RespMessage();
+    public JSONObject getWxSignPar(String url) throws Exception {
+        log.info("当前页面URL：" + url);
 
-        try {
-//			JSONObject resp = this.harCoreService.getSignatureByUrl(url);
+        // 返回的json对象
+        JSONObject respJson = new JSONObject();
+        String accessToken = "";
+       /* JSONObject tmpJson2 = new JSONObject();
+        // 判断微信redis是否存在，不存在重新获取token写入redis
+        if (CheckUtil.isNull(accessTokenJson)) {
+            log.info("redis中数据为空，重新获取token...");
+            // 获取access_token
+            AccessToken accessToken = wxUtil.getAccessToken();
 
-//			log.info("页面加载时获取微信验证相关返回数据：" + resp);
-//			respMessage.setData(resp.toJSONString());
-            respMessage.setRespCode(ErrorCode.E00000000.CODE);
-            respMessage.setRespDesc(ErrorCode.E00000000.MSG);
-        } catch (Exception e) {
-            log.info("页面加载时获取微信验证相关返回数据异常：" + e);
-            respMessage.setRespCode(ErrorCode.E00000001.CODE);
-            respMessage.setRespDesc(e.getMessage());
+            tmpJson2.put("ACCESSTOKEN", accessToken.getToken());
+            tmpJson2.put("TICKET", wxUtil.getTicket(accessToken.getToken()));
+            tmpJson2.put("NONCESTR", wxUtil.createNoncestr());
+            tmpJson2.put("TIMESTAMP", wxUtil.createTimestamp());
+            log.info("重新获取token，写入redis...");
+            // 获取到得accessToken存入到Redis
+            redisServiceImpl.put(accessTokenReidsKey, tmpJson2.toJSONString(), Long.valueOf(accessTokenReidsTimeout));
+        } else {
+            log.info("redis中数据存在:" + accessTokenJson);
+            tmpJson2 = JSONObject.parseObject(accessTokenJson);
         }
+        log.info("微信token相关参数：" + tmpJson2);
+        log.info("微信设置验证相关参数的任务是否已执行：" + tmpJson2.getString("TICKET"));*/
 
-        return respMessage.getRespMessage().toJSONString();
+        // 根据条件生成相关的signature
+        String ticket = WeiXinUtils.getTicket(accessToken, ticketUrl);
+        String nonceStr = Sha1Util.getNonceStr();
+        String timeStamp = Sha1Util.getTimeStamp();
+        String string1 = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp=" + timeStamp + "&url=" + url;
+        String signature = Sha1Util.getSha1(string1);
+
+        // 封装相应参数
+        respJson.put("appId", wxAppId); // 必填，公众号的唯一标识
+        respJson.put("ticket", ticket); // 标签
+        respJson.put("nonceStr", nonceStr); // 必填，生成签名的随机串
+        respJson.put("timestamp", timeStamp);// 必填，生成签名的时间戳
+        respJson.put("accessToken", accessToken);// token
+        respJson.put("signature", signature);// 必填，签名，见附录1
+
+        log.info("页面加载时ajax提交返回的参数：appId：" + wxAppId + "---" + "ticket:" + ticket + "---" + "nonceStr:" + nonceStr
+                + "---" + "timestamp:" + timeStamp + "---" + "accessToken:" + accessToken + "---" + "signature:"
+                + signature);
+
+        return respJson;
     }
 
     /***

@@ -35,4 +35,5 @@ wx:
     unified_order_url: https://api.mch.weixin.qq.com/pay/unifiedorder #统一下单地址
     close_order_url: https://api.mch.weixin.qq.com/pay/closeorder #关闭订单地址
     query_order_url: https://api.mch.weixin.qq.com/pay/orderquery #查询订单地址
+    ticketUrl: https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type=jsapi
     sign_type: MD5 #签名类型

@@ -11,6 +11,7 @@ import com.har.unmanned.mfront.model.ShopOrder;
 import com.har.unmanned.mfront.service.IWxUserShopService;
 import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.RespMessage;
+import com.har.unmanned.mfront.utils.WxAuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,6 +31,8 @@ import java.util.Map;
 public class WxUserShopResourceImpl implements  WxUserShopResource{
     @Autowired
     private IWxUserShopService wxUserShopService;
+    @Autowired
+    private WxAuthUtil wxAuthUtil;
     /**
      * 用户首页
      * @param inputParameter
@@ -102,6 +105,22 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
         // 返回数据
         JSONObject respJson = wxUserShopService.userInfo();
         log.info("[userInfo]查询用户信息响应数据:" + respJson);
+        respMessage.setRespCode(ErrorCode.E00000000.CODE);
+        respMessage.setRespDesc(ErrorCode.E00000000.MSG);
+        respMessage.setData(respJson);
+        return respMessage.getRespMessage();
+    }
+
+    @Override
+    @PostMapping("/getWxSign")
+    public JSONObject getWxSign(HttpServletRequest request) throws Exception {
+        log.info("[getWxSign]获取微信签名");
+        RespMessage respMessage = new RespMessage();
+        // 返回数据 currenturl
+        String currenturl = CheckUtil.isNull(request.getHeader("currenturl")) ? "" : request.getHeader("currenturl");
+        String[] split = currenturl.split("#");
+        JSONObject respJson = wxAuthUtil.getWxSignPar(split[0]);
+        log.info("[getWxSign]获取微信签名响应数据:" + respJson);
         respMessage.setRespCode(ErrorCode.E00000000.CODE);
         respMessage.setRespDesc(ErrorCode.E00000000.MSG);
         respMessage.setData(respJson);
