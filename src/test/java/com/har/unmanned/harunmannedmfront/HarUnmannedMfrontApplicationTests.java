@@ -30,7 +30,7 @@ public class HarUnmannedMfrontApplicationTests {
 		param.put("notify_url", "http:///har-unmanned-mfront/api/v1/wxUserShop/wxPayCallBack");
 		param.put("trade_type", "JSAPI");
 		param.put("openid", "ofSmLt-EwP8qZfdtqKagbNVlMIGM");
-		String sign = WeiXinUtils.createPackage(param, "daeb1993ddee0822edcbeeffa35dedcf");
+		String sign = new WeiXinUtils().createPackage(param, "daeb1993ddee0822edcbeeffa35dedcf");
 		param.put("sign", sign);
 		String respString = WxHttpUtil.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", param, "utf-8");
 		Map<String, String> map = XMLUtil.doXMLParse(respString);

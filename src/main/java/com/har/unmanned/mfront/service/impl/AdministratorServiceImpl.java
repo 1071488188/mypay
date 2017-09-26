@@ -1,6 +1,5 @@
 package com.har.unmanned.mfront.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.har.unmanned.mfront.api.administrator.InputParameter;
@@ -16,7 +15,7 @@ import com.har.unmanned.mfront.model.extend.ShopCommissionExtend;
 import com.har.unmanned.mfront.model.extend.ShopExpressiveExtend;
 import com.har.unmanned.mfront.model.extend.ShopOrderExtend;
 import com.har.unmanned.mfront.service.AdministratorService;
-import com.har.unmanned.mfront.service.SecurityCodeService;
+import com.har.unmanned.mfront.service.ValidateService;
 import com.har.unmanned.mfront.utils.CheckUtil;
 import com.har.unmanned.mfront.utils.PageUtil;
 import com.har.unmanned.mfront.utils.UserUtil;
@@ -53,7 +52,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Autowired
     ShopExpressiveMapperExtend shopExpressiveMapperExtend;
     @Autowired
-    private SecurityCodeService securityCodeService;
+    private ValidateService securityCodeService;
     @Autowired
     RedisServiceImpl redisService;
     private static int roleId = 3;//网点管理员权限
@@ -77,63 +76,6 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
     }
-
-    @Override
-    public int adminInit() throws Exception {
-        int flag = 0;
-        //获取当前用户信息
-        ShopWechat shopWechat = userUtil.userInfo();
-        log.info("查询是否为网点管理员当前用户信息{}", shopWechat);
-        String openid = shopWechat.getOpenid();
-        Long userId = shopWechat.getUserId();
-        if (!CheckUtil.isNull(userId)) {
-            //判断用户是否为网点管理员
-            int count = sysUserMapperExtend.getuserRole(userId, roleId, null);
-            if (count > 0) {
-                flag = 1;
-            }
-        }
-        log.info("用户信息{},查询是否为网点管理员返回参数{}", shopWechat, flag);
-        return flag;
-    }
-
-    @Override
-    public void bindManager(InputParameter inputParameter) throws Exception {
-        String cellPhoneNumber = inputParameter.getCellPhoneNumber();//手机号
-        String verificationCode = inputParameter.getVerificationCode();//验证码
-        log.info("手机号{},验证码{}", cellPhoneNumber,verificationCode);
-        JSONObject jsonObject=new JSONObject();
-        //1验证验证码是否正确
-        jsonObject.put("mobile",cellPhoneNumber);
-        jsonObject.put("validate_code_input",verificationCode);
-        securityCodeService.checkValidateCode(jsonObject);
-        //2判断当前用户是否已经是管理员
-        int flag = adminInit();
-        if (flag == 1) {
-            throw new ApiBizException(ErrorCode.E00000001.CODE, "您已经是网点管理员!", inputParameter);
-        }
-        //3根据手机号查询当前手机号是否为网点管理员
-        int count = sysUserMapperExtend.getuserRole(null, roleId, cellPhoneNumber);
-        log.info("根据手机号查询当前手机号是否为网点管理员,手机号{},查询结果{}", cellPhoneNumber,count);
-        if (count == 0) {
-            throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号暂无网点管理员数据!", inputParameter);
-        }
-        //4查询出当前手机号所存在的管理员信息
-        SysUserExample sysUserExample = new SysUserExample();
-        SysUserExample.Criteria criteria = sysUserExample.createCriteria();
-        criteria.andMobileEqualTo(cellPhoneNumber);
-        sysUserExample.setOrderByClause(" user_id asc");
-        List<SysUser> sysUserList = sysUserMapper.selectByExample(sysUserExample);
-        log.info("系统用户查询结果", sysUserList);
-        SysUser sysUser = sysUserList.get(0);
-        //5将手机号和管理员id写入微信用户表
-        ShopWechat shopWechat = userUtil.userInfo();
-        shopWechat.setUserId(sysUser.getUserId());
-        shopWechat.setPhone(cellPhoneNumber);
-        shopWechatMapper.updateByPrimaryKeySelective(shopWechat);
-
-    }
-
     @Override
     public JSONObject expenseCalendar(InputParameter inputParameter) throws Exception {
         JSONObject jsonObject = new JSONObject();

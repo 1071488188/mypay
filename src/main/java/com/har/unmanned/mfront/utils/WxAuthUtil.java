@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.ShopWechat;
+import com.har.unmanned.mfront.wxapi.fixed.WxTokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,16 @@ public class WxAuthUtil {
     @Value("${wx.auth.secret}")
     public String secret;
 
+    @Value("${wx.pay.ticketUrl}")
+    public String ticketUrl;
+
+    @Autowired
+    private WxTokenService wxTokenService;
+
+    @Autowired
+    private WeiXinUtils weiXinUtils;
+
+
     public String index = "/#/index";
 
 
@@ -55,25 +67,31 @@ public class WxAuthUtil {
      * @return
      * @throws Exception
      */
-    @ResponseBody
-    @RequestMapping(value = "/getWxSignPar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String getWxSignPar(HttpServletRequest request, String url) throws Exception {
-        RespMessage respMessage = new RespMessage();
+    public JSONObject getWxSignPar(String url) throws Exception {
+        log.info("当前页面URL{}", url);
 
-        try {
-//			JSONObject resp = this.harCoreService.getSignatureByUrl(url);
+        // 返回的json对象
+        JSONObject respJson = new JSONObject();
+        String accessToken = wxTokenService.getToken();
+        log.info("获取到的token{}" ,accessToken);
+        // 根据条件生成相关的signature
+        String ticket = weiXinUtils.getTicket(accessToken);
+        String nonceStr = Sha1Util.getNonceStr();
+        String timeStamp = Sha1Util.getTimeStamp();
+        String string1 = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp=" + timeStamp + "&url=" + url;
+        String signature = Sha1Util.getSha1(string1);
 
-//			log.info("页面加载时获取微信验证相关返回数据：" + resp);
-//			respMessage.setData(resp.toJSONString());
-            respMessage.setRespCode(ErrorCode.E00000000.CODE);
-            respMessage.setRespDesc(ErrorCode.E00000000.MSG);
-        } catch (Exception e) {
-            log.info("页面加载时获取微信验证相关返回数据异常：" + e);
-            respMessage.setRespCode(ErrorCode.E00000001.CODE);
-            respMessage.setRespDesc(e.getMessage());
-        }
+        // 封装相应参数
+        respJson.put("appId", wxAppId); // 必填，公众号的唯一标识
+        respJson.put("ticket", ticket); // 标签
+        respJson.put("nonceStr", nonceStr); // 必填，生成签名的随机串
+        respJson.put("timestamp", timeStamp);// 必填，生成签名的时间戳
+        respJson.put("accessToken", accessToken);// token
+        respJson.put("signature", signature);// 必填，签名，见附录1
 
-        return respMessage.getRespMessage().toJSONString();
+        log.info("页面加载时ajax提交返回的参数：appId{}, ticket{}, nonceStr{}, timestamp{}, accessToken{}, signature{}", wxAppId, ticket, nonceStr, timeStamp, accessToken, signature);
+
+        return respJson;
     }
 
     /***
