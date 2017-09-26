@@ -6,6 +6,7 @@ import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.WxPayService;
 import com.har.unmanned.mfront.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class WxPayServiceImpl implements WxPayService {
     private String query_order_url;  //查询订单地址
     @Value("${wx.pay.sign_type}")
     private String sign_type;  //签名类型
+    @Autowired
+    private WeiXinUtils weiXinUtils;
 
 
     @Override
@@ -54,7 +57,7 @@ public class WxPayServiceImpl implements WxPayService {
         param.put("notify_url", notify_url);
         param.put("trade_type", trade_type);
         param.put("openid", openid);
-        String sign = WeiXinUtils.createPackage(param, appsecret);
+        String sign = weiXinUtils.createPackage(param, appsecret);
         param.put("sign", sign);
         String respString = WxHttpUtil.sendPost(unified_order_url, param, charset);
         log.info("微信统一下单返回数据: " + respString);
@@ -73,7 +76,7 @@ public class WxPayServiceImpl implements WxPayService {
         respMap.put("nonceStr", nonceStr);
         respMap.put("package", "prepay_id=" + map.get("prepay_id"));
         respMap.put("signType", sign_type);
-        String paySign = WeiXinUtils.createPaySign(respMap, appsecret);
+        String paySign = weiXinUtils.createPaySign(respMap, appsecret);
         respMap.put("paySign", paySign);
         log.info("-------------生成微信签名结束------------");
         return respMap;
@@ -89,7 +92,7 @@ public class WxPayServiceImpl implements WxPayService {
         param.put("mch_id", mch_id);
         param.put("out_trade_no", out_trade_no);
         param.put("nonce_str", nonceStr);
-        String sign = WeiXinUtils.createPackage(param, appsecret);
+        String sign = weiXinUtils.createPackage(param, appsecret);
         param.put("sign", sign);
         String respString = WxHttpUtil.sendPost(query_order_url, param, charset);
         log.info("微信统一下单返回数据: " + respString);

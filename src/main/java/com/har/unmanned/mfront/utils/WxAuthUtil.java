@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.ShopWechat;
+import com.har.unmanned.mfront.wxapi.fixed.WxTokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +50,12 @@ public class WxAuthUtil {
     @Value("${wx.pay.ticketUrl}")
     public String ticketUrl;
 
+    @Autowired
+    private WxTokenService wxTokenService;
+
+    @Autowired
+    private WeiXinUtils weiXinUtils;
+
 
     public String index = "/#/index";
 
@@ -60,34 +68,14 @@ public class WxAuthUtil {
      * @throws Exception
      */
     public JSONObject getWxSignPar(String url) throws Exception {
-        log.info("当前页面URL：" + url);
+        log.info("当前页面URL{}", url);
 
         // 返回的json对象
         JSONObject respJson = new JSONObject();
-        String accessToken = "";
-       /* JSONObject tmpJson2 = new JSONObject();
-        // 判断微信redis是否存在，不存在重新获取token写入redis
-        if (CheckUtil.isNull(accessTokenJson)) {
-            log.info("redis中数据为空，重新获取token...");
-            // 获取access_token
-            AccessToken accessToken = wxUtil.getAccessToken();
-
-            tmpJson2.put("ACCESSTOKEN", accessToken.getToken());
-            tmpJson2.put("TICKET", wxUtil.getTicket(accessToken.getToken()));
-            tmpJson2.put("NONCESTR", wxUtil.createNoncestr());
-            tmpJson2.put("TIMESTAMP", wxUtil.createTimestamp());
-            log.info("重新获取token，写入redis...");
-            // 获取到得accessToken存入到Redis
-            redisServiceImpl.put(accessTokenReidsKey, tmpJson2.toJSONString(), Long.valueOf(accessTokenReidsTimeout));
-        } else {
-            log.info("redis中数据存在:" + accessTokenJson);
-            tmpJson2 = JSONObject.parseObject(accessTokenJson);
-        }
-        log.info("微信token相关参数：" + tmpJson2);
-        log.info("微信设置验证相关参数的任务是否已执行：" + tmpJson2.getString("TICKET"));*/
-
+        String accessToken = wxTokenService.getToken();
+        log.info("获取到的token{}" ,accessToken);
         // 根据条件生成相关的signature
-        String ticket = WeiXinUtils.getTicket(accessToken, ticketUrl);
+        String ticket = weiXinUtils.getTicket(accessToken);
         String nonceStr = Sha1Util.getNonceStr();
         String timeStamp = Sha1Util.getTimeStamp();
         String string1 = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp=" + timeStamp + "&url=" + url;
@@ -101,9 +89,7 @@ public class WxAuthUtil {
         respJson.put("accessToken", accessToken);// token
         respJson.put("signature", signature);// 必填，签名，见附录1
 
-        log.info("页面加载时ajax提交返回的参数：appId：" + wxAppId + "---" + "ticket:" + ticket + "---" + "nonceStr:" + nonceStr
-                + "---" + "timestamp:" + timeStamp + "---" + "accessToken:" + accessToken + "---" + "signature:"
-                + signature);
+        log.info("页面加载时ajax提交返回的参数：appId{}, ticket{}, nonceStr{}, timestamp{}, accessToken{}, signature{}", wxAppId, ticket, nonceStr, timeStamp, accessToken, signature);
 
         return respJson;
     }
