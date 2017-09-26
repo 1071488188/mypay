@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.exception.CommonExceptionLevel;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
-import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
-import com.har.unmanned.mfront.api.dispatch.validgroup.ValidateCodeGroup;
 import com.har.unmanned.mfront.api.dispatch.validgroup.DispatchGroup;
+import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.DispatchService;
@@ -168,11 +167,5 @@ public class DispatchResourceImpl implements DispatchResource {
         log.info("{},{}", "确认补货返回数据", respMessage.getRespMessage());
         LogHelper.save(LogType.RECEIVE, "确认补货返回数据", respMessage.getRespMessage());
         return respMessage.getRespMessage();
-    }
-
-    @Override
-    @PostMapping("/validateCode")
-    public JSONObject validateCode(@Validated({ValidateCodeGroup.class}) @RequestBody InputParameter inputParameter) throws ApiBizException {
-        return null;
     }
 }
