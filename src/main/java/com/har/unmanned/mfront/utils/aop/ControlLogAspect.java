@@ -44,13 +44,36 @@ public class ControlLogAspect {
     @Before("controlLogAspect()")
     public void doBefore(JoinPoint joinPoint) {
         try {
-            String params=getParam();
             Map<String, Object> map=getControllerMethodDescription(joinPoint);
             String description=map.get(SystemLogComm.ParameterKey.DESCRIPTION)+"";
+            log.info("------------------"+description+"开始-------------------------------");
+            String params=getParam();
             log.info(description+"传入参数:"+params);
             LogHelper.save(LogType.REQUEST, description, params);
         } catch (Exception e) {
             log.error("前置通知异常:" + e.getStackTrace());
+            e.printStackTrace();
+        }
+    }
+    /**
+     *
+     * @Title: After
+     * @Description: TODO(返回通知)
+     * @author jiangjj
+     * @param joinPoint
+     * @param returnValue
+     * @throws
+     */
+    @AfterReturning(pointcut="controlLogAspect()",returning="returnValue")
+    public  void After(JoinPoint joinPoint, Object returnValue) {
+        try {
+            Map<String, Object> map=getControllerMethodDescription(joinPoint);
+            String description=map.get(SystemLogComm.ParameterKey.DESCRIPTION)+"";
+            log.info("------------------"+description+"结束-------------------------------");
+            log.info(description+"返回参数:"+returnValue);
+            LogHelper.save(LogType.REQUEST, description, returnValue);
+        }  catch (Exception e) {
+            log.error("返回通知异常:"+e.getStackTrace());
             e.printStackTrace();
         }
     }
@@ -114,8 +137,6 @@ public class ControlLogAspect {
             if (!CheckUtil.isNull(sb) && sb.length() > 0) {
                 reparam = JSONObject.parseObject(sb.toString());
             }
-            //由于request.getReader()只能获取一次所以将传入进来的参数放到request里面再从request里面获取
-            request.setAttribute("param", reparam);
         }
         return reparam.toString();
     }

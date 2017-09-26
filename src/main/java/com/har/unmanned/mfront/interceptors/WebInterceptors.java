@@ -23,6 +23,8 @@ public class WebInterceptors extends WebMvcConfigurerAdapter {
     public String interceptorExcluded;
 
     public String[] excluded;
+    @Autowired
+    ParameterFilter parameterFilter;
 
     /**
      * 拦截器配置

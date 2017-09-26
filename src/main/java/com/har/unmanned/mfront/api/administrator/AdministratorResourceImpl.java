@@ -33,11 +33,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/withdrawDeposit")
-    @ControlLog(description="dsfs")
+    @ControlLog(description="提现")
     public String withdrawDeposit(@Validated({WithdrawDepositGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
-        log.info("------------------提现开始-------------------------------");
         administratorService.withdrawDeposit(inputParameter);
-        log.info("------------------提现结束-------------------------------");
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
@@ -49,10 +47,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/expenseCalendar")
+    @ControlLog(description="消费记录")
     public String expenseCalendar(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
-        log.info("------------------消费记录开始-------------------------------");
        JSONObject jsonObject= administratorService.expenseCalendar(inputParameter);
-        log.info("------------------消费记录开始-------------------------------");
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
@@ -64,10 +61,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/settlementRecords")
+    @ControlLog(description="结算记录")
     public String settlementRecords(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
-        log.info("------------------结算记录开始-------------------------------");
         JSONObject jsonObject=administratorService.settlementRecords(inputParameter);
-        log.info("------------------结算记录结束-------------------------------");
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 
@@ -79,10 +75,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/closeAnAccount")
+    @ControlLog(description="结算")
     public String closeAnAccount(@Validated({CloseAnAccountGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
-        log.info("------------------结算开始-------------------------------");
         administratorService.closeAnAccount(inputParameter);
-        log.info("------------------结算结束-------------------------------");
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
     }
 
@@ -94,10 +89,9 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/balanceDetails")
+    @ControlLog(description="余额明细")
     public String balanceDetails(@Validated({PageGroup.class}) InputParameter inputParameter) throws Exception{
-        log.info("------------------余额明细开始-------------------------------");
         JSONObject jsonObject=administratorService.balanceDetails(inputParameter);
-        log.info("------------------余额明细结束-------------------------------");
         return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
     }
 }
