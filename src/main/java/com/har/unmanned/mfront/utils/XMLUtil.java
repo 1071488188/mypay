@@ -69,7 +69,7 @@ public class XMLUtil {
 			return null;
 		}
 		
-		Map<String,String> m = new HashMap<String,String>();
+		Map<String,String> m = new TreeMap<>();
 		InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = builder.build(in);

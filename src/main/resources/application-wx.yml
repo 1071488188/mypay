@@ -26,10 +26,10 @@ wx:
       color: 173177 #字体颜色不带井号
       detailsUrl: ${har.server.web.host}/#/myattention #详情url
   pay:
-    appid: wx6b09d460cd913b96 #公众账号ID
-    appsecret: daeb1993ddee0822edcbeeffa35dedcf
+    appid: wx6b09d460cd913b96
+    paternerKey: daeb1993ddee0822edcbeeffa35dedcf
     mch_id: 1303699301 #商户号
-    notify_url: http:///har-unmanned-mfront/api/v1/wxUserShop/wxPayCallBack  #后台通知地址
+    notify_url: http://wxtest.huianrong.cn/har-unmanned-mfront/api/v1/wxUserShop/callBack  #后台通知地址
     trade_type: JSAPI #交易类型
     charset: utf-8
     unified_order_url: https://api.mch.weixin.qq.com/pay/unifiedorder #统一下单地址

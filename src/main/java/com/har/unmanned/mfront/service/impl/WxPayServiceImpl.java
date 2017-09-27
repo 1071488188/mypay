@@ -19,8 +19,8 @@ import java.util.TreeMap;
 public class WxPayServiceImpl implements WxPayService {
     @Value("${wx.pay.appid}")
     private String appid;  //公众账号ID
-    @Value("${wx.pay.appsecret}")
-    private String appsecret;
+    @Value("${wx.pay.paternerKey}")
+    private String paternerKey;
     @Value("${wx.pay.mch_id}")
     private String mch_id;  //商户号
     @Value("${wx.pay.notify_url}")
@@ -45,19 +45,20 @@ public class WxPayServiceImpl implements WxPayService {
     public Map<String, String> paymentOrderH5(String openid, String total_fee, String body, String out_trade_no, String ip) throws Exception {
         log.info("-------------生成微信签名开始------------");
         String nonceStr = Sha1Util.getNonceStr();
-        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String timeStamp = Sha1Util.getTimeStamp();
         TreeMap param = new TreeMap();
         param.put("appid", appid);
         param.put("mch_id", mch_id);
         param.put("nonce_str", nonceStr);
         param.put("body", body);
         param.put("out_trade_no", out_trade_no);
-        param.put("total_fee", total_fee);
+        param.put("total_fee", "1");
+        //param.put("total_fee", total_fee);
         param.put("spbill_create_ip", ip);
         param.put("notify_url", notify_url);
         param.put("trade_type", trade_type);
         param.put("openid", openid);
-        String sign = weiXinUtils.createPackage(param, appsecret);
+        String sign = weiXinUtils.createPackage(param, paternerKey);
         param.put("sign", sign);
         String respString = WxHttpUtil.sendPost(unified_order_url, param, charset);
         log.info("微信统一下单返回数据: " + respString);
@@ -71,12 +72,13 @@ public class WxPayServiceImpl implements WxPayService {
             throw new ApiBizException(ErrorCode.E00000016.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
         }
         TreeMap respMap = new TreeMap();
-        respMap.put("appId", map.get("appid"));
+        respMap.put("appId", appid);
         respMap.put("timeStamp", timeStamp);
         respMap.put("nonceStr", nonceStr);
         respMap.put("package", "prepay_id=" + map.get("prepay_id"));
         respMap.put("signType", sign_type);
-        String paySign = weiXinUtils.createPaySign(respMap, appsecret);
+        String paySign = weiXinUtils.createPaySign(respMap, paternerKey);
+        respMap.put("timestamp", timeStamp);
         respMap.put("paySign", paySign);
         log.info("-------------生成微信签名结束------------");
         return respMap;
@@ -92,7 +94,7 @@ public class WxPayServiceImpl implements WxPayService {
         param.put("mch_id", mch_id);
         param.put("out_trade_no", out_trade_no);
         param.put("nonce_str", nonceStr);
-        String sign = weiXinUtils.createPackage(param, appsecret);
+        String sign = weiXinUtils.createPackage(param, paternerKey);
         param.put("sign", sign);
         String respString = WxHttpUtil.sendPost(query_order_url, param, charset);
         log.info("微信统一下单返回数据: " + respString);

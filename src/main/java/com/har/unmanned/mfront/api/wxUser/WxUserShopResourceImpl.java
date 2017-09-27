@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/wxUserShop", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(value = "/api/v1/wxUserShop", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class WxUserShopResourceImpl implements  WxUserShopResource{
     @Autowired
     private IWxUserShopService wxUserShopService;
@@ -70,7 +70,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
         log.info("提交订单返回的参数:" + JSONObject.toJSONString(shopOrder));
         JSONObject respJson = wxUserShopService.payOrder(shopOrder);
 
-        log.info("微信同一下单返回的参数:" + respJson);
+        log.info("微信下单返回的参数:" + respJson);
         LogHelper.save(LogType.RESPONSE, "[submitOrder]用户提交订单_结束", respJson);
         log.info("[submitOrder]用户访问首页响应数据:" + params);
         respMessage.setRespCode(ErrorCode.E00000000.CODE);
