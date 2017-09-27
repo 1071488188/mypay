@@ -8,9 +8,6 @@ import java.lang.annotation.*;
 @Target({ElementType.PARAMETER, ElementType.METHOD})    
 @Retention(RetentionPolicy.RUNTIME)    
 @Documented    
-public  @interface SystemLog {    
-    
-    String description()  default "";    
-    int interceptType() default SystemLogComm.InterceptType.CONTROLLER ;    
-    
+public  @interface ControlLog {
+    String value()  default "";
 }    

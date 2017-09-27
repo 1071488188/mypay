@@ -31,7 +31,7 @@ import java.net.URLDecoder;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/wxAuth", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(value = "/api/v1/wxAuth", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class WxAuthResource extends ApiBaseController {
     @Autowired
     private RedisServiceImpl service;
@@ -97,6 +97,15 @@ public class WxAuthResource extends ApiBaseController {
                     }
                     // 保存用户信息
                     shopWechatMapper.insertSelective(wxUser);
+                }else{
+                    String userName= wxUser.getName();
+                    if(!CheckUtil.isNull(userName)){
+                        userName= Base64.encodeBase64String(userName.getBytes("UTF-8"));
+                        findUser.setName(userName);
+                    }
+                    findUser.setHeadimgUrl(wxUser.getHeadimgUrl());
+                    findUser.setSex(wxUser.getSex());
+                    shopWechatMapper.updateByPrimaryKeySelective(findUser);//当用户存在是更新用户信息
                 }
                 log.info("微信用户信息：" + JSONObject.toJSON(wxUser));
                 // 获取JWT授权码，写入cookie

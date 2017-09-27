@@ -16,7 +16,7 @@ public class Constants {
 
     public static final String SCOPR_USERINFO = "snsapi_userinfo";
 
-    public static final String SCOPR_base = "snsapi_base";
+    public static final String SCOPR_base = "snsapi_userinfo";
 
     public static final String ACCESS_TOKEN = "access_token";
     // ######################系统常量############################

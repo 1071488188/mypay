@@ -25,7 +25,7 @@ public interface ValidateService {
      * @return
      * @throws Exception
      */
-    JSONObject permissionsValidation() throws Exception;
+    JSONObject permissionsValidation(InputParameter inputParameter) throws Exception;
 
     /**
      * 绑定手机号

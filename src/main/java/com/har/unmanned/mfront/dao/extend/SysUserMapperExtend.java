@@ -5,6 +5,8 @@ import com.har.unmanned.mfront.dao.SysUserMapper;
 import com.har.unmanned.mfront.model.extend.SysUserExtend;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 系统用户扩展
  */
@@ -31,7 +33,7 @@ public interface SysUserMapperExtend extends SysUserMapper {
      * @param mobile
      * @return
      */
-    public SysUserExtend getUserAndRole(@Param("userId") Long userId, @Param("status") Integer status,@Param("mobile") String mobile);
+    public List<SysUserExtend> getUserAndRole(@Param("userId") Long userId, @Param("status") Integer status, @Param("mobile") String mobile);
 
     /**
      * 

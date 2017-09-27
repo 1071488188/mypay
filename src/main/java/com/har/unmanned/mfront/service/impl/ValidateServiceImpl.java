@@ -65,7 +65,8 @@ public class ValidateServiceImpl implements ValidateService {
     }
 
     @Override
-    public JSONObject permissionsValidation() throws Exception {
+    public JSONObject permissionsValidation(InputParameter inputParameter) throws Exception {
+        Integer roleType=Integer.parseInt(inputParameter.getRoleType());
         ShopWechat shopWechat=userUtil.userInfo();
         JSONObject jsonObject=new JSONObject();
         Long userId=shopWechat.getUserId();
@@ -74,11 +75,18 @@ public class ValidateServiceImpl implements ValidateService {
             jsonObject.put("roleType",0);
         }else {
             //2查询用户为启用状态且角色为配送员或管理员的
-            SysUserExtend sysUserExtend= sysUserMapperExtend.getUserAndRole(userId,1,null);
-            if(CheckUtil.isNull(sysUserExtend)){
+            List<SysUserExtend> sysUserExtendList= sysUserMapperExtend.getUserAndRole(userId,1,null);
+            if(CheckUtil.isNull(sysUserExtendList)){
                 jsonObject.put("roleType",0);
             }else{
-                jsonObject.put("roleType",sysUserExtend.getRoleType());
+                int roleTypeFlag=0;
+                for(SysUserExtend sysUserExtend:sysUserExtendList){
+                    if(roleType==sysUserExtend.getRoleType()){
+                        roleTypeFlag=roleType;
+                        break;
+                    }
+                }
+                jsonObject.put("roleType",roleTypeFlag);
             }
         }
         return jsonObject;
@@ -120,13 +128,24 @@ public class ValidateServiceImpl implements ValidateService {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号已经被绑定!", inputParameter);
         }
         //2查询出当前手机号所存在的角色信息
-        SysUserExtend sysUserExtend=sysUserMapperExtend.getUserAndRole(null,1,cellPhoneNumber);
-        log.info("根据手机号查询系统用户是否存在,手机号{},查询结果{}", cellPhoneNumber,sysUserExtend);
-        if(CheckUtil.isNull(sysUserExtend)||(!CheckUtil.isNull(sysUserExtend)&&sysUserExtend.getRoleType()!=roleid)) {
+        List<SysUserExtend> sysUserExtendList=sysUserMapperExtend.getUserAndRole(null,1,cellPhoneNumber);
+        log.info("根据手机号查询系统用户是否存在,手机号{},查询结果{}", cellPhoneNumber,sysUserExtendList);
+        if(CheckUtil.isNull(sysUserExtendList)) {
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号不存在系统角色!", inputParameter);
+        }
+        SysUserExtend roleSysUserExtend=null;
+        for(SysUserExtend sysUserExtended:sysUserExtendList){
+            if(sysUserExtended.getRoleType()==roleid){
+                roleSysUserExtend=new SysUserExtend();
+                roleSysUserExtend=sysUserExtended;
+                break;
+            }
+        }
+        if(CheckUtil.isNull(roleSysUserExtend)){
             throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号不存在系统角色!", inputParameter);
         }
         //3将手机号和管理员id写入微信用户表
-        shopWechat.setUserId(sysUserExtend.getUserId());
+        shopWechat.setUserId(roleSysUserExtend.getUserId());
         shopWechat.setPhone(cellPhoneNumber);
         shopWechatMapper.updateByPrimaryKeySelective(shopWechat);
         returnJsonObject.put("roleType",roleType);
