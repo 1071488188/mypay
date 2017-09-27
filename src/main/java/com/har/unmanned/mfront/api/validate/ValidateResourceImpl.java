@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.validate.ValidGroup.BindingPhoneGroup;
+import com.har.unmanned.mfront.api.validate.ValidGroup.PermissionsGroup;
 import com.har.unmanned.mfront.api.validate.ValidGroup.SendValidateGroup;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.service.ValidateService;
@@ -47,8 +48,8 @@ public class ValidateResourceImpl implements ValidateResource {
     @Override
     @GetMapping("/permissionsValidation")
     @ControlLog("初始化权限验证")
-    public JSONObject permissionsValidation() throws Exception {
-        securityCodeService.permissionsValidation();
+    public JSONObject permissionsValidation(@Validated({PermissionsGroup.class})InputParameter inputParameter) throws Exception {
+        securityCodeService.permissionsValidation(inputParameter);
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage();
     }
 

@@ -47,7 +47,6 @@
         <if test="userId!='' and userId!=null">
             and sr.user_id=#{userId}
         </if>
-        ORDER BY sr.user_id DESC LIMIT 1
     </select>
     <!--查询某角色是否已经被绑定-->
     <select id="distributionIsBinding" resultType="java.lang.Integer" parameterType="map">
