@@ -62,6 +62,7 @@
     <if test="shopId != null and shopId != ''" >
       AND so.shop_id = #{shopId}
     </if>
+    ORDER BY so.pay_time DESC
   </select>
   <select id="selectShopGoodsList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
     SELECT

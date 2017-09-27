@@ -52,9 +52,9 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     private WeiXinUtils weiXinUtils;
     @Value("${har.picPath}")
     private String picPath;
+    @Value("${wx.pay.paternerKey}")
+    private String paternerKey;
     private static final String UNMANNED = "unmanned:order:";
-    @Value("${wx.pay.appsecret}")
-    private String appsecret;
 
     @Override
     public JSONObject selectGoodsList(String param) throws Exception {
@@ -68,7 +68,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
             log.error("货架已下架或货架没有任何可购买商品");
             throw new ApiBizException(ErrorCode.E00000001.CODE, "对不起, 没有可购买商品", param);
         }
-        JSONObject dataList = formatGoodsList(shopStockDomains);
+        JSONArray dataList = formatGoodsList(shopStockDomains);
         respJson.put("dataList", dataList);
         if (shopStockDomains.isEmpty()) {
             JSONArray array = new JSONArray();
@@ -89,6 +89,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
             recentPurchaseList.add(object);
         }
         respJson.put("recentPurchaseList", recentPurchaseList);
+        System.out.println(respJson);
         return respJson;
     }
 
@@ -205,11 +206,14 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
 
     @Override
     public JSONObject payOrder(ShopOrder shopOrder) throws Exception {
+        JSONObject respJson = new JSONObject();
         log.info("----------------微信统一下单开始-----------------");
         log.info("支付订单service传入参数: " + JSONObject.toJSONString(shopOrder));
         String ip = ContextHolderUtils.getIp();
-        Map<String, String> map = wxPayService.paymentOrderH5(shopOrder.getOpenid(), shopOrder.getAmount().toString(), "微信支付", shopOrder.getOrderNo(), ip);
-        JSONObject respJson = (JSONObject) JSONObject.toJSON(map);
+        Map<String, String> map = wxPayService.paymentOrderH5(shopOrder.getOpenid(), shopOrder.getAmount().toString(), "wxpay", shopOrder.getOrderNo(), ip);
+        JSONObject object = (JSONObject) JSONObject.toJSON(map);
+        respJson.put("singData", object);
+        respJson.put("orderNo", shopOrder.getOrderNo());
         log.info("----------------微信统一下单结束-----------------");
         return respJson;
     }
@@ -218,7 +222,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     public void callBack(String param) throws Exception {
         log.info("----------------微信回调开始-----------------");
         log.info("微信回调service传入参数: " + param);
-        Map<String, String> map = XMLUtil.doXMLParse(param);
+        System.out.println(param);
+        TreeMap<String, String> map = (TreeMap<String, String>) XMLUtil.doXMLParse(param);
         String orderNo = map.get("out_trade_no");
         ShopOrderExample example = new ShopOrderExample();
         ShopOrderExample.Criteria criteria = example.createCriteria();
@@ -237,7 +242,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                 log.error("微信回调异常: " + map.get("err_code_des"));
                 throw new ApiBizException(ErrorCode.E00000018.CODE, map.get("err_code_des"), param, CommonExceptionLevel.WARN);
             }
-            boolean validSign = weiXinUtils.isValidSign(map, appsecret);
+            boolean validSign = weiXinUtils.isValidSign(map, paternerKey);
             if (!validSign) {
                 log.error("微信签名验证异常: " + param);
                 throw new ApiBizException(ErrorCode.E00000019.CODE, ErrorCode.E00000019.MSG, param, CommonExceptionLevel.WARN);
@@ -359,10 +364,10 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
      * @param list
      * @return
      */
-    private JSONObject formatGoodsList(List<ShopStockDomain> list) {
+    private JSONArray formatGoodsList(List<ShopStockDomain> list) {
         log.info("-----------------格式化商品开始----------------");
         log.info("传入的商品集合: " + JSONObject.toJSONString(list));
-        JSONObject dataList = new JSONObject(); // 返回的数据
+        JSONArray dataList = new JSONArray(); // 返回的数据
         JSONArray layerGoodsList = new JSONArray(); // 层级的数据集合, 如果到下一层, 本层数据会备份一份然后清空
         Map map = new HashMap(); //层级是否变化标志, 类似指针, 当商品列表循环到下一层级时, 指针指向下一层级
         for (ShopStockDomain shopStockDomain : list) {
@@ -379,7 +384,10 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                 layerGoodsList.add(object);
             } else { // 层级信息变化, 复制一份, 放入需返回的数据中, 清空层级的数据集合, 再把当前商品信息放入层级数据集合
                 JSONArray clone = (JSONArray) layerGoodsList.clone(); // 复制一份, 以免layerGoodsList清除影响dataList中的数据
-                dataList.put(map.get("layer").toString(), clone);
+                JSONObject tempJson = new JSONObject();
+                tempJson.put("layer", map.get("layer").toString());
+                tempJson.put("goodsList", clone);
+                dataList.add(tempJson);
                 layerGoodsList.clear();
                 JSONObject object = new JSONObject();
                 object.put("goodsId", shopStockDomain.getGoodsId());
@@ -391,7 +399,10 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                 map.put("layer", shopStockDomain.getLayer());
             }
         }
-        dataList.put(map.get("layer").toString(), layerGoodsList); // 放入最后一层的数据
+        JSONObject tempJson = new JSONObject();
+        tempJson.put("layer", map.get("layer").toString()); // 放入最后一层的数据
+        tempJson.put("goodsList", layerGoodsList); // 放入最后一层的数据
+        dataList.add(tempJson);
         log.info("格式化后的数据: " + dataList);
         log.info("-----------------格式化商品开始----------------");
         return dataList;
