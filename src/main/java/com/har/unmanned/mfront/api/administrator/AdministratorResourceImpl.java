@@ -33,7 +33,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/withdrawDeposit")
-    @ControlLog(description="提现")
+    @ControlLog("提现")
     public String withdrawDeposit(@Validated({WithdrawDepositGroup.class}) @RequestBody InputParameter inputParameter)throws Exception {
         administratorService.withdrawDeposit(inputParameter);
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
@@ -47,7 +47,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/expenseCalendar")
-    @ControlLog(description="消费记录")
+    @ControlLog("消费记录")
     public String expenseCalendar(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
        JSONObject jsonObject= administratorService.expenseCalendar(inputParameter);
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
@@ -61,7 +61,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/settlementRecords")
-    @ControlLog(description="结算记录")
+    @ControlLog("结算记录")
     public String settlementRecords(@Validated({PageGroup.class}) InputParameter inputParameter)throws Exception {
         JSONObject jsonObject=administratorService.settlementRecords(inputParameter);
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();
@@ -75,7 +75,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @PostMapping("/closeAnAccount")
-    @ControlLog(description="结算")
+    @ControlLog("结算")
     public String closeAnAccount(@Validated({CloseAnAccountGroup.class}) @RequestBody InputParameter inputParameter) throws Exception{
         administratorService.closeAnAccount(inputParameter);
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage().toString();
@@ -89,7 +89,7 @@ public class AdministratorResourceImpl implements AdministratorResource {
      */
     @Override
     @GetMapping("/balanceDetails")
-    @ControlLog(description="余额明细")
+    @ControlLog("余额明细")
     public String balanceDetails(@Validated({PageGroup.class}) InputParameter inputParameter) throws Exception{
         JSONObject jsonObject=administratorService.balanceDetails(inputParameter);
         return  new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage().toString();

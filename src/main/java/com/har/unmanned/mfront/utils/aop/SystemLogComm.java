@@ -11,6 +11,6 @@ public class SystemLogComm {
 	/** 切点参数key */
 	public static interface ParameterKey {
 		/** 描述*/
-		public static final String DESCRIPTION = "description";
+		public static final String DESCRIPTION = "value";
 	}
 }

@@ -27,7 +27,7 @@ public class ValidateResourceImpl implements ValidateResource {
 
     @Override
     @PostMapping("/sendValidateCode")
-    @ControlLog(description="发送验证码")
+    @ControlLog("发送验证码")
     public JSONObject sendValidateCode(@Validated({SendValidateGroup.class}) @RequestBody InputParameter inputParameter) throws Exception {
         // 返回消息
         RespMessage respMessage = new RespMessage();
@@ -46,7 +46,7 @@ public class ValidateResourceImpl implements ValidateResource {
      */
     @Override
     @GetMapping("/permissionsValidation")
-    @ControlLog(description="初始化权限验证")
+    @ControlLog("初始化权限验证")
     public JSONObject permissionsValidation() throws Exception {
         securityCodeService.permissionsValidation();
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage();
@@ -60,7 +60,7 @@ public class ValidateResourceImpl implements ValidateResource {
      */
     @Override
     @PostMapping("/bindingPhone")
-    @ControlLog(description="绑定手机号")
+    @ControlLog("绑定手机号")
     public JSONObject bindingPhone(@Validated({BindingPhoneGroup.class}) @RequestBody InputParameter inputParameter) throws Exception {
         JSONObject jsonObject=securityCodeService.bindingPhone(inputParameter);
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage();

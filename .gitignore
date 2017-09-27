@@ -26,3 +26,4 @@ nbdist/
 ### doc ###
 apidoc
 /apidoc
+/deploy-108.sh

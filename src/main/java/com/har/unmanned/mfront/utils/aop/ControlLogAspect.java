@@ -96,7 +96,7 @@ public class ControlLogAspect {
             if (method.getName().equals(methodName)) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(ControlLog.class).description();
+                    description = method.getAnnotation(ControlLog.class).value();
                     break;
                 }
             }

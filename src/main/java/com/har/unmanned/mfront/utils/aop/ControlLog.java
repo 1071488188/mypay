@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)    
 @Documented    
 public  @interface ControlLog {
-    String description()  default "";
+    String value()  default "";
 }    
