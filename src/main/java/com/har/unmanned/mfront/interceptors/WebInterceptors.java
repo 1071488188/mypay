@@ -37,7 +37,7 @@ public class WebInterceptors extends WebMvcConfigurerAdapter {
         // 需要排除拦截的地址初始化
         interceptorInit();
         // 注册JWT检验拦截
-//        registry.addInterceptor(jwtCheckInterceptor).addPathPatterns("/**").excludePathPatterns(interceptorExcluded);
+        registry.addInterceptor(jwtCheckInterceptor).addPathPatterns("/**").excludePathPatterns(interceptorExcluded);
         log.info("=====注册拦截器结束-OVER=====");
     }
 

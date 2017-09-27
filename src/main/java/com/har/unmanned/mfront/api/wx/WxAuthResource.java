@@ -31,7 +31,7 @@ import java.net.URLDecoder;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/wxAuth", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(value = "/api/v1/wxAuth", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class WxAuthResource extends ApiBaseController {
     @Autowired
     private RedisServiceImpl service;
