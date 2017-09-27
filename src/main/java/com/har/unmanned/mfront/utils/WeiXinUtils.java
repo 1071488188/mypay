@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -212,26 +211,31 @@ public class WeiXinUtils {
 		return treeMap;
 	}
 
-	public String getTicket(String accessToken) throws IOException, ApiBizException {
+	public String getTicket(String accessToken) throws ApiBizException {
+		log.info("获取ticket传入参数: {}", accessToken);
 		String ticket = redisService.get(Constants.WX_TICKET);
 		if (CheckUtil.isNull(ticket)) {
-			// 获取ticket_url
-			String ticket_url = MessageFormat.format(ticketUrl, new String[]{accessToken});
-			String s = WxHttpUtil.sendGet(ticket_url, "utf-8");
-			// 如果请求成功
-			JSONObject jsonObject = JSONObject.parseObject(s);
-			try {
-				if (null != jsonObject) {
-					ticket = jsonObject.getString("ticket");
-					redisService.put(Constants.WX_TICKET, ticket, 5400);
-				}
-			} catch (Exception e) {
-				// 获取失败
-				log.error("获取ticket失败 errcode:{" + jsonObject.getInteger("errcode") + "} errmsg:{" + jsonObject.getString("errmsg") + "}");
-				throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, jsonObject);
-			}
+			String s = synchronizationGetTicket(accessToken);
+			return s;
 		}
 		return ticket;
+	}
+
+	private synchronized String synchronizationGetTicket(String accessToken) throws ApiBizException {
+		String ticket_url = MessageFormat.format(ticketUrl, new String[]{accessToken});
+		log.info("请求ticket的url: {}", ticket_url);
+		String s = WxHttpUtil.sendGet(ticket_url, "utf-8");
+		log.info("请求ticket返回数据: {}", s);
+		// 如果请求成功
+		JSONObject jsonObject = JSONObject.parseObject(s);
+		if (null != jsonObject && "0".equals(jsonObject.getString("errcode"))) {
+			String ticket = jsonObject.getString("ticket");
+			log.info("请求到的ticket实际数据: {}", ticket);
+			redisService.put(Constants.WX_TICKET, ticket, 5400);
+			return ticket;
+		} else {
+			throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, accessToken);
+		}
 	}
 
 	final static String KEYSTORE_FILE = "E:/apiclient_cert.p12";//支付证书地址

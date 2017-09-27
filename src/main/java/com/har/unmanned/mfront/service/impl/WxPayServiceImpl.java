@@ -78,7 +78,7 @@ public class WxPayServiceImpl implements WxPayService {
         respMap.put("package", "prepay_id=" + map.get("prepay_id"));
         respMap.put("signType", sign_type);
         String paySign = weiXinUtils.createPaySign(respMap, paternerKey);
-        respMap.put("timestamp", timeStamp);
+        respMap.put("timestamp", timeStamp); //重新赋值, 将s改为小写, 用于前端唤起微信支付, 这是微信的一个bug
         respMap.put("paySign", paySign);
         log.info("-------------生成微信签名结束------------");
         return respMap;

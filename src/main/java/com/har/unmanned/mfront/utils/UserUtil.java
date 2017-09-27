@@ -36,8 +36,8 @@ public class UserUtil {
     public ShopWechat userInfo() throws ApiBizException {
         // 初始化返回用户信息
         //ShopWechat wxUser = new ShopWechat();
-        //wxUser.setOpenid("ofSmLt-EwP8qZfdtqKagbNVlMIGM");
-        //wxUser.setName("5rWL6K+V");
+        //wxUser.setOpenid("ofSmLt7PC7oMaculqxBSsuaKW4ww");
+        //wxUser.setName("6ZmI6LaF");
        ShopWechat wxUser = null;
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             // 将cookie中取出的token转换成OAuth2格式

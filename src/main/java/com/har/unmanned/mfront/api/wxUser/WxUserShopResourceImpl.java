@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,8 +133,8 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      * @param params
      * @return
      */
-    @RequestMapping("/callBack")
-    public String callBack(HttpServletRequest request, @RequestBody String params) throws Exception {
+    @PostMapping("/callBack")
+    public void callBack(HttpServletResponse response, @RequestBody String params) throws Exception {
         log.info("[callBack]微信支付回调传入数据:" + params);
         StringBuilder sb = new StringBuilder(); // 返回结果, 用于通知微信
         Map resultMap = new HashMap();
@@ -184,6 +185,9 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
             }
             sb.append("</xml>");
         }
-        return sb.toString();
+        log.info("[callBack]微信支付返回数据: {}", sb.toString());
+        response.getOutputStream().write(sb.toString().getBytes("UTF-8"));
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
     }
 }

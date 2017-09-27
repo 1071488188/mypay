@@ -222,7 +222,6 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     public void callBack(String param) throws Exception {
         log.info("----------------微信回调开始-----------------");
         log.info("微信回调service传入参数: " + param);
-        System.out.println(param);
         TreeMap<String, String> map = (TreeMap<String, String>) XMLUtil.doXMLParse(param);
         String orderNo = map.get("out_trade_no");
         ShopOrderExample example = new ShopOrderExample();
