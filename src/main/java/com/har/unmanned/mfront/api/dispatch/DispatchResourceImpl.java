@@ -51,49 +51,15 @@ public class DispatchResourceImpl implements DispatchResource {
         } catch (ApiBizException e) {
             e.printStackTrace();
             log.error("{},{}", "配送列表错误", JSONObject.toJSON(e.getObject()));
-            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()), CommonExceptionLevel.COMMONEXCEPTION);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "配送列表错误", JSONObject.toJSON(inputParameter));
-            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter));
+            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter), CommonExceptionLevel.WARN);
         }
 
         log.info("{},{}", "配送列表返回数据", respMessage.getRespMessage());
         LogHelper.save(LogType.RECEIVE, "配送列表返回数据", respMessage.getRespMessage());
-        return respMessage.getRespMessage();
-    }
-
-//    @Override
-    @PostMapping("/updateDispatchStatus")
-    public JSONObject updateDispatchStatus(@RequestBody JSONObject reqParam) throws ApiBizException {
-        log.info("{},{}", "更新配送单状态", reqParam);
-        LogHelper.save(LogType.RECEIVE, "更新配送单状态", reqParam);
-        // 返回消息
-        RespMessage respMessage = new RespMessage();
-
-        try {
-            log.info("{},{}", "更新配送单状态请求参数", reqParam);
-            LogHelper.save(LogType.REQUEST, "更新配送单状态请求参数", reqParam);
-
-            if (CheckUtil.isNull(reqParam.getString("dispatchNo"))
-                    || CheckUtil.isNull(reqParam.getString("status"))) {
-                log.info("{},{},{}", "更新配送单状态", "参数不全", reqParam);
-                throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
-            }
-
-//            dispatchService.updateDispatchStatus(reqParam);
-        } catch (ApiBizException e) {
-            e.printStackTrace();
-            log.error("{},{}", "更新配送单状态错误", JSONObject.toJSON(e.getObject()));
-            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("{},{}", "更新配送单状态错误", reqParam);
-            throw new ApiBizException(ErrorCode.E00000023.CODE, ErrorCode.E00000023.MSG, reqParam);
-        }
-
-        log.info("{},{}", "更新配送单状态返回数据", respMessage.getRespMessage());
-        LogHelper.save(LogType.RECEIVE, "更新配送单状态返回数据", respMessage.getRespMessage());
         return respMessage.getRespMessage();
     }
 
@@ -123,11 +89,11 @@ public class DispatchResourceImpl implements DispatchResource {
         } catch (ApiBizException e) {
             e.printStackTrace();
             log.error("{},{}", "补货列表错误", JSONObject.toJSON(e.getObject()));
-            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()), CommonExceptionLevel.COMMONEXCEPTION);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "补货列表错误", JSONObject.toJSON(inputParameter));
-            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter));
+            throw new ApiBizException(ErrorCode.E00000014.CODE, ErrorCode.E00000014.MSG, JSONObject.toJSON(inputParameter), CommonExceptionLevel.WARN);
         }
 
         log.info("{},{}", "补货列表返回数据", respMessage.getRespMessage());
@@ -157,11 +123,11 @@ public class DispatchResourceImpl implements DispatchResource {
         } catch (ApiBizException e) {
             e.printStackTrace();
             log.error("{},{}", "确认补货错误", JSONObject.toJSON(e.getObject()));
-            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()));
+            throw new ApiBizException(e.getErrCode(), e.getMessage(), JSONObject.toJSON(e.getObject()), CommonExceptionLevel.COMMONEXCEPTION);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "确认补货错误", reqParam);
-            throw new ApiBizException(ErrorCode.E00000025.CODE, ErrorCode.E00000025.MSG, reqParam);
+            throw new ApiBizException(ErrorCode.E00000025.CODE, ErrorCode.E00000025.MSG, reqParam, CommonExceptionLevel.WARN);
         }
 
         log.info("{},{}", "确认补货返回数据", respMessage.getRespMessage());
