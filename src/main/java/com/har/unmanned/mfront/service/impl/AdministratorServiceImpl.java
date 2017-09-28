@@ -84,14 +84,11 @@ public class AdministratorServiceImpl implements AdministratorService {
         //1根据用户user_id查询所管理的网点
         Shop shop = getShop();
         log.info("当前用户网点查询结果{}", shop);
-        //2查询累计消费人数
-        int countByShopId = shopOrderMapperExtend.countByShopId(shop.getId());
-        jsonObject.put("theNumberOfConsumer", countByShopId);
-        log.info("查询累计消费人数{}", countByShopId);
-        //3查询列表
+        //2查询列表
         Page page1=PageUtil.startPage(page, pageSize);
         List<ShopOrderExtend> shopOrderExtendList = shopOrderMapperExtend.sumByShopId(shop.getId());
         log.info("总条数{}", page1.getTotal());
+        jsonObject.put("theNumberOfConsumer", page1.getTotal());
         jsonObject.put("particulars", shopOrderExtendList);
         log.info("查询列表{}", shopOrderExtendList);
         return jsonObject;

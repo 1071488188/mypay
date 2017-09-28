@@ -6,6 +6,7 @@ import com.har.unmanned.mfront.config.Constants;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.utils.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
@@ -55,19 +56,23 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
         if (StringUtils.isNotBlank(cookieStr)) {
             log.debug("{}", cookieStr);
             // TODO 验签，只要解析成功，即表示验签通过
-            Object body = Jwts.parser().setSigningKey(clientSecret.getBytes()).parse(cookieStr).getBody();
+            Object body =null;
+            try {
+                body=Jwts.parser().setSigningKey(clientSecret.getBytes()).parse(cookieStr).getBody();
+            }catch (Exception e){
+                if(e instanceof ExpiredJwtException){
+                    log.error("检查Cookie过期，请重新授权");
+                    throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
+                }
+                e.printStackTrace();
+            }
+
             DefaultClaims claims = (DefaultClaims) body;
-            // TODO 过期验证
-            Object exp = claims.get("exp");
-            int expValue = Integer.valueOf(exp.toString()).intValue();
+
             Object openId = claims.get("openId");
             String theNameOfTheModule=UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
             if(!CheckUtil.isNull(theNameOfTheModule)){
                 ThreadLocalCache.getInstance().setCache(APPID,"har-unmanned-mfront", theNameOfTheModule,openId+"", ContextHolderUtils.getIp());//日志系统存日志
-            }
-            if (expValue == 0) {
-                log.error("检查Cookie过期，请重新授权");
-                throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
             }
             if(CheckUtil.isNull(openId)){
                 log.error("未获取到openid");

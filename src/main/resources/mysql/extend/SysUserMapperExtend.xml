@@ -36,7 +36,7 @@
     </select>
     <!--根据用户id查询用户权限并返回权限类型-->
     <select id="getUserAndRole" resultMap="BaseResultMap" parameterType="map">
-        SELECT sr.role_id as roleType,sr.user_id  FROM sys_user sr,sys_user_role so
+        SELECT so.role_id as roleType,sr.user_id  FROM sys_user sr,sys_user_role so
         WHERE sr.user_id = so.user_id AND so.role_id IN (3, 4)
         <if test="status!=null">
             and sr.status=#{status}

@@ -1,6 +1,7 @@
 package com.har.unmanned.mfront.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -61,7 +62,7 @@ public class ShopOrder implements Serializable {
         this.openid = openid == null ? null : openid.trim();
     }
 
-    public String getName() {
+    public String getName() throws UnsupportedEncodingException {
         return name;
     }
 

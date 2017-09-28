@@ -31,7 +31,7 @@ public class JwtUtil {
         try {
             String openid = wxUser.getOpenid();
                 // 用户相关权限校验
-                Date expiresDate = DateTime.now().plusSeconds(1200).toDate();//过期时间
+                Date expiresDate = DateTime.now().plusSeconds(7200).toDate();//过期时间
                 Map<String, Object> claims = Maps.newHashMap();
                 claims.put("openId", openid);
                 claims.put("exp", expiresDate);
