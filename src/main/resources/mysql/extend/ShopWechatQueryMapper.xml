@@ -97,4 +97,11 @@
   <update id="updateGoodsStock" parameterType="java.lang.String">
     UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId} AND quantity > #{num}
   </update>
+
+  <select id="selectMaxLayer" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT MAX(ss.layer)
+    FROM shop s
+    LEFT JOIN shop_stock ss ON ss.shop_id = s.id
+    WHERE s.shop_code = #{shopCode}
+  </select>
 </mapper>
