@@ -12,10 +12,7 @@ import com.har.unmanned.mfront.dao.ShopOrderMapper;
 import com.har.unmanned.mfront.dao.extend.ShopWechatQueryMapper;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.*;
-import com.har.unmanned.mfront.model.extend.CodeGoodsDomain;
-import com.har.unmanned.mfront.model.extend.ShopOrderDomain;
-import com.har.unmanned.mfront.model.extend.ShopOrderItemDomain;
-import com.har.unmanned.mfront.model.extend.ShopStockDomain;
+import com.har.unmanned.mfront.model.extend.*;
 import com.har.unmanned.mfront.service.IWxUserShopService;
 import com.har.unmanned.mfront.service.WxPayService;
 import com.har.unmanned.mfront.utils.*;
@@ -68,7 +65,28 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
             log.error("货架已下架或货架没有任何可购买商品");
             throw new ApiBizException(ErrorCode.E00000001.CODE, "对不起, 没有可购买商品", param);
         }
-        JSONArray dataList = formatGoodsList(shopStockDomains);
+        // 查询此货架的最大商品层级信息
+        Integer maxLayer = shopWechatQueryMapper.selectMaxLayer(param);
+        JSONArray dataList = new JSONArray();
+        for (int i = 1; i <= maxLayer; i++) { // 从第一层开始到最大层
+            JSONObject object = new JSONObject(); // 每一层的所有信息
+            JSONArray goodsList = new JSONArray(); // 每一层的商品列表
+            for (ShopStockDomain domain : shopStockDomains) {
+                if (CheckUtil.isEquals(domain.getLayer().toString(), String.valueOf(i))) {
+                    JSONObject goods = new JSONObject();
+                    goods.put("goodsId", domain.getGoodsId());//商品id
+                    goods.put("name", domain.getName());//商品名称
+                    goods.put("image", picPath + (CheckUtil.isNull(domain.getImage()) ? "" : domain.getImage()));//商品图片
+                    goods.put("price", domain.getPrice());//商品单价
+                    goods.put("quantity", domain.getQuantity());//商品库存
+                    goodsList.add(goods);
+                }
+            }
+            object.put("layer", i);
+            object.put("goodsList", goodsList);
+            dataList.add(object);
+        }
+        //JSONArray dataList = formatGoodsList(shopStockDomains);
         respJson.put("dataList", dataList);
         if (shopStockDomains.isEmpty()) {
             JSONArray array = new JSONArray();
@@ -222,7 +240,6 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     public void callBack(String param) throws Exception {
         log.info("----------------微信回调开始-----------------");
         log.info("微信回调service传入参数: " + param);
-        System.out.println(param);
         TreeMap<String, String> map = (TreeMap<String, String>) XMLUtil.doXMLParse(param);
         String orderNo = map.get("out_trade_no");
         ShopOrderExample example = new ShopOrderExample();

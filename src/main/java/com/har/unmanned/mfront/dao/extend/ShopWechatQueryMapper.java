@@ -44,4 +44,11 @@ public interface ShopWechatQueryMapper {
      * @param num
      */
     Integer updateGoodsStock(@Param("shopId") String shopId, @Param("goodsId")String goodsId, @Param("num")String num);
+
+    /**
+     * 查询最大的层级信息
+     * @param shopCode
+     * @return
+     */
+    Integer selectMaxLayer(String shopCode);
 }
