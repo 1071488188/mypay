@@ -91,26 +91,32 @@ public class LoseServiceImpl implements LoseService {
         Integer maxLayer = dispatchItemQueryMapper.getMaxLayer2ShopCode(shopCode);
 
         // 货架商品列表
-        JSONObject goodsJson = new JSONObject();
+        JSONArray goodsArray = new JSONArray();
+        // 配送单商品
+        JSONObject disObj = new JSONObject();
 
         // 分装货架商品分层
         for (int i = 1; i <= maxLayer; i++) {
-            JSONArray goodsArray = new JSONArray();
+            JSONArray disArray = new JSONArray();
             for (DispatchItemDomain dispatchGoods : shopStockGoodsList) {
                 if (CheckUtil.isEquals(dispatchGoods.getLayer().toString(), String.valueOf(i))) {
                     JSONObject goods = new JSONObject();
-                    goods.put("goodsName", dispatchGoods.getGoodsName());// 商品名称
-                    goods.put("goodsValue", dispatchGoods.getPrice());// 商品单价
-                    goods.put("goodsQuantity", dispatchGoods.getQuantity());// 商品数量
-                    goods.put("goodsPicture", basePicPath.concat(dispatchGoods.getGoodsPicture()));// 商品图片
-                    goods.put("goodsId", dispatchGoods.getGoodsId());// 商品ID
-                    goodsArray.add(goods);
+                    goods.put("goodsName", dispatchGoods.getGoodsName());//商品名称
+                    goods.put("goodsValue", dispatchGoods.getPrice());//商品单价
+                    goods.put("goodsPicture", basePicPath.concat(dispatchGoods.getGoodsPicture()));//商品图片
+                    goods.put("goodsQuantity", dispatchGoods.getQuantity());//商品数量
+                    goods.put("goodsId", dispatchGoods.getGoodsId());//商品ID
+                    disArray.add(goods);
                 }
             }
-            goodsJson.put(String.valueOf(i), goodsArray);
+
+            disObj.put("layer", i);
+            disObj.put("goodsList", disArray);
+            goodsArray.add(disObj);
+            disObj = new JSONObject();
         }
 
-        respParam.put("goods", goodsJson);//商品列表
+        respParam.put("dataList", goodsArray);//商品列表
         return respParam;
     }
 
