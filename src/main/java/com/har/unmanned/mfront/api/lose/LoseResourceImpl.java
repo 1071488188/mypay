@@ -49,7 +49,7 @@ public class LoseResourceImpl implements LoseResource {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "货架库存错误", JSONObject.toJSON(inputParameter));
-            throw new ApiBizException(ErrorCode.E00000025.CODE, ErrorCode.E00000025.MSG, JSONObject.toJSON(inputParameter), CommonExceptionLevel.WARN);
+            throw new ApiBizException(ErrorCode.E00000027.CODE, ErrorCode.E00000027.MSG, JSONObject.toJSON(inputParameter), CommonExceptionLevel.WARN);
         }
 
         log.info("{},{}", "货架库存返回数据", respMessage.getRespMessage());
@@ -80,7 +80,7 @@ public class LoseResourceImpl implements LoseResource {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("{},{}", "货架盘存错误", reqParam);
-            throw new ApiBizException(ErrorCode.E00000025.CODE, ErrorCode.E00000025.MSG, reqParam, CommonExceptionLevel.WARN);
+            throw new ApiBizException(ErrorCode.E00000028.CODE, ErrorCode.E00000028.MSG, reqParam, CommonExceptionLevel.WARN);
         }
 
         log.info("{},{}", "货架盘存返回数据", respMessage.getRespMessage());

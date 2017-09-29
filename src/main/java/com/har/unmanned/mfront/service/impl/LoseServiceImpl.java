@@ -134,10 +134,17 @@ public class LoseServiceImpl implements LoseService {
         Map<Long, Integer> stocks = new HashMap<>();
         for (int i = 0; i < stocksArray.size(); i++) {
             JSONObject stockObj = stocksArray.getJSONObject(i);
-            Long goodsId = new Long(stockObj.getLongValue("goodsId"));
 
+            String goodsIdStr = stockObj.getString("goodsId");
+            String goodsNumStr = stockObj.getString("goodsNum");
+            if (CheckUtil.isNull(goodsIdStr) || CheckUtil.isNull(goodsNumStr)) {
+                log.error("{},{},{}", "商品信息校验不通过", stocksArray, stocksArray);
+                throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, stocksArray);
+            }
+
+            Long goodsId = new Long(goodsIdStr);
             goodsIds.put(goodsId, goodsId);
-            stocks.put(goodsId, stockObj.getInteger("goodsNum"));
+            stocks.put(goodsId, Integer.parseInt(goodsNumStr));
         }
 
         ShopExample example = new ShopExample();
@@ -161,12 +168,12 @@ public class LoseServiceImpl implements LoseService {
             shopStockGoodsMap.put(domain.getGoodsId(), domain);
         }
 
-        // 查询未确认的商品
+        // 确认商品是否存在于货架
         Set<Long> goodsIdSet = goodsIds.keySet();
         for (long goodsId : goodsIdSet) {
             if (CheckUtil.isNull(shopStockGoodsMap.get(goodsId))) {
-                log.info("{},{},{}", "提交的商品与货架商品不匹配", stocksArray, JSONObject.toJSON(shopStockGoodsList));
-                throw new ApiBizException(ErrorCode.E00000024.CODE, "提交的商品与货架商品不匹配", param);
+                log.info("{},{},{}", "商品信息校验不通过", stocksArray, JSONObject.toJSON(shopStockGoodsList));
+                throw new ApiBizException(ErrorCode.E00000024.CODE, "商品信息校验不通过", param);
             }
         }
 

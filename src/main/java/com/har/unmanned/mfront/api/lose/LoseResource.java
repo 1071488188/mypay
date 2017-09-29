@@ -24,7 +24,7 @@ public interface LoseResource {
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
-     * @apiSuccess (200) {Object[]} Data			响应数据
+     * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {Object[]} Data.goods		    层级为key，value为每层商品集合
      * @apiSuccess (200) {String} Data.goods.layer.goodsName      商品名称
      * @apiSuccess (200) {String} Data.goods.layer.goodsValue     商品单价

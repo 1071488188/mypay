@@ -53,7 +53,7 @@ public interface DispatchResource {
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
-     * @apiSuccess (200) {Object[]} Data			响应数据
+     * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {Number} Data.replenishmentNum 补货总数
      * @apiSuccess (200) {Number} Data.species 种类
      * @apiSuccess (200) {Object[]} Data.goods		    层级为key，value为每层商品集合

@@ -190,4 +190,18 @@ public class ErrorCode {
 
 		String MSG = "提交订单失败";
 	}
+
+	public interface E00000027 {
+
+		String CODE = "00000027";
+
+		String MSG = "货架库存查询异常";
+	}
+
+	public interface E00000028 {
+
+		String CODE = "00000028";
+
+		String MSG = "货架盘存异常";
+	}
 }
