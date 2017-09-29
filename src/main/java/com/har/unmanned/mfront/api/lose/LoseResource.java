@@ -5,7 +5,7 @@ import com.har.unmanned.mfront.exception.ApiBizException;
 
 /**
  * 货架遗损（盘存）
- * @apiDefine dispatch 货架遗损
+ * @apiDefine lose 货架遗损
  * @author zhanggr
  * @create 2017-09-28
  **/
@@ -20,7 +20,7 @@ public interface LoseResource {
      *
      * @apiDescription 货架商品列表
      *
-     * @apiParam {String} dispatchNo 	货架编号
+     * @apiParam {String} shopCode 	货架编号
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
