@@ -44,12 +44,4 @@ public interface DispatchService {
      * @throws Exception
      */
     void confirmReplenishment(JSONObject param) throws ApiBizException;
-
-    /**
-     * 验证手机号
-     * @param param
-     * @return
-     * @throws Exception
-     */
-    JSONObject validateCode(JSONObject param) throws ApiBizException;
 }

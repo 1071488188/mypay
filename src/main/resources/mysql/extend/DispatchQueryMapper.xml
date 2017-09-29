@@ -45,7 +45,7 @@
             <if test="openid != null and openid != ''">
                 and sw.openid = #{openid}
             </if>
-            and dh.status = #{status}
+            and dh.status IN (${statusString})
         </where>
         ORDER BY dh.create_time DESC
     </select>
@@ -73,7 +73,7 @@
             <if test="openid != null and openid != ''">
                 and sw.openid = #{openid}
             </if>
-            and dh.status = #{status}
+            and dh.status IN (${statusString})
         </where>
     </select>
 </mapper>

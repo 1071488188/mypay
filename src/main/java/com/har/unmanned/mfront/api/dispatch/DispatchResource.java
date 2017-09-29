@@ -66,7 +66,23 @@ public interface DispatchResource {
     JSONObject replenishmentList(InputParameter inputParameter) throws ApiBizException;
 
     /**
-     * @api {post} /api/v1/dispatch/confirmReplenishment 4.api 确认补货
+     * @api {post} /api/v1/dispatch/confirmPickUp 4.api 确认取货
+     * @apiVersion 1.0.0
+     * @apiName confirmPickUp
+     * @apiGroup dispatch
+     * @apiPermission none
+     *
+     * @apiDescription 确认取货
+     *
+     * @apiParam {String} dispatchNo 	        配送单号
+     *
+     * @apiSuccess (200) {String} RespCode          响应编码，8位
+     * @apiSuccess (200) {String} RespDesc          响应描述
+     */
+    JSONObject confirmPickUp(JSONObject params) throws ApiBizException;
+
+    /**
+     * @api {post} /api/v1/dispatch/confirmReplenishment 5.api 确认补货
      * @apiVersion 1.0.0
      * @apiName confirmReplenishment
      * @apiGroup dispatch

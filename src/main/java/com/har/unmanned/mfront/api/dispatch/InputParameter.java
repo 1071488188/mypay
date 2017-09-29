@@ -30,7 +30,7 @@ public class InputParameter {
     private Integer pageSize;//每页显示条数
 
     @NotNull(message = "配送状态不能为空!", groups = PageGroup.class)
-    private Integer status;//配送状态
+    private String status;//配送状态
 
     @NotNull(message = "配送单号不能为空!", groups = DispatchGroup.class)
     private String dispatchNo;//配送单号

@@ -107,7 +107,7 @@ public class DispatchServiceImpl implements DispatchService {
 
         //############################请求数据#######################################
         // 数据状态
-        int status = param.getInteger("status");
+        String status = param.getString("status");
         // 页数
         int page = param.getInteger("page");
         // 条数
@@ -120,7 +120,7 @@ public class DispatchServiceImpl implements DispatchService {
         // 参数封装
         DispatchDomain dispatchDomain = new DispatchDomain();
         dispatchDomain.setOpenid(wechatUser.getOpenid());
-        dispatchDomain.setStatus(status);
+        dispatchDomain.setStatusString(status);
         // 配送单总数
         int count = dispatchQueryMapper.dispatchCount(dispatchDomain);
         retData.put("totalCount", count);// 总条数
@@ -164,11 +164,22 @@ public class DispatchServiceImpl implements DispatchService {
         LogHelper.save(LogType.RECEIVE, "更新配送单状态传入数据", param);
 
         //############################请求数据#######################################
-        // 数据状态
-        Integer status = param.getInteger("status");
         // 配送单
         String dispatchNo = param.getString("dispatchNo");
+        // 数据状态
+        Integer status = param.getInteger("status");
         //############################请求数据#######################################
+
+        // 当前状态
+        Integer nowState = getDispatchStatus(dispatchNo);
+
+        if (nowState == CodeConstants.DispatchStatus.PENDING_DELIVERY) {
+            if (status != CodeConstants.DispatchStatus.IN_DELIVERY)
+                throw new ApiBizException(ErrorCode.E00000024.CODE, "该配送单暂不能操作", param);
+        } else if (nowState == CodeConstants.DispatchStatus.IN_DELIVERY) {
+            if (status != CodeConstants.DispatchStatus.SHELVES)
+                throw new ApiBizException(ErrorCode.E00000024.CODE, "该配送单暂不能操作", param);
+        }
 
         DispatchExample dispatchExample = new DispatchExample();
         DispatchExample.Criteria criteria = dispatchExample.or();
@@ -321,8 +332,9 @@ public class DispatchServiceImpl implements DispatchService {
             }
         }
 
-        //更新货架库存
+        // 循环派送单，更新货架库存
         for (DispatchItemDomain dispatchGoods : dispatchGoodsList) {
+            // 货架商品
             DispatchItemDomain shopStockGoods = shopStockGoodsMap.get(dispatchGoods.getGoodsId());
             ShopStock shopStock = new ShopStock();
 
@@ -343,8 +355,7 @@ public class DispatchServiceImpl implements DispatchService {
             } else {
                 // 更新库存信息
                 shopStock.setId(shopStockGoods.getId());
-                shopStock.setQuantity(shopStockGoods.getQuantity());
-                shopStock.setId(shopStockGoods.getId());
+                shopStock.setQuantity(dispatchGoods.getQuantity());
                 shopStockExtendMapper.updateShopStock(shopStock);
 
                 // 更新配送单信息
@@ -354,10 +365,5 @@ public class DispatchServiceImpl implements DispatchService {
                 updateDispatchStatus(updateParam);
             }
         }
-    }
-
-    @Override
-    public JSONObject validateCode(JSONObject param) throws ApiBizException {
-        return null;
     }
 }
