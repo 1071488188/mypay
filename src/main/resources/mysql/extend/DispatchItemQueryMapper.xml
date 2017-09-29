@@ -41,7 +41,7 @@
         dh.dispatch_no = #{dispatchNo}
         ORDER BY cg.layer ASC
     </select>
-    <!--货架商品列表-->
+    <!--按配送单查询货架商品列表-->
     <select id="shopStockGoodsList" resultMap="BaseResultMap" parameterType="java.lang.String">
        SELECT
             ss.id,
@@ -58,17 +58,43 @@
         WHERE ss.shop_id = dh.shop_id
         AND dh.dispatch_no = #{dispatchNo}
     </select>
+    <!--按配货架编号货架商品列表-->
+    <select id="shopStockGoodsList2ShopCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+       SELECT
+            ss.id,
+            cg.`name` goodsName,
+            cg.image goodsPicture,
+            ss.layer,
+            ss.goods_id,
+            ss.quantity,
+            cg.price
+        FROM
+            shop_stock ss
+        LEFT JOIN code_goods cg ON cg.id = ss.goods_id
+        LEFT JOIN shop sp ON sp.id = ss.shop_id
+        WHERE
+            sp.shop_code = #{shopCode}
+    </select>
     <!-- 获取最大层数 -->
     <select id="getMaxLayer" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
-            MAX(cg.layer)
+            IF(MAX(cg.layer) IS NULL , 0, MAX(cg.layer))
         FROM
             dispatch dh
         LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
         LEFT JOIN code_goods cg ON cg.id = di.goods_id
         WHERE
             dh.dispatch_no = #{dispatchNo}
-        ORDER BY
-            cg.layer DESC
+    </select>
+    <!-- 获取最大层数 -->
+    <select id="getMaxLayer2ShopCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+            IF(MAX(ss.layer) IS NULL , 0, MAX(ss.layer))
+        FROM
+            shop_stock ss
+        LEFT JOIN code_goods cg ON cg.id = ss.goods_id
+        LEFT JOIN shop sp ON sp.id = ss.shop_id
+        WHERE
+            sp.shop_code = #{shopCode}
     </select>
 </mapper>

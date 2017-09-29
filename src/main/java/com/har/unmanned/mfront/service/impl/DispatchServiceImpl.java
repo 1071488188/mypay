@@ -170,9 +170,6 @@ public class DispatchServiceImpl implements DispatchService {
         String dispatchNo = param.getString("dispatchNo");
         //############################请求数据#######################################
 
-        // 检查授权
-        checkUserAuth();
-
         DispatchExample dispatchExample = new DispatchExample();
         DispatchExample.Criteria criteria = dispatchExample.or();
         criteria.andDispatchNoEqualTo(dispatchNo);//配送单号

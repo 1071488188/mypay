@@ -84,7 +84,7 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
                 ThreadLocalCache.getInstance().setCache(APPID,"har-unmanned-mfront", theNameOfTheModule,null, ContextHolderUtils.getIp());//日志系统存日志
             }
             log.error("检查Cookie为空，请授权");
-            throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
+//            throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
         }
 
         return true;
