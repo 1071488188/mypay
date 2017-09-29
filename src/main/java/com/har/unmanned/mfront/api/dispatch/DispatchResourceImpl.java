@@ -6,6 +6,7 @@ import com.har.bigdata.log.LogHelper;
 import com.har.bigdata.log.LogType;
 import com.har.unmanned.mfront.api.dispatch.validgroup.DispatchGroup;
 import com.har.unmanned.mfront.api.dispatch.validgroup.PageGroup;
+import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.DispatchService;
@@ -98,6 +99,39 @@ public class DispatchResourceImpl implements DispatchResource {
 
         log.info("{},{}", "补货列表返回数据", respMessage.getRespMessage());
         LogHelper.save(LogType.RECEIVE, "补货列表返回数据", respMessage.getRespMessage());
+        return respMessage.getRespMessage();
+    }
+
+    @Override
+    @PostMapping("/confirmPickUp")
+    public JSONObject confirmPickUp(@RequestBody JSONObject reqParam) throws ApiBizException {
+        log.info("{},{}", "确认取货传入参数", reqParam);
+        LogHelper.save(LogType.RECEIVE, "确认取货传入参数", reqParam);
+        // 返回消息
+        RespMessage respMessage = new RespMessage();
+
+        try {
+            if (CheckUtil.isNull(reqParam.getString("dispatchNo"))) {
+                log.info("{},{},{}", "确认取货", "参数不全", reqParam);
+                throw new ApiBizException(ErrorCode.E00000012.CODE, ErrorCode.E00000012.MSG, reqParam, CommonExceptionLevel.COMMONEXCEPTION);
+            }
+
+            reqParam.put("status", CodeConstants.DispatchStatus.IN_DELIVERY);
+            dispatchService.updateDispatchStatus(reqParam);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (e instanceof ApiBizException) {
+                ApiBizException exception = (ApiBizException) e;
+                log.error("{},{}", "确认取货错误", JSONObject.toJSON(exception.getObject()));
+                throw new ApiBizException(exception.getErrCode(), e.getMessage(), JSONObject.toJSON(exception.getObject()), CommonExceptionLevel.COMMONEXCEPTION);
+            } else {
+                log.error("{},{}", "确认取货错误", reqParam);
+                throw new ApiBizException(ErrorCode.E00000025.CODE, ErrorCode.E00000025.MSG, reqParam, CommonExceptionLevel.WARN);
+            }
+        }
+
+        log.info("{},{}", "确认补货返回数据", respMessage.getRespMessage());
+        LogHelper.save(LogType.RECEIVE, "确认补货返回数据", respMessage.getRespMessage());
         return respMessage.getRespMessage();
     }
 

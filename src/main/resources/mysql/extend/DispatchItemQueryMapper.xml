@@ -32,7 +32,7 @@
             cg.image goodsPicture,
             cg.layer,
             di.goods_id,
-            di.quantity,
+            di.quantity_shop quantity,
             di.price
         FROM dispatch dh
         LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
