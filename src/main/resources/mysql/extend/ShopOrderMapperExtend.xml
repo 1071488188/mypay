@@ -24,14 +24,14 @@
     ID, shop_id, openid, `name`, order_no, order_time, amount, commission, pay_no, pay_time,
     `location`, longitude, latitude, `status`
   </sql>
-  <!--根据网点id查询网点总消费人数-->
-  <select id="countByShopId" resultType="java.lang.Integer" parameterType="map">
-    SELECT COUNT(DISTINCT(openid)) FROM shop_order WHERE shop_id=#{shopId}
-  </select>
+  <!--&lt;!&ndash;根据网点id查询网点总消费人数&ndash;&gt;-->
+  <!--<select id="countByShopId" resultType="java.lang.Integer" parameterType="map">-->
+    <!--SELECT COUNT(DISTINCT(openid)) FROM shop_order WHERE shop_id=#{shopId}-->
+  <!--</select>-->
   <!--查询所有消费用户-->
   <select id="sumByShopId" resultMap="BaseResultMap" parameterType="map">
     SELECT sw.name,sw.headimg_url, FORMAT(SUM(so.amount)/100,2)  as amountZh  from shop_order so LEFT JOIN shop_wechat sw
-    ON so.openid=sw.openid where so.shop_id=#{shopId}  group BY so.openid ORDER by amountZh desc
+    ON so.openid=sw.openid where so.shop_id=#{shopId}  and so.`status`=1 group BY so.openid ORDER by amountZh desc
 
   </select>
 

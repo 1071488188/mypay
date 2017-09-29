@@ -19,7 +19,7 @@ public interface ValidateResource {
      *
      * @apiDescription 发送短信验证码git
      *
-     * @apiParam {String} phone  	手机号
+     * @apiParam {String} cellPhoneNumber  	手机号
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述

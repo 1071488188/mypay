@@ -133,10 +133,8 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {String} Data.appId        公众号的唯一标识
-     * @apiSuccess (200) {String} Data.ticket       标签
      * @apiSuccess (200) {String} Data.nonceStr     随机串
      * @apiSuccess (200) {String} Data.timestamp    时间戳
-     * @apiSuccess (200) {String} Data.accessToken  Token
      * @apiSuccess (200) {String} Data.signature    签名
      * */
     JSONObject getWxSign(HttpServletRequest request) throws Exception;

@@ -28,4 +28,5 @@ public class InputParameter {
     @Pattern(regexp = "^[3-4]{1}$", message = "传入参数不完整", groups = {BindingPhoneGroup.class, PermissionsGroup.class})
     private String roleType;//角色类型3、网点管理员4、配送员
 
+
 }

@@ -27,7 +27,7 @@ public class ValidateResourceImpl implements ValidateResource {
     private ValidateService securityCodeService;
 
     @Override
-    @PostMapping("/sendValidateCode")
+    @PostMapping("/sendValidate")
     @ControlLog("发送验证码")
     public JSONObject sendValidateCode(@Validated({SendValidateGroup.class}) @RequestBody InputParameter inputParameter) throws Exception {
         // 返回消息
@@ -49,8 +49,8 @@ public class ValidateResourceImpl implements ValidateResource {
     @GetMapping("/permissionsValidation")
     @ControlLog("初始化权限验证")
     public JSONObject permissionsValidation(@Validated({PermissionsGroup.class})InputParameter inputParameter) throws Exception {
-        securityCodeService.permissionsValidation(inputParameter);
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage();
+        JSONObject jsonObject=securityCodeService.permissionsValidation(inputParameter);
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,jsonObject).getRespMessage();
     }
 
     /**

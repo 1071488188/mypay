@@ -37,10 +37,7 @@ import java.util.Set;
 public class CommonExceptionAdvice {
 
 
-    /**
-     * 400 - Bad Request
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public JSONObject handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("缺少请求参数{}", e);
@@ -50,10 +47,7 @@ public class CommonExceptionAdvice {
         return respMessage.getRespMessage();
     }
 
-    /**
-     * 400 - Bad Request
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public JSONObject handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         RespMessage respMessage = new RespMessage();
@@ -63,10 +57,7 @@ public class CommonExceptionAdvice {
         return respMessage.getRespMessage();
     }
 
-    /**
-     * 400 - Bad Request
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public JSONObject handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("参数验证失败{}", e);
@@ -82,10 +73,7 @@ public class CommonExceptionAdvice {
         return respMessage.getRespMessage();
     }
 
-    /**
-     * 400 - Bad Request
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(BindException.class)
     public JSONObject handleBindException(BindException e) {
 
@@ -101,10 +89,7 @@ public class CommonExceptionAdvice {
         return respMessage.getRespMessage();
     }
 
-    /**
-     * 400 - Bad Request
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(ConstraintViolationException.class)
     public JSONObject handleServiceException(ConstraintViolationException e) {
         RespMessage respMessage = new RespMessage();
@@ -117,10 +102,7 @@ public class CommonExceptionAdvice {
         return respMessage.getRespMessage();
     }
 
-    /**
-     * 400 - Bad Request
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(ValidationException.class)
     public JSONObject handleValidationException(ValidationException e) {
         RespMessage respMessage = new RespMessage();

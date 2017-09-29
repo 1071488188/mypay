@@ -86,10 +86,8 @@ public class WxAuthUtil {
 
         // 封装相应参数
         respJson.put("appId", appid); // 必填，公众号的唯一标识
-        respJson.put("ticket", ticket); // 标签
         respJson.put("nonceStr", nonceStr); // 必填，生成签名的随机串
         respJson.put("timestamp", timeStamp);// 必填，生成签名的时间戳
-        respJson.put("accessToken", accessToken);// token
         respJson.put("signature", signature);// 必填，签名，见附录1
 
         log.info("页面加载时ajax提交返回的参数：appId: {}, ticket: {}, nonceStr: {}, timestamp: {}, accessToken: {}, signature: {}", wxAppId, ticket, nonceStr, timeStamp, accessToken, signature);
