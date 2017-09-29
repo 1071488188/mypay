@@ -235,13 +235,15 @@ public class DispatchServiceImpl implements DispatchService {
         }
 
         // 货架商品列表
-        JSONObject goodsJson = new JSONObject();
+        JSONArray goodsArray = new JSONArray();
+        // 配送单商品
+        JSONObject disObj = new JSONObject();
         // 补货总数
         int replenishmentNum = 0;
 
         // 分装货架商品分层
         for (int i = 1; i <= maxLayer; i++) {
-            JSONArray goodsArray = new JSONArray();
+            JSONArray disArray = new JSONArray();
             for (DispatchItemDomain dispatchGoods : dispatchGoodsList) {
                 if (CheckUtil.isEquals(dispatchGoods.getLayer().toString(), String.valueOf(i))) {
                     JSONObject goods = new JSONObject();
@@ -250,14 +252,18 @@ public class DispatchServiceImpl implements DispatchService {
                     goods.put("goodsPicture", basePicPath.concat(dispatchGoods.getGoodsPicture()));//商品图片
                     goods.put("goodsQuantity", dispatchGoods.getQuantity());//商品数量
                     goods.put("goodsId", dispatchGoods.getGoodsId());//商品ID
-                    goodsArray.add(goods);
                     replenishmentNum += dispatchGoods.getQuantity();
+                    disArray.add(goods);
                 }
             }
-            goodsJson.put(String.valueOf(i), goodsArray);
+
+            disObj.put("layer", i);
+            disObj.put("goodsList", disArray);
+            goodsArray.add(disObj);
+            disObj = new JSONObject();
         }
 
-        respParam.put("goods", goodsJson);//商品列表
+        respParam.put("dataList", goodsArray);//商品列表
         respParam.put("replenishmentNum", replenishmentNum);//补货总数
         respParam.put("species", dispatchGoodsList.size());//种类
         return respParam;
