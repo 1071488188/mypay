@@ -36,12 +36,12 @@ public interface ValidateResource {
      *
      * @apiDescription 当前用户权限验证
      *
-     * @apiParam {String} roleType  	角色类型3、网点管理员4、配送员
+     * @apiParam {String} roleType  	角色类型3、网点管理员4、配送员5、库存盘点
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
-     * @apiSuccess (200) {String} Data.roleType		 角色类型0、未绑定信息3、网点管理员4、配送员
+     * @apiSuccess (200) {String} Data.roleType		 角色类型0、未绑定信息3、网点管理员4、配送员5、库存盘点
      */
     JSONObject permissionsValidation(InputParameter inputParameter) throws Exception;
 
@@ -57,12 +57,12 @@ public interface ValidateResource {
      *
      * @apiParam {String} cellPhoneNumber  	手机号
      * @apiParam {String} verificationCode  	验证码
-     * @apiParam {String} roleType          	角色类型3、网点管理员4、配送员
+     * @apiParam {String} roleType          	角色类型3、网点管理员4、配送员5、库存盘点
      *
      * @apiSuccess (200) {String} RespCode          响应编码，8位
      * @apiSuccess (200) {String} RespDesc          响应描述
      * @apiSuccess (200) {Object} Data			响应数据
-     * @apiSuccess (200) {String} Data.roleType		角色类型3、网点管理员4、配送员
+     * @apiSuccess (200) {String} Data.roleType		角色类型3、网点管理员4、配送员5、库存盘点
      */
     JSONObject bindingPhone(InputParameter inputParameter) throws Exception;
 
