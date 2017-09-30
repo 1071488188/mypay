@@ -39,7 +39,8 @@ public class ValidateServiceImpl implements ValidateService {
     @Autowired
     ShopWechatMapper shopWechatMapper;
     private static int ADMINROLEID = 3;//网点管理员角色id
-    private static int DISTRIBUTIONROLEID=3;//配送员角色id
+    private static int DISTRIBUTIONROLEID=4;//配送员角色id
+    private static int DAMAGED=5;//库存盘点
 
     @Override
     public void sendValidateCode(JSONObject reqParam) throws Exception {
@@ -110,9 +111,11 @@ public class ValidateServiceImpl implements ValidateService {
         }
         //2判断是绑定管理员还是配送员
         if("3".equals(roleType)){
-            returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,DISTRIBUTIONROLEID);
+            returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,ADMINROLEID);
         }else if("4".equals(roleType)) {
             returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,DISTRIBUTIONROLEID);
+        }else if("5".equals(roleType)) {
+            returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,DAMAGED);
         }else{
             throw new ApiBizException(ErrorCode.E00000001.CODE, "参数错误",inputParameter);
         }

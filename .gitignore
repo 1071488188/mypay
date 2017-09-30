@@ -24,4 +24,6 @@ nbdist/
 .nb-gradle/
 
 ### doc ###
+
 /deploy-108.sh
+/apidoc/apidoc/
