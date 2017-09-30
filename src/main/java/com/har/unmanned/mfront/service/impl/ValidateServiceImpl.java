@@ -104,7 +104,7 @@ public class ValidateServiceImpl implements ValidateService {
         //1验证验证码是否正确
         verifJsonObject.put("mobile",cellPhoneNumber);
         verifJsonObject.put("validate_code_input",verificationCode);
-        checkValidateCode(verifJsonObject);
+//        checkValidateCode(verifJsonObject);
         ShopWechat shopWechat = userUtil.userInfo();
         if(!CheckUtil.isNull(shopWechat.getUserId())){
             throw new ApiBizException(ErrorCode.E00000001.CODE,"您已经绑定角色,或绑定信息已被删除",null);
