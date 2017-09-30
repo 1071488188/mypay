@@ -24,6 +24,9 @@ public class CodeConstants {
 
 		/** 配送员 */
 		public static final Integer DISPATCHOR = 4;
+
+		/** 盘存人员（预留） */
+		public static final Integer LOSE = 5;
 	}
 
 	/** 发送短信操作类型 */

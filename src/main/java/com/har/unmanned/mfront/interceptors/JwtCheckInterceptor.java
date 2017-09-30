@@ -46,7 +46,7 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
     }
 
     @ResponseBody
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("Start:" + request.getRequestURI());
         // 返回消息
         RespMessage respMessage = new RespMessage();
@@ -56,11 +56,11 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
         if (StringUtils.isNotBlank(cookieStr)) {
             log.debug("{}", cookieStr);
             // TODO 验签，只要解析成功，即表示验签通过
-            Object body =null;
+            Object body = null;
             try {
-                body=Jwts.parser().setSigningKey(clientSecret.getBytes()).parse(cookieStr).getBody();
-            }catch (Exception e){
-                if(e instanceof ExpiredJwtException){
+                body = Jwts.parser().setSigningKey(clientSecret.getBytes()).parse(cookieStr).getBody();
+            } catch (Exception e) {
+                if (e instanceof ExpiredJwtException) {
                     log.error("检查Cookie过期，请重新授权");
                     throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
                 }
@@ -70,21 +70,21 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
             DefaultClaims claims = (DefaultClaims) body;
 
             Object openId = claims.get("openId");
-            String theNameOfTheModule=UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
-            if(!CheckUtil.isNull(theNameOfTheModule)){
-                ThreadLocalCache.getInstance().setCache(APPID,"har-unmanned-mfront", theNameOfTheModule,openId+"", ContextHolderUtils.getIp());//日志系统存日志
+            String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
+            if (!CheckUtil.isNull(theNameOfTheModule)) {
+                ThreadLocalCache.getInstance().setCache(APPID, "har-unmanned-mfront", theNameOfTheModule, openId + "", ContextHolderUtils.getIp());//日志系统存日志
             }
-            if(CheckUtil.isNull(openId)){
+            if (CheckUtil.isNull(openId)) {
                 log.error("未获取到openid");
                 throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
             }
         } else {
-            String theNameOfTheModule=UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
-            if(!CheckUtil.isNull(theNameOfTheModule)){
-                ThreadLocalCache.getInstance().setCache(APPID,"har-unmanned-mfront", theNameOfTheModule,null, ContextHolderUtils.getIp());//日志系统存日志
+            String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
+            if (!CheckUtil.isNull(theNameOfTheModule)) {
+                ThreadLocalCache.getInstance().setCache(APPID, "har-unmanned-mfront", theNameOfTheModule, null, ContextHolderUtils.getIp());//日志系统存日志
             }
             log.error("检查Cookie为空，请授权");
-//            throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
+            throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
         }
 
         return true;

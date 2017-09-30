@@ -19,8 +19,12 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
+<<<<<<< Updated upstream
     "time": "2017-09-29T08:38:06.731Z",
+=======
+    "time": "2017-09-29T09:05:35.725Z",
+>>>>>>> Stashed changes
     "url": "http://apidocjs.com",
-    "version": "0.17.5"
+    "version": "0.17.6"
   }
 });
