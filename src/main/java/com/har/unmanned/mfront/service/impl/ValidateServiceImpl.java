@@ -26,9 +26,9 @@ import java.util.List;
 @Service
 public class ValidateServiceImpl implements ValidateService {
     private static final Logger log = LoggerFactory.getLogger(ValidateServiceImpl.class);
-    @Value("{har.sms.template}")
+    @Value("${har.frontProxy.sms.template}")
     private String template;
-    @Value("{har.sms.optType}")
+    @Value("${har.frontProxy.sms.optType}")
     private String optType;
     @Autowired
     private SysUserMapperExtend sysUserMapperExtend;
@@ -36,6 +36,8 @@ public class ValidateServiceImpl implements ValidateService {
     private UserUtil userUtil;
     @Autowired
     private AdministratorService administratorService;
+    @Autowired
+    ApiRequestClient apiRequestClient;
     @Autowired
     ShopWechatMapper shopWechatMapper;
     private static int ADMINROLEID = 3;//网点管理员角色id
@@ -48,10 +50,9 @@ public class ValidateServiceImpl implements ValidateService {
         //传入参数
         JSONObject param = new JSONObject();
         param.put("phone_number", reqParam.getString("mobile"));// 手机号
-        param.put("validate_type", 1);// 生成验证码的类型
-        param.put("content", template);// 发送内容
+        param.put("sms_tmp", template);// 发送内容
         param.put("opt_type", optType);// 发送短信操作类型
-        ApiRequestClient.post(param, "/login/validate/HF50001");
+        apiRequestClient.post(param, "/api/captcha/send");
     }
 
     @Override
@@ -60,9 +61,9 @@ public class ValidateServiceImpl implements ValidateService {
         //传入参数
         JSONObject param = new JSONObject();
         param.put("phone_number", reqParam.getString("mobile"));// 手机号
-        param.put("validate_type", 1);//生成验证码的类型
-        param.put("validate_code_input", reqParam.getString("validateCode"));// 验证码
-        ApiRequestClient.post(param, "/login/validate/HF50002");
+        param.put("opt_type", optType);//生成验证码的类型
+        param.put("validate_code_input", reqParam.getString("validate_code_input"));// 验证码
+        apiRequestClient.post(param, "/api/captcha/check");
     }
 
     @Override
