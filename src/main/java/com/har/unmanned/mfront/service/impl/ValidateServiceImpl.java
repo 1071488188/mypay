@@ -34,15 +34,14 @@ public class ValidateServiceImpl implements ValidateService {
     private SysUserMapperExtend sysUserMapperExtend;
     @Autowired
     private UserUtil userUtil;
-    @Autowired
-    private AdministratorService administratorService;
+
     @Autowired
     ApiRequestClient apiRequestClient;
     @Autowired
     ShopWechatMapper shopWechatMapper;
-    private static int ADMINROLEID = 3;//网点管理员角色id
-    private static int DISTRIBUTIONROLEID=4;//配送员角色id
-    private static int DAMAGED=5;//库存盘点
+    @Autowired
+    RedisServiceImpl redisService;
+    private static String BINDTHEPHONENUMBERTOPREVENTREPETITION="bindthephonenumbertopreventrepetition";//绑定手机号防重复提交
 
     @Override
     public void sendValidateCode(JSONObject reqParam) throws Exception {
@@ -68,7 +67,7 @@ public class ValidateServiceImpl implements ValidateService {
 
     @Override
     public JSONObject permissionsValidation(InputParameter inputParameter) throws Exception {
-        Integer roleType=Integer.parseInt(inputParameter.getRoleType());
+//        Integer roleType=Integer.parseInt(inputParameter.getRoleType());
         ShopWechat shopWechat=userUtil.userInfo();
         JSONObject jsonObject=new JSONObject();
         Long userId=shopWechat.getUserId();
@@ -78,17 +77,12 @@ public class ValidateServiceImpl implements ValidateService {
         }else {
             //2查询用户为启用状态且角色为配送员或管理员的
             List<SysUserExtend> sysUserExtendList= sysUserMapperExtend.getUserAndRole(userId,1,null);
-            if(CheckUtil.isNull(sysUserExtendList)){
+            if(CheckUtil.isNull(sysUserExtendList)||sysUserExtendList.size()==0){
                 jsonObject.put("roleType",0);
             }else{
-                int roleTypeFlag=0;
-                for(SysUserExtend sysUserExtend:sysUserExtendList){
-                    if(roleType==sysUserExtend.getRoleType()){
-                        roleTypeFlag=roleType;
-                        break;
-                    }
-                }
-                jsonObject.put("roleType",roleTypeFlag);
+                SysUserExtend sysUserExtend=sysUserExtendList.get(0);
+
+                jsonObject.put("roleType",sysUserExtend.getRoleType());
             }
         }
         return jsonObject;
@@ -100,7 +94,7 @@ public class ValidateServiceImpl implements ValidateService {
 
        String verificationCode= inputParameter.getVerificationCode();
        String cellPhoneNumber= inputParameter.getCellPhoneNumber();
-       String roleType= inputParameter.getRoleType();
+
         JSONObject verifJsonObject=new JSONObject();
         //1验证验证码是否正确
         verifJsonObject.put("mobile",cellPhoneNumber);
@@ -110,23 +104,20 @@ public class ValidateServiceImpl implements ValidateService {
         if(!CheckUtil.isNull(shopWechat.getUserId())){
             throw new ApiBizException(ErrorCode.E00000001.CODE,"您已经绑定角色,或绑定信息已被删除",null);
         }
-        //2判断是绑定管理员还是配送员
-        if("3".equals(roleType)){
-            returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,ADMINROLEID);
-        }else if("4".equals(roleType)) {
-            returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,DISTRIBUTIONROLEID);
-        }else if("5".equals(roleType)) {
-            returnJsonObject= bindingRole(inputParameter, cellPhoneNumber, roleType, shopWechat,DAMAGED);
-        }else{
-            throw new ApiBizException(ErrorCode.E00000001.CODE, "参数错误",inputParameter);
+        Object object=redisService.get(BINDTHEPHONENUMBERTOPREVENTREPETITION);
+        if (!CheckUtil.isNull(object)){
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "请勿重复点击", shopWechat);
         }
+        redisService.put(BINDTHEPHONENUMBERTOPREVENTREPETITION, shopWechat.getOpenid(), 10);
+        returnJsonObject= bindingRole(inputParameter, cellPhoneNumber,shopWechat);
+
         return returnJsonObject;
     }
 
-    private JSONObject bindingRole(InputParameter inputParameter,  String cellPhoneNumber, String roleType, ShopWechat shopWechat,int roleid) throws ApiBizException {
+    private JSONObject bindingRole(InputParameter inputParameter,  String cellPhoneNumber, ShopWechat shopWechat) throws ApiBizException {
         JSONObject returnJsonObject=new JSONObject();
         //1根据手机号查询当前手机号是否已经被绑定
-        int count=sysUserMapperExtend.distributionIsBinding(null ,1,cellPhoneNumber,roleid);
+        int count=sysUserMapperExtend.distributionIsBinding(null ,1,cellPhoneNumber,null);
         log.info("根据手机号查询当前手机号是否已经被绑定,手机号{},查询结果{}", cellPhoneNumber,count);
         if (count >0) {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号已经被绑定!", inputParameter);
@@ -134,25 +125,15 @@ public class ValidateServiceImpl implements ValidateService {
         //2查询出当前手机号所存在的角色信息
         List<SysUserExtend> sysUserExtendList=sysUserMapperExtend.getUserAndRole(null,1,cellPhoneNumber);
         log.info("根据手机号查询系统用户是否存在,手机号{},查询结果{}", cellPhoneNumber,sysUserExtendList);
-        if(CheckUtil.isNull(sysUserExtendList)) {
+        if(CheckUtil.isNull(sysUserExtendList)||sysUserExtendList.size()==0) {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号不存在系统角色!", inputParameter);
         }
-        SysUserExtend roleSysUserExtend=null;
-        for(SysUserExtend sysUserExtended:sysUserExtendList){
-            if(sysUserExtended.getRoleType()==roleid){
-                roleSysUserExtend=new SysUserExtend();
-                roleSysUserExtend=sysUserExtended;
-                break;
-            }
-        }
-        if(CheckUtil.isNull(roleSysUserExtend)){
-            throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号不存在系统角色!", inputParameter);
-        }
+        SysUserExtend roleSysUserExtend=sysUserExtendList.get(0);
         //3将手机号和管理员id写入微信用户表
         shopWechat.setUserId(roleSysUserExtend.getUserId());
         shopWechat.setPhone(cellPhoneNumber);
         shopWechatMapper.updateByPrimaryKeySelective(shopWechat);
-        returnJsonObject.put("roleType",roleType);
+        returnJsonObject.put("roleType",roleSysUserExtend.getRoleType());
         return returnJsonObject;
     }
 }
