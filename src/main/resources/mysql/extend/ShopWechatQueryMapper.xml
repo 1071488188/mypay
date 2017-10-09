@@ -50,7 +50,7 @@
   <select id="selectBuyHistory" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
     so.shop_id shopId, so.openid,	so.`name`,	so.order_no orderNo, so.order_time orderTime,	so.amount,	so.commission, so.pay_no payNo,	so.pay_time payTime,
-    so.location,	so.longitude,	so.latitude, so.`status`, soi.order_id orderId,	soi.goods_id goodsId, DATE_FORMAT(so.pay_time,'%Y.%m.%d %H:%m:%s') payTimeString,
+    so.location,	so.longitude,	so.latitude, so.`status`, soi.order_id orderId,	soi.goods_id goodsId, DATE_FORMAT(so.pay_time,'%Y.%m.%d %H:%i:%s') payTimeString,
     soi.shop_id ishopId, soi.shop_code shopCode,	soi.quantity,	soi.price,	soi.amount iamount,	soi.order_time iorderTime, so.ID, soi.ID IID, cg.`name` iname
     FROM
     shop_order so
