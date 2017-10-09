@@ -12,6 +12,8 @@
         <result column="create_user_id" property="createUserId" jdbcType="BIGINT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="roleType" property="roleType" jdbcType="BIGINT"/>
+
     </resultMap>
     <!-- 查询用户是否拥有某角色-->
     <select id="getuserRole" resultType="java.lang.Integer" parameterType="map">
@@ -47,11 +49,15 @@
         <if test="userId!='' and userId!=null">
             and sr.user_id=#{userId}
         </if>
+        ORDER by role_id asc
     </select>
     <!--查询某角色是否已经被绑定-->
     <select id="distributionIsBinding" resultType="java.lang.Integer" parameterType="map">
       SELECT COUNT(*) from sys_user sr,shop_wechat sw, sys_user_role sur
-      where sr.user_id=sw.user_id and sw.user_id=sur.user_id and sur.role_id=#{roleId}
+      where sr.user_id=sw.user_id and sw.user_id=sur.user_id
+        <if test="roleId!=null">
+            and sur.role_id=#{roleId}
+        </if>
         <if test="status!=null">
             and sr.status=#{status}
         </if>
