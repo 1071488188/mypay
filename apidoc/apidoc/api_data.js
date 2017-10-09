@@ -1133,7 +1133,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "roleType",
-            "description": "<p>角色类型3、网点管理员4、配送员</p>"
+            "description": "<p>角色类型3、网点管理员4、配送员5、库存盘点</p>"
           }
         ]
       }
@@ -1167,7 +1167,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "Data.roleType",
-            "description": "<p>角色类型3、网点管理员4、配送员</p>"
+            "description": "<p>角色类型3、网点管理员4、配送员5、库存盘点</p>"
           }
         ]
       }
@@ -1214,7 +1214,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "roleType",
-            "description": "<p>角色类型3、网点管理员4、配送员</p>"
+            "description": "<p>角色类型3、网点管理员4、配送员5、库存盘点</p>"
           }
         ]
       }
@@ -1248,7 +1248,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "Data.roleType",
-            "description": "<p>角色类型0、未绑定信息3、网点管理员4、配送员</p>"
+            "description": "<p>角色类型0、未绑定信息3、网点管理员4、配送员5、库存盘点</p>"
           }
         ]
       }

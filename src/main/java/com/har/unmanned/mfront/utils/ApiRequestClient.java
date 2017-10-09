@@ -9,23 +9,25 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * @author huangjj
  */
+@Component
 public class ApiRequestClient {
 
     //老前置机路径
     @Value("${har.frontProxy.url}")
-    public static String FRONT_PROXY_URL;
+    String FRONT_PROXY_URL;
 
     //获取配置APPID
     @Value("${har.frontProxy.appId}")
-    public static String APP_ID;
+   String APP_ID;
 
     //获取配置公钥
     @Value("${har.frontProxy.publicKey}")
-    public static String PUBLIC_KEY;
+    String PUBLIC_KEY;
 
 
     /**
@@ -36,7 +38,7 @@ public class ApiRequestClient {
      * @return Data:为JSONObject
      * @throws Exception
      */
-    public static JSONObject post(JSONObject reqData, String postUrl) throws Exception {
+    public  JSONObject post(JSONObject reqData, String postUrl) throws Exception {
         JSONObject retData = new JSONObject();
         ReqMessage reqMessage = new ReqMessage();
         // 设置AppId
