@@ -8,10 +8,10 @@ wx:
     wxAuthCallBack: ${har.server.front.host}/api/v1/wxAuth/wxAuthCallBack
 #    paternerKey: daeb1993ddee0822edcbeeffa35dedcf
 #    mch_id: 1303699301
-    appId: wx458c425cd30d32f3
-    secret: 3f9333742b8e4e2024cfe1f65660f71b
-#    appId: wx6b09d460cd913b96
-#    secret: 809636152e5f8cec63e21d5981e0d2f8
+#    appId: wxd2409564b8406543
+#    secret: 471555906f47236677241016fed7889c
+    appId: wx6b09d460cd913b96
+    secret: 809636152e5f8cec63e21d5981e0d2f8
     interceptor:
       excluded: "/**/wxAuthCallBack" #拦截器排除地址
   token: 

@@ -56,12 +56,14 @@ public interface DispatchResource {
      * @apiSuccess (200) {Object} Data			响应数据
      * @apiSuccess (200) {Number} Data.replenishmentNum 补货总数
      * @apiSuccess (200) {Number} Data.species 种类
-     * @apiSuccess (200) {Object[]} Data.goods		    层级为key，value为每层商品集合
-     * @apiSuccess (200) {String} Data.goods.layer.goodsName      商品名称
-     * @apiSuccess (200) {String} Data.goods.layer.goodsValue     商品单价
-     * @apiSuccess (200) {String} Data.goods.layer.goodsPicture   商品图片路径
-     * @apiSuccess (200) {Number} Data.goods.layer.goodsQuantity  商品数量
-     * @apiSuccess (200) {Number} Data.goods.layer.goodsId        商品ID
+     * @apiSuccess (200) {Object[]} Data.dataList		    商品集合
+     * @apiSuccess (200) {String} Data.dataList.layer		    层级
+     * @apiSuccess (200) {String} Data.goods.goodsList      商品集合
+     * @apiSuccess (200) {String} Data.goods.goodsList.goodsName      商品名称
+     * @apiSuccess (200) {String} Data.goods.goodsList.goodsValue     商品单价
+     * @apiSuccess (200) {String} Data.goods.goodsList.goodsPicture   商品图片路径
+     * @apiSuccess (200) {Number} Data.goods.goodsList.goodsQuantity  商品数量
+     * @apiSuccess (200) {Number} Data.goods.goodsList.goodsId        商品ID
      */
     JSONObject replenishmentList(InputParameter inputParameter) throws ApiBizException;
 
