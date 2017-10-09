@@ -17,6 +17,7 @@ import com.har.unmanned.mfront.service.IWxUserShopService;
 import com.har.unmanned.mfront.service.WxPayService;
 import com.har.unmanned.mfront.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -179,7 +180,10 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
             ShopOrder shopOrder = new ShopOrder();
             shopOrder.setShopId(shop.getId()); //设置门店id
             shopOrder.setOpenid(shopWechat.getOpenid()); //下单人员
-            shopOrder.setName(shopWechat.getName()); //微信号昵称
+            //shopOrder.setName(shopWechat.getName()); //微信号昵称
+            if (!CheckUtil.isNull(shopWechat.getName())) {
+                shopOrder.setName(Base64.encodeBase64String(shopWechat.getName().getBytes("UTF-8")));
+            }
             shopOrder.setOrderNo(StringUtil.getRandomStrByCurrentTime(5, RandomUtils.generateNumberString(4))); //订单号
             shopOrder.setOrderTime(new Date()); //下单时间
             shopOrder.setAmount(totalMoney); // 订单金额, 单位(分)

@@ -133,7 +133,7 @@ public class WxUserShopResourceImpl implements  WxUserShopResource{
      * @param params
      * @return
      */
-    @PostMapping("/callBack")
+    @RequestMapping("/callBack")
     public void callBack(HttpServletResponse response, @RequestBody String params) throws Exception {
         log.info("[callBack]微信支付回调传入数据:" + params);
         StringBuilder sb = new StringBuilder(); // 返回结果, 用于通知微信
