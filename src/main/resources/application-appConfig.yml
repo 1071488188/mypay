@@ -1,14 +1,14 @@
 har:
   server:
     web:
-      domain: http://192.168.3.225
+      domain: http://wxtest.huianrong.cn
       projectName: /har-unmanned-h5
       host: ${har.server.web.domain}${har.server.web.projectName}
       errorPath: ${har.server.web.host}/#/error
       homePath: ${har.server.web.host}/#/home
       indexPath: ${har.server.web.host}/#/index
     front:
-      domain: http://192.168.3.225
+      domain: http://wxtest.huianrong.cn
       projectName: /har-unmanned-mfront
       host: ${har.server.front.domain}${har.server.front.projectName}
   frontProxy:   #老前置机配置
