@@ -67,7 +67,7 @@ public class ValidateServiceImpl implements ValidateService {
 
     @Override
     public JSONObject permissionsValidation(InputParameter inputParameter) throws Exception {
-//        Integer roleType=Integer.parseInt(inputParameter.getRoleType());
+        Integer roleType=Integer.parseInt(inputParameter.getRoleType());
         ShopWechat shopWechat=userUtil.userInfo();
         JSONObject jsonObject=new JSONObject();
         Long userId=shopWechat.getUserId();
@@ -80,9 +80,17 @@ public class ValidateServiceImpl implements ValidateService {
             if(CheckUtil.isNull(sysUserExtendList)||sysUserExtendList.size()==0){
                 jsonObject.put("roleType",0);
             }else{
-                SysUserExtend sysUserExtend=sysUserExtendList.get(0);
-
-                jsonObject.put("roleType",sysUserExtend.getRoleType());
+                int flag=0;
+               for(SysUserExtend sysUserExtend:sysUserExtendList){
+                    if(sysUserExtend.getRoleType()==roleType){
+                        flag=sysUserExtend.getRoleType();
+                        break;
+                    }
+               }
+               if(flag==0){
+                   throw new ApiBizException(ErrorCode.E00000015.CODE,"您所绑定的角色没有权限",null);
+               }
+                jsonObject.put("roleType",flag);
             }
         }
         return jsonObject;
