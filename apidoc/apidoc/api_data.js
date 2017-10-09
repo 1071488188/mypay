@@ -858,56 +858,42 @@ define({ "api": [
             "group": "200",
             "type": "Object[]",
             "optional": false,
-            "field": "Data.dataList",
-            "description": "<p>商品集合</p>"
+            "field": "Data.goods",
+            "description": "<p>层级为key，value为每层商品集合</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.dataList.layer",
-            "description": "<p>层级</p>"
-          },
-          {
-            "group": "200",
-            "type": "String",
-            "optional": false,
-            "field": "Data.goods.goodsList",
-            "description": "<p>商品集合</p>"
-          },
-          {
-            "group": "200",
-            "type": "String",
-            "optional": false,
-            "field": "Data.goods.goodsList.goodsName",
+            "field": "Data.goods.layer.goodsName",
             "description": "<p>商品名称</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.goodsList.goodsValue",
+            "field": "Data.goods.layer.goodsValue",
             "description": "<p>商品单价</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.goodsList.goodsPicture",
+            "field": "Data.goods.layer.goodsPicture",
             "description": "<p>商品图片路径</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.goods.goodsList.goodsQuantity",
+            "field": "Data.goods.layer.goodsQuantity",
             "description": "<p>商品数量</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.goods.goodsList.goodsId",
+            "field": "Data.goods.layer.goodsId",
             "description": "<p>商品ID</p>"
           }
         ]
