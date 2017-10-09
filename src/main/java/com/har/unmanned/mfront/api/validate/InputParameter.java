@@ -25,7 +25,7 @@ public class InputParameter {
     private String verificationCode;// 验证码
 
     @NotNull(message = "传入参数不完整", groups = {BindingPhoneGroup.class, PermissionsGroup.class})
-    @Pattern(regexp = "^[0-10]{1}$", message = "传入参数不完整", groups = {BindingPhoneGroup.class, PermissionsGroup.class})
+    @Pattern(regexp = "^[0-9]{1}$", message = "传入参数不完整", groups = {BindingPhoneGroup.class, PermissionsGroup.class})
     private String roleType;//角色类型3、网点管理员4、配送员
 
 
