@@ -77,7 +77,7 @@ public class ValidateServiceImpl implements ValidateService {
         }else {
             //2查询用户为启用状态且角色为配送员或管理员的
             List<SysUserExtend> sysUserExtendList= sysUserMapperExtend.getUserAndRole(userId,1,null);
-            if(CheckUtil.isNull(sysUserExtendList)){
+            if(CheckUtil.isNull(sysUserExtendList)||sysUserExtendList.size()==0){
                 jsonObject.put("roleType",0);
             }else{
                 SysUserExtend sysUserExtend=sysUserExtendList.get(0);
@@ -125,7 +125,7 @@ public class ValidateServiceImpl implements ValidateService {
         //2查询出当前手机号所存在的角色信息
         List<SysUserExtend> sysUserExtendList=sysUserMapperExtend.getUserAndRole(null,1,cellPhoneNumber);
         log.info("根据手机号查询系统用户是否存在,手机号{},查询结果{}", cellPhoneNumber,sysUserExtendList);
-        if(CheckUtil.isNull(sysUserExtendList)) {
+        if(CheckUtil.isNull(sysUserExtendList)||sysUserExtendList.size()==0) {
             throw new ApiBizException(ErrorCode.E00000001.CODE, "当前手机号不存在系统角色!", inputParameter);
         }
         SysUserExtend roleSysUserExtend=sysUserExtendList.get(0);
