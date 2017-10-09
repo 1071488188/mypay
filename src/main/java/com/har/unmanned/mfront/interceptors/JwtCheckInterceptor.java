@@ -72,7 +72,7 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
             Object openId = claims.get("openId");
             String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
             if (!CheckUtil.isNull(theNameOfTheModule)) {
-                ThreadLocalCache.getInstance().setCache(APPID, "har-unmanned-mfront", theNameOfTheModule, openId + "", ContextHolderUtils.getIp());//日志系统存日志
+                ThreadLocalCache.getInstance().setCache(APPID, Constants.Topic, theNameOfTheModule, openId + "", ContextHolderUtils.getIp());//日志系统存日志
             }
             if (CheckUtil.isNull(openId)) {
                 log.error("未获取到openid");
@@ -81,7 +81,7 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
         } else {
             String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
             if (!CheckUtil.isNull(theNameOfTheModule)) {
-                ThreadLocalCache.getInstance().setCache(APPID, "har-unmanned-mfront", theNameOfTheModule, null, ContextHolderUtils.getIp());//日志系统存日志
+                ThreadLocalCache.getInstance().setCache(APPID, Constants.Topic, theNameOfTheModule, null, ContextHolderUtils.getIp());//日志系统存日志
             }
             log.error("检查Cookie为空，请授权");
             throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
