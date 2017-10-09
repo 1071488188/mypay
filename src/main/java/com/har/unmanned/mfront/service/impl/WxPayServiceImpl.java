@@ -52,8 +52,8 @@ public class WxPayServiceImpl implements WxPayService {
         param.put("nonce_str", nonceStr);
         param.put("body", body);
         param.put("out_trade_no", out_trade_no);
-        param.put("total_fee", "1");
-        //param.put("total_fee", total_fee);
+        //param.put("total_fee", "1");
+        param.put("total_fee", total_fee);
         param.put("spbill_create_ip", ip);
         param.put("notify_url", notify_url);
         param.put("trade_type", trade_type);
