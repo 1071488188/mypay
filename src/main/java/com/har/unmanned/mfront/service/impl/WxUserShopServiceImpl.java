@@ -374,7 +374,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         log.info("-----------------查询用户详情service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
-        respJson.put("name", CheckUtil.isNull(shopWechat.getName()) ? "" : new String(Base64Utils.decode(shopWechat.getName().getBytes("utf-8")))); // 解码用户名
+        respJson.put("name", shopWechat.getName());
         respJson.put("headimgUrl", CheckUtil.isNull(shopWechat.getHeadimgUrl()) ? "" : shopWechat.getHeadimgUrl());
         log.info("-----------------查询用户详情service结束----------------");
         return respJson;
