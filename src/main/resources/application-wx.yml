@@ -26,6 +26,7 @@ wx:
       color: 173177 #字体颜色不带井号
       detailsUrl: ${har.server.web.host}/#/myattention #详情url
   pay:
+    msgKey: B@1dsCC%ejk589^2
     appid: wx6b09d460cd913b96
     paternerKey: daeb1993ddee0822edcbeeffa35dedcf
     mch_id: 1303699301 #商户号

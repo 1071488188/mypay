@@ -3,6 +3,7 @@ package com.har.unmanned.mfront.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.har.bigdata.exception.CommonExceptionLevel;
+import com.har.bigdata.util.AESUtil;
 import com.har.unmanned.mfront.api.wxUser.InputParameter;
 import com.har.unmanned.mfront.config.CodeConstants;
 import com.har.unmanned.mfront.config.ErrorCode;
@@ -52,6 +53,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     private String picPath;
     @Value("${wx.pay.paternerKey}")
     private String paternerKey;
+    @Value("${wx.pay.msgKey}")
+    private String msgKey;
     private static final String UNMANNED = "unmanned:order:";
 
     @Override
@@ -61,7 +64,9 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         respJson.put("shopCode", param);
         ShopWechat shopWechat = userUtil.userInfo();
         log.info("获取到的授权用户信息: " + JSONObject.toJSONString(shopWechat));
-        List<ShopStockDomain> shopStockDomains = shopWechatQueryMapper.selectShopGoodsList(param); //条件: 商品正常, 商品货架库存大于0, 货架上架
+        String shopCode = AESUtil.getInstance(msgKey).decrypt(param);
+        log.info("解密的货架编号信息: " + shopCode);
+        List<ShopStockDomain> shopStockDomains = shopWechatQueryMapper.selectShopGoodsList(shopCode); //条件: 商品正常, 商品货架库存大于0, 货架上架
         if (shopStockDomains.isEmpty()) { // 该货架没有可购买商品
             log.error("货架已下架或货架没有任何可购买商品");
             throw new ApiBizException(ErrorCode.E00000001.CODE, "对不起, 没有可购买商品", param);
