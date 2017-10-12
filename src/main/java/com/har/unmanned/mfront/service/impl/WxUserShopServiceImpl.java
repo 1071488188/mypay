@@ -67,14 +67,17 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         String shopCode = AESUtil.getInstance(msgKey).decrypt(param);
         log.info("解密的货架编号信息: " + shopCode);
         List<ShopStockDomain> shopStockDomains = shopWechatQueryMapper.selectShopGoodsList(shopCode); //条件: 商品正常, 商品货架库存大于0, 货架上架
+        log.info("获取到的货架产品列表: {}", JSONObject.toJSONString(shopStockDomains));
         if (shopStockDomains.isEmpty()) { // 该货架没有可购买商品
             log.error("货架已下架或货架没有任何可购买商品");
             throw new ApiBizException(ErrorCode.E00000001.CODE, "对不起, 没有可购买商品", param);
         }
+
         // 查询此货架的最大商品层级信息
-        Integer maxLayer = shopWechatQueryMapper.selectMaxLayer(param);
+        Integer maxLayer = shopWechatQueryMapper.selectMaxLayer(shopCode);
+        log.info("获取到的最大层级信息: {}", maxLayer);
         JSONArray dataList = new JSONArray();
-        for (int i = 1; i <= maxLayer; i++) { // 从第一层开始到最大层
+        for (int i = 0; i <= maxLayer; i++) { // 从第一层开始到最大层
             JSONObject object = new JSONObject(); // 每一层的所有信息
             JSONArray goodsList = new JSONArray(); // 每一层的商品列表
             for (ShopStockDomain domain : shopStockDomains) {
@@ -88,9 +91,11 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                     goodsList.add(goods);
                 }
             }
-            object.put("layer", i);
-            object.put("goodsList", goodsList);
-            dataList.add(object);
+            if (!goodsList.isEmpty()) {
+                object.put("layer", i);
+                object.put("goodsList", goodsList);
+                dataList.add(object);
+            }
         }
         //JSONArray dataList = formatGoodsList(shopStockDomains);
         respJson.put("dataList", dataList);
@@ -141,13 +146,14 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         /** 2. 获取货架信息 */
         ShopExample shopExample = new ShopExample();
         ShopExample.Criteria criteria = shopExample.createCriteria();
-        criteria.andShopCodeEqualTo(param.getShopCode());
+        String shopCode = AESUtil.getInstance(msgKey).decrypt(param.getShopCode());
+        criteria.andShopCodeEqualTo(shopCode);
         criteria.andStatusEqualTo(CodeConstants.ShopStatus.ON); // 货架上架
         List<Shop> shops = shopMapper.selectByExample(shopExample);
         // 货架不存在
         if (shops.isEmpty()) {
             log.error("查询货架信息异常:" + param);
-            throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, param.getShopCode());
+            throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, shopCode);
         }
         Shop shop = shops.get(0);
         log.info("获取到的货架信息:" + JSONObject.toJSONString(shop));
@@ -332,12 +338,13 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     }
 
     @Override
-    public JSONObject buyRecord(String shopCode) throws Exception {
+    public JSONObject buyRecord(String param) throws Exception {
         log.info("-----------------用户所购买的商品信息service开始----------------");
         JSONObject respJson = new JSONObject();
         ShopWechat shopWechat = userUtil.userInfo();
         //ShopExample example = new ShopExample();
         //ShopExample.Criteria criteria = example.createCriteria();
+        //String shopCode = AESUtil.getInstance(msgKey).decrypt(param);
         //criteria.andShopCodeEqualTo(shopCode);
         //List<Shop> shops = shopMapper.selectByExample(example);
         //if (shops.isEmpty()) {
@@ -433,14 +440,14 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         log.info("-----------------格式化商品开始----------------");
         return dataList;
     }
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) throws Exception {
         //String s = "测试";
         //String s1 = new String(Base64Utils.encode(s.getBytes("utf-8")));
         //System.out.println(s1);
         //System.out.println(new String(Base64Utils.decode(s1.getBytes("utf-8"))));
-        System.out.println("订单信息更新异常: \n" +
-                "{\"amount\":2100,\"commission\":21,\"id\":73,\"latitude\":168.280000,\"location\":\"北京\",\"longitude\":125.120000,\"name\":\"5rWL6K+V\",\"openid\":\"ofSmLt-EwP8qZfdtqKagbNVlMIGM\",\"orderNo\":\"20170922144438398352519183\",\"orderTime\":1506062678000,\"payNo\":\"4009572001201707048819191190\",\"payTime\":1506063420165,\"ratio\":1.00,\"shopId\":28,\"status\":1}\n" +
-                ", 更新库存成功的相关信息: \n" +
-                "[{\"goodsId\":7,\"shopId\":28,\"buyNum\":2}]");
+        //String test = AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("test");
+        //System.out.println(test);
+        System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").decrypt("YoFDVxyLZuf3zjpEPmpdEw"));
+        //System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("0000074"));
     }
 }

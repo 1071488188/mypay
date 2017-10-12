@@ -76,6 +76,7 @@
     AND cg.`status` = 0
     AND ss.quantity > 0
     AND s.`status` = 1
+    AND ss.`status` = 1
     ORDER BY ss.layer ASC
   </select>
   <select id="selectRecentlyBuyList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
@@ -99,7 +100,8 @@
   </update>
 
   <select id="selectMaxLayer" parameterType="java.lang.String" resultType="java.lang.Integer">
-    SELECT MAX(ss.layer)
+    SELECT
+    IF(MAX(ss.layer) IS NULL , 0, MAX(ss.layer))
     FROM shop s
     LEFT JOIN shop_stock ss ON ss.shop_id = s.id
     WHERE s.shop_code = #{shopCode}
