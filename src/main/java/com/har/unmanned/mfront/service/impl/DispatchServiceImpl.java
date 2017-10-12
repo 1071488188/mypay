@@ -57,7 +57,8 @@ public class DispatchServiceImpl implements DispatchService {
     @Autowired
     private ShopStockExtendMapper shopStockExtendMapper;
 
-    @Value("${har.picPath}") String basePicPath;
+    @Value("${har.picPath}")
+    String basePicPath;
 
     /***
      * 检查用户授权
@@ -78,10 +79,11 @@ public class DispatchServiceImpl implements DispatchService {
 
     /**
      * 检查配送单状态
-     * @param dispatchNo    配送单单号
-     * @return  配送单状态
+     *
+     * @param dispatchNo 配送单单号
+     * @return 配送单状态
      */
-    private Integer getDispatchStatus(String dispatchNo){
+    private Integer getDispatchStatus(String dispatchNo) {
         Integer status = -1;
 
         // 检查配送单状态
@@ -201,6 +203,8 @@ public class DispatchServiceImpl implements DispatchService {
         //############################请求数据#######################################
         // 配送单
         String dispatchNo = param.getString("dispatchNo");
+        // 是否存在侧边栏
+        boolean layerByZero = false;
         //############################请求数据#######################################
         // 返回参数
         JSONObject respParam = new JSONObject();
@@ -217,8 +221,8 @@ public class DispatchServiceImpl implements DispatchService {
         log.info("{},{}", "货架商品列表", JSONObject.toJSON(shopStockGoodsList));
         LogHelper.save(LogType.RECEIVE, "货架商品列表", JSONObject.toJSON(shopStockGoodsList));
 
-        // 获取货架最大层数
-        Integer maxLayer = dispatchItemQueryMapper.getMaxLayer(dispatchNo);
+        // 获取货架最大层数（+1）
+        Integer maxLayer = dispatchItemQueryMapper.getMaxLayer(dispatchNo) + 1;
 
         Map<Long, DispatchItemDomain> map = new HashMap<>();
         for (DispatchItemDomain domain : shopStockGoodsList) {
@@ -228,6 +232,11 @@ public class DispatchServiceImpl implements DispatchService {
         // 货架商品存在，以货架商品摆放位置为准
         for (DispatchItemDomain dispatchGoods : dispatchGoodsList) {
             long goodsId = dispatchGoods.getGoodsId();
+            int layer = dispatchGoods.getLayer();
+            // 层数为0并且条件成立
+            if (!layerByZero && layer == 0) {
+                layerByZero = true;
+            }
 
             if (map.get(goodsId) != null) {
                 dispatchGoods.setLayer(map.get(goodsId).getLayer());
@@ -240,9 +249,12 @@ public class DispatchServiceImpl implements DispatchService {
         JSONObject disObj = new JSONObject();
         // 补货总数
         int replenishmentNum = 0;
+        // 循环最小
+        int forMinLayer = 1;
+        if (layerByZero) forMinLayer = 0;
 
         // 分装货架商品分层
-        for (int i = 1; i <= maxLayer; i++) {
+        for (int i = forMinLayer; i < maxLayer; i++) {
             JSONArray disArray = new JSONArray();
             for (DispatchItemDomain dispatchGoods : dispatchGoodsList) {
                 if (CheckUtil.isEquals(dispatchGoods.getLayer().toString(), String.valueOf(i))) {
@@ -366,8 +378,8 @@ public class DispatchServiceImpl implements DispatchService {
 
                 // 更新配送单信息
                 JSONObject updateParam = new JSONObject();
-                updateParam.put("dispatchNo",dispatchNo);
-                updateParam.put("status",CodeConstants.DispatchStatus.SHELVES);
+                updateParam.put("dispatchNo", dispatchNo);
+                updateParam.put("status", CodeConstants.DispatchStatus.SHELVES);
                 updateDispatchStatus(updateParam);
             }
         }

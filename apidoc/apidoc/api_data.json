@@ -664,7 +664,7 @@
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>状态以逗号分隔（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+            "description": "<p>状态以逗号分隔（1: 未接单、2: 派送中、3: 已完成）</p>"
           },
           {
             "group": "Parameter",
@@ -749,7 +749,7 @@
             "type": "String",
             "optional": false,
             "field": "Data.dataList.status",
-            "description": "<p>状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+            "description": "<p>状态（1: 未接单、2: 派送中、3: 已完成）</p>"
           },
           {
             "group": "200",
@@ -860,8 +860,6 @@
             "optional": false,
             "field": "Data.dataList",
             "description": "<p>商品集合</p>"
-<<<<<<< Updated upstream
-=======
           },
           {
             "group": "200",
@@ -876,29 +874,11 @@
             "optional": false,
             "field": "Data.goods.goodsList",
             "description": "<p>商品集合</p>"
->>>>>>> Stashed changes
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-<<<<<<< Updated upstream
-            "field": "Data.dataList.layer",
-            "description": "<p>层级</p>"
-          },
-          {
-            "group": "200",
-            "type": "String",
-            "optional": false,
-            "field": "Data.goods.goodsList",
-            "description": "<p>商品集合</p>"
-          },
-          {
-            "group": "200",
-            "type": "String",
-            "optional": false,
-=======
->>>>>>> Stashed changes
             "field": "Data.goods.goodsList.goodsName",
             "description": "<p>商品名称</p>"
           },

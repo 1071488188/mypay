@@ -76,6 +76,8 @@ public class LoseServiceImpl implements LoseService {
         //############################请求数据#######################################
         // 货架编号
         String shopCode = param.getString("shopCode");
+        // 是否存在侧边栏
+        boolean layerByZero = false;
         //############################请求数据#######################################
         // 返回参数
         JSONObject respParam = new JSONObject();
@@ -87,16 +89,28 @@ public class LoseServiceImpl implements LoseService {
         log.info("{},{}", "货架商品列表", JSONObject.toJSON(shopStockGoodsList));
         LogHelper.save(LogType.RECEIVE, "货架商品列表", JSONObject.toJSON(shopStockGoodsList));
 
-        // 获取货架最大层数
-        Integer maxLayer = dispatchItemQueryMapper.getMaxLayer2ShopCode(shopCode);
+        // 货架商品存在，以货架商品摆放位置为准
+        for (DispatchItemDomain dispatchGoods : shopStockGoodsList) {
+            int layer = dispatchGoods.getLayer();
+            // 层数为0并且条件成立
+            if (!layerByZero && layer == 0) {
+                layerByZero = true;
+            }
+        }
+
+        // 获取货架最大层数（+1）
+        Integer maxLayer = dispatchItemQueryMapper.getMaxLayer2ShopCode(shopCode) + 1;
 
         // 货架商品列表
         JSONArray goodsArray = new JSONArray();
         // 配送单商品
         JSONObject disObj = new JSONObject();
+        // 循环最小
+        int forMinLayer = 1;
+        if (layerByZero) forMinLayer = 0;
 
         // 分装货架商品分层
-        for (int i = 1; i <= maxLayer; i++) {
+        for (int i = forMinLayer; i < maxLayer; i++) {
             JSONArray disArray = new JSONArray();
             for (DispatchItemDomain dispatchGoods : shopStockGoodsList) {
                 if (CheckUtil.isEquals(dispatchGoods.getLayer().toString(), String.valueOf(i))) {

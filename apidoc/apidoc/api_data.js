@@ -664,7 +664,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>状态以逗号分隔（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+            "description": "<p>状态以逗号分隔（1: 未接单、2: 派送中、3: 已完成）</p>"
           },
           {
             "group": "Parameter",
@@ -749,7 +749,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "Data.dataList.status",
-            "description": "<p>状态（0: 未接单、1: 已接单、2: 派送中、3: 已完成）</p>"
+            "description": "<p>状态（1: 未接单、2: 派送中、3: 已完成）</p>"
           },
           {
             "group": "200",
@@ -858,42 +858,56 @@ define({ "api": [
             "group": "200",
             "type": "Object[]",
             "optional": false,
-            "field": "Data.goods",
-            "description": "<p>层级为key，value为每层商品集合</p>"
+            "field": "Data.dataList",
+            "description": "<p>商品集合</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.layer.goodsName",
+            "field": "Data.dataList.layer",
+            "description": "<p>层级</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.goods.goodsList",
+            "description": "<p>商品集合</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.goods.goodsList.goodsName",
             "description": "<p>商品名称</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.layer.goodsValue",
+            "field": "Data.goods.goodsList.goodsValue",
             "description": "<p>商品单价</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.layer.goodsPicture",
+            "field": "Data.goods.goodsList.goodsPicture",
             "description": "<p>商品图片路径</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.goods.layer.goodsQuantity",
+            "field": "Data.goods.goodsList.goodsQuantity",
             "description": "<p>商品数量</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.goods.layer.goodsId",
+            "field": "Data.goods.goodsList.goodsId",
             "description": "<p>商品ID</p>"
           }
         ]
@@ -1036,42 +1050,56 @@ define({ "api": [
             "group": "200",
             "type": "Object[]",
             "optional": false,
-            "field": "Data.goods",
-            "description": "<p>层级为key，value为每层商品集合</p>"
+            "field": "Data.dataList",
+            "description": "<p>商品集合</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.layer.goodsName",
+            "field": "Data.dataList.layer",
+            "description": "<p>层级</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.goods.goodsList",
+            "description": "<p>商品集合</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.goods.goodsList.goodsName",
             "description": "<p>商品名称</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.layer.goodsValue",
+            "field": "Data.goods.goodsList.goodsValue",
             "description": "<p>商品单价</p>"
           },
           {
             "group": "200",
             "type": "String",
             "optional": false,
-            "field": "Data.goods.layer.goodsPicture",
+            "field": "Data.goods.goodsList.goodsPicture",
             "description": "<p>商品图片路径</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.goods.layer.goodsQuantity",
+            "field": "Data.goods.goodsList.goodsQuantity",
             "description": "<p>商品数量</p>"
           },
           {
             "group": "200",
             "type": "Number",
             "optional": false,
-            "field": "Data.goods.layer.goodsId",
+            "field": "Data.goods.goodsList.goodsId",
             "description": "<p>商品ID</p>"
           }
         ]
