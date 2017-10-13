@@ -38,7 +38,7 @@
   </select>
   <!--查询当月订单根据网点进行分组-->
   <select id="selectByShop" resultMap="BaseResultMap" parameterType="map">
-    SELECT tj.* FROM  (SELECT count(*) as order_num,SUM(so.amount) as amount,sum(so.commission) as commission,so.shop_id,so.ratio as ratio from shop_order so
+    SELECT tj.* FROM  (SELECT count(*) as order_num,SUM(so.amount) as amount,sum(so.commission) as commission,so.shop_id,MAX(so.ratio) as ratio from shop_order so
     where DATE_FORMAT(so.order_time,'%Y-%m-%d') &gt;=#{startTime} and DATE_FORMAT(so.order_time,'%Y-%m-%d')&lt;= #{endTime} and so.`status`=1
     group by so.shop_id ORDER by so.order_time DESC) tj LEFT JOIN (
     SELECT sc.shop_id from shop_commission sc
