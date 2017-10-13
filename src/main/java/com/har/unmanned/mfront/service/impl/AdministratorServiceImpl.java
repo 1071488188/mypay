@@ -17,6 +17,7 @@ import com.har.unmanned.mfront.model.extend.ShopOrderExtend;
 import com.har.unmanned.mfront.service.AdministratorService;
 import com.har.unmanned.mfront.service.ValidateService;
 import com.har.unmanned.mfront.utils.CheckUtil;
+import com.har.unmanned.mfront.utils.DateUtil;
 import com.har.unmanned.mfront.utils.PageUtil;
 import com.har.unmanned.mfront.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -190,6 +191,10 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public  void withdrawDeposit(InputParameter inputParameter) throws Exception {
+        String week=DateUtil.getCurrentDateAndWeek();
+        if("3".equals(week)){
+            throw new ApiBizException(ErrorCode.E00000001.CODE, "提现失败,提现时间为每周三", inputParameter);
+        }
         int reflectTheAmountOf=(int)(Double.parseDouble(inputParameter.getReflectTheAmountOf())*100);//提现金额
         log.info("提现传入金额{}", reflectTheAmountOf);
         //1得到当前网点账户
