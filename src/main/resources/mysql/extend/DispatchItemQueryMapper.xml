@@ -19,6 +19,7 @@
         <result column="stockQuantity" property="stockQuantity" jdbcType="INTEGER"/>
         <result column="dispatchQuantity" property="dispatchQuantity" jdbcType="INTEGER"/>
         <result column="shopStockId" property="shopStockId" jdbcType="INTEGER"/>
+        <result column="priceStr" property="priceStr" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--配送单商品列表-->
@@ -33,7 +34,7 @@
             cg.layer,
             di.goods_id,
             di.quantity_shop quantity,
-            di.price
+            FORMAT((di.price / 100), 2) priceStr
         FROM dispatch dh
         LEFT JOIN dispatch_item di ON di.dispatch_id = dh.id
         LEFT JOIN code_goods cg ON cg.id = di.goods_id
@@ -50,7 +51,7 @@
             ss.layer,
             ss.goods_id,
             ss.quantity,
-            cg.price
+            FORMAT((cg.price / 100), 2) priceStr
         FROM
             shop_stock ss
         LEFT JOIN code_goods cg ON cg.id = ss.goods_id
@@ -67,7 +68,7 @@
             ss.layer,
             ss.goods_id,
             ss.quantity,
-            cg.price
+            FORMAT((cg.price / 100), 2) price
         FROM
             shop_stock ss
         LEFT JOIN code_goods cg ON cg.id = ss.goods_id

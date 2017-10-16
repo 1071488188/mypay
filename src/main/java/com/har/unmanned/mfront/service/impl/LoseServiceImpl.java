@@ -116,7 +116,7 @@ public class LoseServiceImpl implements LoseService {
                 if (CheckUtil.isEquals(dispatchGoods.getLayer().toString(), String.valueOf(i))) {
                     JSONObject goods = new JSONObject();
                     goods.put("goodsName", dispatchGoods.getGoodsName());//商品名称
-                    goods.put("goodsValue", dispatchGoods.getPrice());//商品单价
+                    goods.put("goodsValue", dispatchGoods.getPriceStr());//商品单价
                     goods.put("goodsPicture", basePicPath.concat(dispatchGoods.getGoodsPicture()));//商品图片
                     goods.put("goodsQuantity", dispatchGoods.getQuantity());//商品数量
                     goods.put("goodsId", dispatchGoods.getGoodsId());//商品ID

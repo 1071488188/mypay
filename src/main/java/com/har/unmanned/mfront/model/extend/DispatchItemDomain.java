@@ -11,7 +11,7 @@ import lombok.Data;
 public class DispatchItemDomain extends DispatchItem {
     // 商品名称
     private long shopId;
-    //商品名称
+    // 商品名称
     private String goodsName;
     // 商品规格
     private String spec;
@@ -29,5 +29,6 @@ public class DispatchItemDomain extends DispatchItem {
     private Integer shopMinQuantity;
     // 货架商品最低库存
     private Integer shopBaseQuantity;
-
+    // 商品金额
+    private String priceStr;
 }
