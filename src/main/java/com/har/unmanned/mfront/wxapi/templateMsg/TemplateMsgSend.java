@@ -35,7 +35,7 @@ public class TemplateMsgSend {
 			Object body = result.getBody();
 			log.info("调用发送消息返回数据{}",body);
 			Map<String, Object> resultmap = (Map<String, Object>) body;
-			if("0".equals(resultmap.get("errcode"))){
+			if("0".equals(resultmap.get("errcode")+"")){
 				tempMsgRetrun.setIssuccess(true);
 				tempMsgRetrun.setData(JSONObject.toJSONString(resultmap));
 			}else{

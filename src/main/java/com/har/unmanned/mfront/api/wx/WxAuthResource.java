@@ -149,7 +149,7 @@ public class WxAuthResource extends ApiBaseController {
     }
 
     /**
-     * @api {get} /api/v1/wxAuth/distributionNotice 1.api 配送通知
+     * @api {post} /api/v1/wxAuth/distributionNotice 1.api 配送通知
      * @apiVersion 1.0.0
      * @apiName distributionNotice
      * @apiGroup wx
@@ -162,6 +162,7 @@ public class WxAuthResource extends ApiBaseController {
      * @apiParam {String} deliveryTime  配送时间
      * @apiParam {String} distributionNetwork  配送网点
      * @apiParam {String} totalDistribution  配送总计
+     * @apiParam {String} openId  微信openId
      * @apiParam {String} remark  备注
      *
      *
@@ -200,13 +201,13 @@ public class WxAuthResource extends ApiBaseController {
             wxTokenService.postToken();
             TempMsgRetrun tempMsgRetrun1 = new TemplateMsgSend().sendMsg(templateMsgPojo,
                     service.get("access_token"));
-            if(!tempMsgRetrun.isIssuccess()){
+            if(!tempMsgRetrun1.isIssuccess()){
                 throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,订单号为:"+wxImputParam.getDistributionNumber(),tempMsgRetrun.getErrmsg());
             }
         }else if(!tempMsgRetrun.isIssuccess()){
             throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,订单号为:"+wxImputParam.getDistributionNumber(),tempMsgRetrun.getErrmsg());
         }
-        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,wxImputParam).getRespMessage();
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage();
     }
 
 }
