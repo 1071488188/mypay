@@ -13,7 +13,7 @@ wx:
     appId: wx6b09d460cd913b96
     secret: 809636152e5f8cec63e21d5981e0d2f8
     interceptor:
-      excluded: "/**/wxAuthCallBack,/api/v1/wxUserShop/callBack" #拦截器排除地址
+      excluded: "/**/wxAuthCallBack,/**/distributionNotice,/api/v1/wxUserShop/callBack" #拦截器排除地址
   token: 
     tokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.auth.appId}&secret=${wx.auth.secret}
   template:
