@@ -17,14 +17,10 @@ wx:
   token: 
     tokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.auth.appId}&secret=${wx.auth.secret}
   template:
-    subscribe: #订阅通知模板
+    subscribe: #配送单通知模板
       templateId: 2C6VAAepzTJ88ZCsnsQPPfV1Kml36-6bOOHumhyyLHo
       color: 173177 #字体颜色不带井号
-      detailsUrl: 1 #${har.server.web.host}/#/subscription #详情url
-    push: #推送通知模板
-      templateId: bxB6fgCaj9ytvmhmrzLm1Rw8xYREh9tMPMkNhlpFOmg
-      color: 173177 #字体颜色不带井号
-      detailsUrl: ${har.server.web.host}/#/myattention #详情url
+      detailsUrl: ${har.server.web.host}/#/dispatch #详情url
   pay:
     msgKey: B@1dsCC%ejk589^2
     appid: wx6b09d460cd913b96
