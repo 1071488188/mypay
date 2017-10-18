@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -171,7 +172,15 @@ public class WxAuthResource extends ApiBaseController {
      * @apiSuccess (200) {Object} Data			响应数据
      */
     @PostMapping("distributionNotice")
-    public JSONObject distributionNotice(@Validated @RequestBody WxImputParam wxImputParam) throws ApiBizException {
+    public JSONObject distributionNotice( @RequestBody String param) throws ApiBizException {
+        // 获取请求报文
+        ReqMessage reqMessage = getParam(param);
+        WxImputParam wxImputParam=JSONObject.toJavaObject(reqMessage.getDataJson(),WxImputParam.class);
+        List<String> validate=ValidateUtil.validate(wxImputParam);
+        log.info("验证入参{}",validate);
+        if(!CheckUtil.isNull(validate)&&validate.size()>0){
+            throw new ApiBizException(ErrorCode.E00000001.CODE,validate.get(0),wxImputParam);
+        }
         String token = service.get("access_token");
         TemplateMsgPojo templateMsgPojo = new TemplateMsgPojo();
         templateMsgPojo.setUrl(detailsUrl);

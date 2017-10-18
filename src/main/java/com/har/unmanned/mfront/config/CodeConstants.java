@@ -127,4 +127,18 @@ public class CodeConstants {
 		/** 3、已上架（配送人员完成配送） */
 		public static int SHELVES = 3;
 	}
+	/** 数据删除状态 */
+	public static interface DataStatus {
+
+		public static final String CAGETORY = "2";
+
+		/** 数据有效 */
+		public static final int ENABLED = 0;
+
+		/** 数据无效 */
+		public static final int INVALID = 1;
+
+		/** 被删除 */
+		public static final int DELETED = 9;
+	}
 }
