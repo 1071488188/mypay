@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
@@ -28,6 +29,8 @@ public class ApiBaseController {
 
 	@Autowired
 	private AppService appService;
+	@Value("${har.msgkey}")
+	private String HAR_APP_MSG_KEY;
 
 
 
@@ -67,7 +70,7 @@ public class ApiBaseController {
 			}
 
 			RSAUtil rsaUtil = new RSAUtil();
-			rsaUtil.loadPrivateKey(AESUtil.getInstance(PropertiesUtil.getAppConfig("HAR_APP_MSG_KEY")).decrypt(app.getFrontPrikey()));
+			rsaUtil.loadPrivateKey(AESUtil.getInstance(HAR_APP_MSG_KEY).decrypt(app.getFrontPrikey()));
 			msgKey = rsaUtil.decrypt(msgKey);
 
 			// 检查数据是否合法

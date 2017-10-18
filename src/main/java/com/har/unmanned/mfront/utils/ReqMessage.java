@@ -6,7 +6,7 @@ import com.har.unmanned.mfront.model.App;
 /**
  * 请求报文
  *
- * @author tanzeng
+ *
  */
 public class ReqMessage {
 
