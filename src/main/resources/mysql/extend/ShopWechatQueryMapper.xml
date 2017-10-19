@@ -42,7 +42,7 @@
     LEFT JOIN code_goods cg ON ss.goods_id = cg.id
     WHERE ss.shop_id = #{shopId}
     AND ss.`status` = 1
-    AND cg.`status` = 0
+    AND cg.`status` != 2
     AND cg.id IN
     <foreach item="id" collection="ids" open="(" separator="," close=")">
       #{id}
