@@ -10,24 +10,32 @@ import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.ShopWechat;
 import com.har.unmanned.mfront.service.impl.RedisServiceImpl;
 import com.har.unmanned.mfront.utils.*;
+import com.har.unmanned.mfront.wxapi.fixed.WxTokenService;
+import com.har.unmanned.mfront.wxapi.templateMsg.MsgDataPojo;
+import com.har.unmanned.mfront.wxapi.templateMsg.TempMsgRetrun;
+import com.har.unmanned.mfront.wxapi.templateMsg.TemplateMsgPojo;
+import com.har.unmanned.mfront.wxapi.templateMsg.TemplateMsgSend;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
- * @author zhanggr
- * @apiDefine wxAuth 用户授权相关
+ * 微信相关接口
+ * @apiDefine wx 微信相关接口
+ * Created by jiang on 2017/9/19.
  */
 @Slf4j
 @RestController
@@ -43,8 +51,16 @@ public class WxAuthResource extends ApiBaseController {
     WxAuthUtil wxAuthUtil;
     @Autowired
     JwtUtil jwtUtil;
+    @Autowired
+    WxTokenService wxTokenService;
     @Value("${wx.auth.maxAge}")
     Integer maxAge;
+    @Value("${wx.template.subscribe.templateId}")
+    private String templateId;
+    @Value("${wx.template.subscribe.color}")
+    private String color;
+    @Value("${wx.template.subscribe.detailsUrl}")
+    private String detailsUrl;
     //保存用户防止重复提交key
     public static String SAVETHEUSERAGAINSTREPEATEDCOMMIT="saveTheUserAgainstRepeatedCommit";
 
@@ -131,6 +147,76 @@ public class WxAuthResource extends ApiBaseController {
 
         response.sendRedirect(redirectUrl);
         return "";
+    }
+
+    /**
+     * @api {post} /api/v1/wxAuth/distributionNotice 1.api 配送通知
+     * @apiVersion 1.0.0
+     * @apiName distributionNotice
+     * @apiGroup wx
+     * @apiPermission none
+     *
+     * @apiDescription 配送通知
+     *
+     * @apiParam {String} title  推送title
+     * @apiParam {String} distributionNumber  配送单号
+     * @apiParam {String} deliveryTime  配送时间
+     * @apiParam {String} distributionNetwork  配送网点
+     * @apiParam {String} totalDistribution  配送总计
+     * @apiParam {String} openId  微信openId
+     * @apiParam {String} remark  备注
+     *
+     *
+     * @apiSuccess (200) {String} RespCode          响应编码，8位
+     * @apiSuccess (200) {String} RespDesc          响应描述
+     * @apiSuccess (200) {Object} Data			响应数据
+     */
+    @PostMapping("distributionNotice")
+    public JSONObject distributionNotice( @RequestBody String param) throws ApiBizException {
+        // 获取请求报文
+        ReqMessage reqMessage = getParam(param);
+        WxImputParam wxImputParam=JSONObject.toJavaObject(reqMessage.getDataJson(),WxImputParam.class);
+        List<String> validate=ValidateUtil.validate(wxImputParam);
+        log.info("验证入参{}",validate);
+        if(!CheckUtil.isNull(validate)&&validate.size()>0){
+            throw new ApiBizException(ErrorCode.E00000001.CODE,validate.get(0),wxImputParam);
+        }
+        String token = service.get("access_token");
+        TemplateMsgPojo templateMsgPojo = new TemplateMsgPojo();
+        templateMsgPojo.setUrl(detailsUrl);
+        templateMsgPojo.setTemplate_id(templateId);
+        templateMsgPojo.setTouser(wxImputParam.getOpenId());
+        // templateMsgPojo.setTouser("ofSmLtzfSdB7M-XjUKTu0NDnSJu0");
+        Map<String, MsgDataPojo> data = new TreeMap<String, MsgDataPojo>();
+        MsgDataPojo first = new MsgDataPojo(wxImputParam.getTitle(), color);
+        MsgDataPojo keyword1 = new MsgDataPojo(wxImputParam.getDistributionNumber(), color);
+        MsgDataPojo keyword2 = new MsgDataPojo(wxImputParam.getDeliveryTime(), color);
+        MsgDataPojo keyword3 = new MsgDataPojo(wxImputParam.getDistributionNetwork(), color);
+        MsgDataPojo keyword4 = new MsgDataPojo(wxImputParam.getTotalDistribution(), color);
+        MsgDataPojo remark = new MsgDataPojo(wxImputParam.getRemark(), color);
+        data.put("first", first);
+        data.put("keyword1", keyword1);
+        data.put("keyword2", keyword2);
+        data.put("keyword3", keyword3);
+        data.put("keyword4", keyword4);
+        data.put("remark", remark);
+        templateMsgPojo.setData(data);
+        TempMsgRetrun tempMsgRetrun = new TemplateMsgSend().sendMsg(
+                templateMsgPojo, token);
+        // 如果是因为token被刷新而导致消息发送失败则拉取一次token重新发送
+        if (!tempMsgRetrun.isIssuccess()
+                && tempMsgRetrun.getErrmsg().contains("access_token")
+                && tempMsgRetrun.getErrmsg().contains("invalid")) {
+            wxTokenService.postToken();
+            TempMsgRetrun tempMsgRetrun1 = new TemplateMsgSend().sendMsg(templateMsgPojo,
+                    service.get("access_token"));
+            if(!tempMsgRetrun1.isIssuccess()){
+                throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,订单号为:"+wxImputParam.getDistributionNumber(),tempMsgRetrun.getErrmsg());
+            }
+        }else if(!tempMsgRetrun.isIssuccess()){
+            throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,订单号为:"+wxImputParam.getDistributionNumber(),tempMsgRetrun.getErrmsg());
+        }
+        return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage();
     }
 
 }

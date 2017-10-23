@@ -1,11 +1,12 @@
 package com.har.unmanned.mfront.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.har.unmanned.mfront.model.App;
 
 /**
  * 请求报文
  *
- * @author tanzeng
+ *
  */
 public class ReqMessage {
 
@@ -20,6 +21,7 @@ public class ReqMessage {
     private JSONObject dataJson;
 
     private String devType;
+    private App app;
 
     private String sign;
 
@@ -77,6 +79,13 @@ public class ReqMessage {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+    public App getApp() {
+        return app;
+    }
+
+    public void setApp(App app) {
+        this.app = app;
     }
 
     public JSONObject getReqMessage() {

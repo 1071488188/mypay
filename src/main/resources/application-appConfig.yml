@@ -19,5 +19,6 @@ har:
       template: 【汇安融】亲爱的哥们，您的验证码是{0}。如非本人操作，请忽略本短信
       optType: 0
   picPath: http://192.168.3.121:8080/har-unmanned-manage-web
+  msgkey: Lo3YhWOn9JK7thIE #三方调用时加密key
 
 

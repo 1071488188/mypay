@@ -42,7 +42,7 @@
     LEFT JOIN code_goods cg ON ss.goods_id = cg.id
     WHERE ss.shop_id = #{shopId}
     AND ss.`status` = 1
-    AND cg.`status` = 0
+    AND cg.`status` != 2
     AND cg.id IN
     <foreach item="id" collection="ids" open="(" separator="," close=")">
       #{id}
@@ -74,7 +74,7 @@
     LEFT JOIN shop_stock ss ON s.id = ss.shop_id
     LEFT JOIN code_goods cg ON ss.goods_id = cg.id
     WHERE s.shop_code = #{shopCode}
-    AND cg.`status` = 0
+    AND cg.`status` != 2
     AND ss.quantity > 0
     AND s.`status` = 1
     AND ss.`status` = 1
@@ -89,6 +89,7 @@
     LEFT JOIN (SELECT * FROM shop_stock ss1 WHERE ss1.shop_id = #{shopId}) ss ON ss.goods_id = cg.id
     WHERE so.openid = #{openId}
     AND soi.shop_id = #{shopId}
+    AND cg.`status` != 2
     AND so.`status` = 1
     AND ss.`status` = 1
     GROUP BY soi.goods_id
@@ -97,7 +98,7 @@
   </select>
 
   <update id="updateGoodsStock" parameterType="java.lang.String">
-    UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId} AND quantity > #{num}
+    UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId} AND quantity >= #{num}
   </update>
 
   <select id="selectMaxLayer" parameterType="java.lang.String" resultType="java.lang.Integer">

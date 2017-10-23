@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8083
   context-path: /har-unmanned-mfront
 #系统相关常量
 client:
