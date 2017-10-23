@@ -211,10 +211,10 @@ public class WxAuthResource extends ApiBaseController {
             TempMsgRetrun tempMsgRetrun1 = new TemplateMsgSend().sendMsg(templateMsgPojo,
                     service.get("access_token"));
             if(!tempMsgRetrun1.isIssuccess()){
-                throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,订单号为:"+wxImputParam.getDistributionNumber(),tempMsgRetrun.getErrmsg());
+                throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,错误原因:"+tempMsgRetrun1.getErrmsg(),tempMsgRetrun.getErrmsg());
             }
         }else if(!tempMsgRetrun.isIssuccess()){
-            throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,订单号为:"+wxImputParam.getDistributionNumber(),tempMsgRetrun.getErrmsg());
+            throw new ApiBizException(ErrorCode.E00000001.CODE,"推送消息失败,错误原因:"+tempMsgRetrun.getErrmsg(),tempMsgRetrun.getErrmsg());
         }
         return new RespMessage(ErrorCode.E00000000.CODE,ErrorCode.E00000000.MSG,null).getRespMessage();
     }
