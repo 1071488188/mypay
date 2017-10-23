@@ -68,7 +68,7 @@
   <select id="selectShopGoodsList" parameterType="java.lang.String" resultType="com.har.unmanned.mfront.model.extend.ShopStockDomain">
     SELECT
     ss.shop_id shopId, ss.goods_id goodsId, ss.quantity, ss.initial_quantity initialQuantity,	ss.initial_time initialTime, ss.layer, ss.dispatch_quantity dispatchQuantity,
-    ss.min_quantity minQuantity,ss.shop_base_quantity shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId
+    ss.min_quantity minQuantity,ss.shop_base_quantity shopBaseQuantity, ss.`status`, ss.template_id templateId, cg.`name`, ROUND(cg.price / 100, 2) price, cg.image, ss.id, cg.id goodsId, cg.bar_code barCode
     FROM
     shop s
     LEFT JOIN shop_stock ss ON s.id = ss.shop_id
@@ -92,6 +92,7 @@
     AND cg.`status` != 2
     AND so.`status` = 1
     AND ss.`status` = 1
+    AND ss.quantity > 0
     GROUP BY soi.goods_id
     ORDER BY totalNum DESC, totalMoney DESC
     LIMIT 0,2

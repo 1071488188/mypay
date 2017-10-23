@@ -43,6 +43,7 @@ public interface WxUserShopResource {
      * @apiSuccess (200) {Number} Data.dataList.goodsList.goodsId    商品id
      * @apiSuccess (200) {String} Data.dataList.goodsList.name   商品名称
      * @apiSuccess (200) {String} Data.dataList.goodsList.image   商品图片
+     * @apiSuccess (200) {String} Data.dataList.goodsList.barCode   商品条形码
      * @apiSuccess (200) {Number} Data.dataList.goodsList.price   商品单价(元)
      * @apiSuccess (200) {Number} Data.dataList.goodsList.quantity   商品库存数量
      * */

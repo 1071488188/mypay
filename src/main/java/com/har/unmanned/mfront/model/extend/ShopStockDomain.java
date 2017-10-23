@@ -15,4 +15,5 @@ public class ShopStockDomain extends ShopStock {
     private String name; //商品名称
     private String price; //商品价格
     private String image; //商品图片
+    private String barCode; //商品条形码
 }

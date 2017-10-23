@@ -88,6 +88,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                     goods.put("image", picPath + (CheckUtil.isNull(domain.getImage()) ? "" : domain.getImage()));//商品图片
                     goods.put("price", domain.getPrice());//商品单价
                     goods.put("quantity", domain.getQuantity());//商品库存
+                    goods.put("barCode", domain.getBarCode());//商品条形码
                     goodsList.add(goods);
                 }
             }
@@ -447,7 +448,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         //System.out.println(new String(Base64Utils.decode(s1.getBytes("utf-8"))));
         //String test = AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("test");
         //System.out.println(test);
-        System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").decrypt("YoFDVxyLZuf3zjpEPmpdEw"));
+        System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").decrypt("vbeDcMlSEQLgjFo8BLDTmg=="));
         //System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("0000074"));
     }
 }
