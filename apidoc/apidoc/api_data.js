@@ -760,6 +760,13 @@ define({ "api": [
           },
           {
             "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.shopCode",
+            "description": "<p>货架编号</p>"
+          },
+          {
+            "group": "200",
             "type": "Object[]",
             "optional": false,
             "field": "Data.dataList.carrierNote",
@@ -1927,6 +1934,110 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxUserShop"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/wxAuth/distributionNotice",
+    "title": "1.api 配送通知",
+    "version": "1.0.0",
+    "name": "distributionNotice",
+    "group": "wx",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "description": "<p>配送通知</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>推送title</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "distributionNumber",
+            "description": "<p>配送单号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "deliveryTime",
+            "description": "<p>配送时间</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "distributionNetwork",
+            "description": "<p>配送网点</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "totalDistribution",
+            "description": "<p>配送总计</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "openId",
+            "description": "<p>微信openId</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "remark",
+            "description": "<p>备注</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespCode",
+            "description": "<p>响应编码，8位</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "RespDesc",
+            "description": "<p>响应描述</p>"
+          },
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>响应数据</p>"
+          }
+        ]
+      }
+    },
+    "filename": "../src/main/java/com/har/unmanned/mfront/api/wx/WxAuthResource.java",
+    "groupTitle": "微信相关接口",
+    "groupDescription": "<p>Created by jiang on 2017/9/19.</p>",
+    "sampleRequest": [
+      {
+        "url": "http://192.168.70.7:8082/har-unmanned-mfront/api/v1/wxAuth/distributionNotice"
       }
     ]
   }
