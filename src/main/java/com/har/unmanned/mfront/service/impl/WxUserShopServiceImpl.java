@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -83,7 +82,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
             for (ShopStockDomain domain : shopStockDomains) {
                 if (CheckUtil.isEquals(domain.getLayer().toString(), String.valueOf(i))) {
                     JSONObject goods = new JSONObject();
-                    goods.put("goodsId", domain.getGoodsId());//商品id
+                    String goodsId = Base64Utils.encodeToString(AESUtil.getInstance(msgKey).encrypt(domain.getGoodsId().toString()).getBytes());
+                    goods.put("goodsId", goodsId); //将商品id加密后再编码
                     goods.put("name", domain.getName());//商品名称
                     goods.put("image", picPath + (CheckUtil.isNull(domain.getImage()) ? "" : domain.getImage()));//商品图片
                     goods.put("price", domain.getPrice());//商品单价
@@ -109,7 +109,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         List<ShopStockDomain> codeGoods = shopWechatQueryMapper.selectRecentlyBuyList(shopWechat.getOpenid(), shopStockDomains.get(0).getShopId().toString()); // 查询最近购买, 条件: 订单已支付成功, 货架已上架
         for (ShopStockDomain codeGood : codeGoods) {
             JSONObject object = new JSONObject();
-            object.put("goodsId", codeGood.getGoodsId());
+            String goodsId = Base64Utils.encodeToString(AESUtil.getInstance(msgKey).encrypt(codeGood.getGoodsId().toString()).getBytes());
+            object.put("goodsId", goodsId);
             object.put("name", codeGood.getName());
             object.put("image", picPath + (CheckUtil.isNull(codeGood.getImage()) ? "" : codeGood.getImage()));
             object.put("price", codeGood.getPrice());
@@ -166,8 +167,9 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         JSONObject reqJson = new JSONObject(); // 优化请求中的商品id以及数量信息, 使商品id与数量一一对应, 类似于{'1':'3','9':'2'}
         for (Object o : goodsList) {
             JSONObject object = (JSONObject) JSONObject.toJSON(o);
-            ids.add(object.getLong("goodsId"));
-            reqJson.put(object.getString("goodsId"), object.getString("goodsNum"));
+            String goodsId = AESUtil.getInstance(msgKey).decrypt(new String(Base64Utils.decodeFromString(object.getString("goodsId")))); // 将商品id解码后再解密
+            ids.add(Long.parseLong(goodsId));
+            reqJson.put(goodsId, object.getString("goodsNum"));
         }
         log.info("ids: " + ids);
         List<CodeGoodsDomain> codeGoods = shopWechatQueryMapper.selectGoodsInfo(shop.getId(), ids); // 查询用户购买的门店商品列表
@@ -448,7 +450,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         //System.out.println(new String(Base64Utils.decode(s1.getBytes("utf-8"))));
         //String test = AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("test");
         //System.out.println(test);
-        System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").decrypt("vbeDcMlSEQLgjFo8BLDTmg=="));
+        //System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").decrypt("vbeDcMlSEQLgjFo8BLDTmg=="));
         //System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("0000074"));
+        //System.out.println(Base64Utils.encodeToString(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("123").getBytes()));
     }
 }
