@@ -17,6 +17,8 @@ public class DispatchDomain extends Dispatch{
     private String storeAddress;
     //货架位置
     private String shopAddress;
+    //货架编号
+    private String shopCode;
     //配送状态（逗号分隔字符串）
     private String statusString;
     //取货单

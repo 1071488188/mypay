@@ -60,7 +60,8 @@ public class LoseServiceImpl implements LoseService {
         ShopWechat wechatUser = userUtil.userInfo();
 
         //验证用户权限
-        int userNum = sysUserMapperExtend.queryUserRole(wechatUser.getUserId().toString(), CodeConstants.Role.LOSE);
+        String role = CodeConstants.Role.DISPATCHOR.toString().concat(",").concat(CodeConstants.Role.LOSE.toString());
+        int userNum = sysUserMapperExtend.queryUserRole(wechatUser.getUserId().toString(), role);
         if (userNum <= 0) {
             log.info("{},{}", "用户权限不足", JSONObject.toJSON(wechatUser));
             throw new ApiBizException(ErrorCode.E00000015.CODE, ErrorCode.E00000015.MSG, JSONObject.toJSON(wechatUser));

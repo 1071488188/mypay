@@ -24,7 +24,7 @@ public interface SysUserMapperExtend extends SysUserMapper {
      * @param roleId
      * @return
      */
-    public Integer queryUserRole(@Param("userId") String userId,@Param("roleId") Integer roleId);
+    public Integer queryUserRole(@Param("userId") String userId,@Param("roleId") String roleId);
 
     /**
      * 根据用户是否禁用状态查询用户所存在的角色

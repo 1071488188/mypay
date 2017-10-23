@@ -34,7 +34,7 @@
             sys_user sr LEFT JOIN sys_user_role so ON so.user_id = sr.user_id
         WHERE
           sr.user_id=#{userId}
-          and so.role_id=#{roleId}
+          and so.role_id in (#{roleId})
     </select>
     <!--根据用户id查询用户权限并返回权限类型-->
     <select id="getUserAndRole" resultMap="BaseResultMap" parameterType="map">
