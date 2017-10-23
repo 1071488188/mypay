@@ -68,7 +68,8 @@ public class DispatchServiceImpl implements DispatchService {
         ShopWechat wechatUser = userUtil.userInfo();
 
         //验证用户权限
-        int userNum = sysUserMapperExtend.queryUserRole(wechatUser.getUserId().toString(), CodeConstants.Role.DISPATCHOR);
+        String role = CodeConstants.Role.DISPATCHOR.toString();
+        int userNum = sysUserMapperExtend.queryUserRole(wechatUser.getUserId().toString(), role);
         if (userNum <= 0) {
             log.info("{},{}", "用户权限不足", JSONObject.toJSON(wechatUser));
             throw new ApiBizException(ErrorCode.E00000015.CODE, ErrorCode.E00000015.MSG, JSONObject.toJSON(wechatUser));
@@ -141,6 +142,7 @@ public class DispatchServiceImpl implements DispatchService {
                 jsonObject.put("shopAddress", item.getShopAddress());//货架位置
                 jsonObject.put("status", item.getStatus());//状态
                 jsonObject.put("dispatchNo", item.getDispatchNo());//配送单号
+                jsonObject.put("shopCode", item.getShopCode());//货架编号
 
                 //取货单
                 JSONArray carrierNote = new JSONArray();

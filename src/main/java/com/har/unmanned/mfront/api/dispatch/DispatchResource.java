@@ -32,8 +32,9 @@ public interface DispatchResource {
      * @apiSuccess (200) {String} Data.dataList.createTime		创建时间
      * @apiSuccess (200) {String} Data.dataList.storeAddress     取货位置
      * @apiSuccess (200) {String} Data.dataList.shopAddress      货架位置
-     * @apiSuccess (200) {String} Data.dataList.status       	状态（1: 未接单、2: 派送中、3: 已完成）
+     * @apiSuccess (200) {String} Data.dataList.status       	 状态（1: 未接单、2: 派送中、3: 已完成）
      * @apiSuccess (200) {String} Data.dataList.dispatchNo       配送单号
+     * @apiSuccess (200) {String} Data.dataList.shopCode         货架编号
      * @apiSuccess (200) {Object[]} Data.dataList.carrierNote    取货单
      * @apiSuccess (200) {String} Data.dataList.carrierNote.goodsName    商品名称
      * @apiSuccess (200) {Number} Data.dataList.carrierNote.quantity     商品数量
