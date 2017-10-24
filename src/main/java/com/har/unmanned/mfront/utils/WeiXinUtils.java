@@ -6,6 +6,7 @@ import com.har.unmanned.mfront.config.Constants;
 import com.har.unmanned.mfront.config.ErrorCode;
 import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.service.impl.RedisServiceImpl;
+import com.har.unmanned.mfront.wxapi.fixed.WxTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,8 @@ public class WeiXinUtils {
 	private String ticketUrl;
 	@Autowired
 	private RedisServiceImpl redisService;
+	@Autowired
+	private WxTokenService wxTokenService;
 	/**
 	 * 创建支付包Package
 	 * @param treeMap
@@ -227,15 +230,19 @@ public class WeiXinUtils {
 		String s = WxHttpUtil.sendGet(ticket_url, "utf-8");
 		log.info("请求ticket返回数据: {}", s);
 		// 如果请求成功
+		String ticket;
 		JSONObject jsonObject = JSONObject.parseObject(s);
 		if (null != jsonObject && "0".equals(jsonObject.getString("errcode"))) {
-			String ticket = jsonObject.getString("ticket");
+			ticket = jsonObject.getString("ticket");
 			log.info("请求到的ticket实际数据: {}", ticket);
 			redisService.put(Constants.WX_TICKET, ticket, 5400);
-			return ticket;
+		} else if (null != jsonObject && "40001".equals(jsonObject.getString("errcode"))){ // token因为未知原因失效
+			String token = wxTokenService.synchronizationGetToken(); // 重新获取token
+			ticket = this.getTicket(token); // 再次获取ticket
 		} else {
 			throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, accessToken);
 		}
+		return ticket;
 	}
 
 	final static String KEYSTORE_FILE = "E:/apiclient_cert.p12";//支付证书地址

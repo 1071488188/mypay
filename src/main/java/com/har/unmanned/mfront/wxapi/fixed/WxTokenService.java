@@ -70,7 +70,7 @@ public class WxTokenService {
 		return retoken;
 	}
 
-	private synchronized String synchronizationGetToken() throws ApiBizException {
+	public synchronized String synchronizationGetToken() throws ApiBizException {
 		String retoken;RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Map> result = restTemplate.postForEntity(tokenUrl, null, Map.class);
 		if (result.getStatusCode() != HttpStatus.OK) {
