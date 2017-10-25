@@ -16,6 +16,8 @@
         <!--扩展属性-->
         <result column="storeAddress" property="storeAddress" jdbcType="VARCHAR"/>
         <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR"/>
+        <result column="storeName" property="storeName" jdbcType="VARCHAR"/>
+        <result column="shopName" property="shopName" jdbcType="VARCHAR"/>
         <result column="shopCode" property="shopCode" jdbcType="VARCHAR"/>
         <collection select="dispatchItemForGoodsId"
                     property="carrierNote"
@@ -27,6 +29,7 @@
     <resultMap id="dispatchItem" type="com.har.unmanned.mfront.model.extend.DispatchItemDomain">
         <result column="goodsId" property="goodsId" jdbcType="BIGINT"/>
         <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="spec" property="spec" jdbcType="VARCHAR"/>
         <result column="stockQuantity" property="stockQuantity" jdbcType="INTEGER"/>
     </resultMap>
     <!--配送列表-->
@@ -38,7 +41,9 @@
             dh.`status`,
             sp.shop_code shopCode,
             se.address AS storeAddress,
-            sp.address AS shopAddress
+            sp.address AS shopAddress,
+            se.store_name storeName,
+            sp.company shopName
         FROM dispatch dh
         LEFT JOIN shop_wechat sw ON sw.user_id = dh.dispatchor
         LEFT JOIN store se ON se.id = dh.storage_id
@@ -56,7 +61,8 @@
         SELECT
             di.goods_id goodsId,
             cg.name goodsName,
-            di.quantity stockQuantity
+            di.quantity stockQuantity,
+	        cg.spec
         FROM
             dispatch_item di LEFT JOIN code_goods cg ON cg.id = di.goods_id
         WHERE

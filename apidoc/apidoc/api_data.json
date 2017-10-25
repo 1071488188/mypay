@@ -734,8 +734,22 @@
             "group": "200",
             "type": "String",
             "optional": false,
+            "field": "Data.dataList.storeName",
+            "description": "<p>仓库名称</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
             "field": "Data.dataList.storeAddress",
-            "description": "<p>取货位置</p>"
+            "description": "<p>仓库位置</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.shopName",
+            "description": "<p>货架名称</p>"
           },
           {
             "group": "200",
@@ -785,6 +799,13 @@
             "optional": false,
             "field": "Data.dataList.carrierNote.quantity",
             "description": "<p>商品数量</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "Data.dataList.carrierNote.spec",
+            "description": "<p>商品规格</p>"
           }
         ]
       }
@@ -1911,6 +1932,13 @@
             "optional": false,
             "field": "Data.dataList.goodsList.image",
             "description": "<p>商品图片</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "Data.dataList.goodsList.barCode",
+            "description": "<p>商品条形码</p>"
           },
           {
             "group": "200",

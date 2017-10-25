@@ -143,6 +143,8 @@ public class DispatchServiceImpl implements DispatchService {
                 jsonObject.put("status", item.getStatus());//状态
                 jsonObject.put("dispatchNo", item.getDispatchNo());//配送单号
                 jsonObject.put("shopCode", item.getShopCode());//货架编号
+                jsonObject.put("storeName", item.getStoreName());//仓库名称
+                jsonObject.put("shopName", item.getShopName());//货架名称
 
                 //取货单
                 JSONArray carrierNote = new JSONArray();
@@ -150,6 +152,7 @@ public class DispatchServiceImpl implements DispatchService {
                     JSONObject carrierNoteJson = new JSONObject();
                     carrierNoteJson.put("goodsName", itemDomain.getGoodsName());//商品名称
                     carrierNoteJson.put("quantity", itemDomain.getStockQuantity());//商品数量
+                    carrierNoteJson.put("spec", itemDomain.getSpec());//商品规格
                     carrierNote.add(carrierNoteJson);
                 }
                 jsonObject.put("carrierNote", carrierNote);//取货单

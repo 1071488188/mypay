@@ -7,10 +7,8 @@ import com.har.unmanned.mfront.exception.ApiBizException;
 import com.har.unmanned.mfront.model.App;
 import com.har.unmanned.mfront.service.AppService;
 import com.har.unmanned.mfront.utils.CheckUtil;
-import com.har.unmanned.mfront.utils.PropertiesUtil;
 import com.har.unmanned.mfront.utils.RSAUtil;
 import com.har.unmanned.mfront.utils.ReqMessage;
-import com.har.utils.security.AESByCbcUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -79,12 +77,7 @@ public class ApiBaseController {
 				throw new ApiBizException(ErrorCode.E00000002.CODE, "Data不能为空",null);
 			}
 
-			// ios采用AES CBC模式进行解密
-			if("ios".equals(message.getString("DevType"))){
-				data = AESByCbcUtil.getInstance(msgKey).decrypt(data);
-			}else{
-				data = AESUtil.getInstance(msgKey).decrypt(data);
-			}
+			data = AESUtil.getInstance(msgKey).decrypt(data);
 
 			JSONObject dataJson = JSONObject.parseObject(data);
 
