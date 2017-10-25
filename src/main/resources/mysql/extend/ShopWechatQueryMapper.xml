@@ -75,7 +75,7 @@
     LEFT JOIN code_goods cg ON ss.goods_id = cg.id
     WHERE s.shop_code = #{shopCode}
     AND cg.`status` != 2
-    AND ss.quantity > 0
+    <!-- AND ss.quantity > 0 -->
     AND s.`status` = 1
     AND ss.`status` = 1
     ORDER BY ss.layer ASC
