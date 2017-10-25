@@ -238,7 +238,7 @@ public class WeiXinUtils {
 			redisService.put(Constants.WX_TICKET, ticket, 5400);
 		} else if (null != jsonObject && "40001".equals(jsonObject.getString("errcode"))){ // token因为未知原因失效
 			String token = wxTokenService.synchronizationGetToken(); // 重新获取token
-			ticket = this.getTicket(token); // 再次获取ticket
+			ticket = synchronizationGetTicket(token); // 再次获取ticket
 		} else {
 			throw new ApiBizException(ErrorCode.E00000001.CODE, ErrorCode.E00000001.MSG, accessToken);
 		}
