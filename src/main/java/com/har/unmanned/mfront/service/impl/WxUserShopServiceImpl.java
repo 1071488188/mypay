@@ -181,12 +181,12 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         int totalMoney = 0; //支付的总金额
         for (CodeGoodsDomain domain : codeGoods) {
             int num = reqJson.getIntValue(domain.getId().toString());
-            if (num > domain.getQuantity()) { // 如果当前商品的购买数量超过库存总数
-                log.error("商品" + domain.getName() + "下单数量" + num + "超过库存数量");
-                throw new ApiBizException(ErrorCode.E00000001.CODE, domain.getName() + "数量" + num + "超过库存数量" + domain.getQuantity(), param);
-            } else {
+            //if (num > domain.getQuantity()) { // 如果当前商品的购买数量超过库存总数
+            //    log.error("商品" + domain.getName() + "下单数量" + num + "超过库存数量");
+            //    throw new ApiBizException(ErrorCode.E00000001.CODE, domain.getName() + "数量" + num + "超过库存数量" + domain.getQuantity(), param);
+            //} else {
                 totalMoney += domain.getPrice() * num;
-            }
+            //}
         }
 
         try {
@@ -290,7 +290,7 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
 
             log.info("订单支付成功");
             /** 处理后台业务逻辑 */
-            JSONArray errorList = new JSONArray(); // 用于存放更新失败的商品信息
+            JSONArray errorList = new JSONArray(); // 用于存放更新失败的商品信息(货架实际商品数量大于库存数量)
             JSONArray successList = new JSONArray(); // 用于存放更新货架商品库存过程中发生异常, 而更新成功的部分商品库存信息
             try {
                 // 1. 更新基础订单信息
@@ -327,14 +327,23 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                         successList.add(successGoods);
                     }
                 }
+                if (errorList.size() > 0) { // 因库存数量异常导致回调库存扣减失败(货架实际库存大于数据库库存, 而用户购买数量大于数据库库存)
+                    for (Object o : errorList) {
+                        JSONObject object = (JSONObject) o;
+                        String goodsId = object.getString("goodsId");
+                        String shopId = object.getString("shopId");
+                        shopWechatQueryMapper.resetGoodsStock(shopId, goodsId); // 将商品库存清零
+                    }
+                    throw new ApiBizException(ErrorCode.E00000021.CODE, ErrorCode.E00000021.MSG, errorList, CommonExceptionLevel.WARN);
+                }
+            } catch (ApiBizException e) {
+                e.printStackTrace();
+                log.error("库存异常: " + e.getMessage());
+                throw new ApiBizException(e.getErrCode(), e.getMessage(), "订单信息: \r\n" + JSONObject.toJSONString(shopOrder) + "\r\n, 清零货架相关信息: \r\n" + errorList, CommonExceptionLevel.WARN);
             } catch (Exception e) {
                 e.printStackTrace();
-                log.error("订单或库存信息更新失败" + e.getMessage());
-                throw new ApiBizException(ErrorCode.E00000022.CODE, ErrorCode.E00000022.MSG, "订单信息更新异常: \r\n" + JSONObject.toJSONString(shopOrder) + "\r\n, 更新库存成功的相关信息: \r\n" + successList, CommonExceptionLevel.WARN);
-            }
-            if (errorList.size() > 0) { // 因库存数量异常导致回调库存扣减失败
-                log.error("商品" + errorList + ": 库存异常");
-                throw new ApiBizException(ErrorCode.E00000021.CODE, ErrorCode.E00000021.MSG, errorList, CommonExceptionLevel.WARN);
+                log.error("订单或库存信息更新失败: " + e.getMessage());
+                throw new ApiBizException(ErrorCode.E00000022.CODE, ErrorCode.E00000022.MSG, "订单信息: \r\n" + JSONObject.toJSONString(shopOrder) + "\r\n, 更新库存成功的相关信息: \r\n" + successList, CommonExceptionLevel.WARN);
             }
         }
         log.info("----------------微信回调结束-----------------");
@@ -453,5 +462,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         //System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").decrypt("vbeDcMlSEQLgjFo8BLDTmg=="));
         //System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("0000074"));
         //System.out.println(Base64Utils.encodeToString(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("123").getBytes()));
+        //vbeDcMlSEQLgjFo8BLDTmg==    80
+        //DZ2vwnwb1dJPuQP9aI6Xbg==    46
+        System.out.println(AESUtil.getInstance("B@1dsCC%ejk589^2").encrypt("test"));
     }
 }

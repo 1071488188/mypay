@@ -102,6 +102,10 @@
     UPDATE shop_stock SET quantity = quantity - #{num}  WHERE goods_id = #{goodsId} AND shop_id = #{shopId} AND quantity >= #{num}
   </update>
 
+  <update id="resetGoodsStock" parameterType="java.lang.String">
+    UPDATE shop_stock SET quantity = 0  WHERE goods_id = #{goodsId} AND shop_id = #{shopId}
+  </update>
+
   <select id="selectMaxLayer" parameterType="java.lang.String" resultType="java.lang.Integer">
     SELECT
     IF(MAX(ss.layer) IS NULL , 0, MAX(ss.layer))

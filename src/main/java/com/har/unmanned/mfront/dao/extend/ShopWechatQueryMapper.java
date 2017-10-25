@@ -51,4 +51,12 @@ public interface ShopWechatQueryMapper {
      * @return
      */
     Integer selectMaxLayer(String shopCode);
+
+    /**
+     * 将货架的商品数量设置为零
+     * @param shopId
+     * @param goodsId
+     * @return
+     */
+    Integer resetGoodsStock(@Param("shopId") String shopId, @Param("goodsId")String goodsId);
 }
