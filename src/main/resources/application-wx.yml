@@ -22,6 +22,7 @@ wx:
       color: 173177 #字体颜色不带井号
       detailsUrl: ${har.server.web.host}/#/dispatch #详情url
   pay:
+    defaultIp: 103.44.145.245
     msgKey: B@1dsCC%ejk589^2
     appid: wx6b09d460cd913b96
     paternerKey: daeb1993ddee0822edcbeeffa35dedcf

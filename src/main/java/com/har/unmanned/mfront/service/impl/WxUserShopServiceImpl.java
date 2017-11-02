@@ -54,6 +54,8 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
     private String paternerKey;
     @Value("${wx.pay.msgKey}")
     private String msgKey;
+    @Value("${wx.pay.defaultIp}")
+    private String defaultIp;
     private static final String UNMANNED = "unmanned:order:";
 
     @Override
@@ -245,7 +247,19 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
         JSONObject respJson = new JSONObject();
         log.info("----------------微信统一下单开始-----------------");
         log.info("支付订单service传入参数: " + JSONObject.toJSONString(shopOrder));
-        String ip = ContextHolderUtils.getIp();
+        String userIp = ContextHolderUtils.getIp();
+        String ip;
+        if (!CheckUtil.isNull(userIp)) {
+            String[] ips = userIp.split(",");
+            if (ips.length == 0) {
+                ip = defaultIp;
+            } else {
+                ip = ips[0];
+            }
+        } else {
+            ip = defaultIp;
+        }
+
         Map<String, String> map = wxPayService.paymentOrderH5(shopOrder.getOpenid(), shopOrder.getAmount().toString(), "wxpay", shopOrder.getOrderNo(), ip);
         JSONObject object = (JSONObject) JSONObject.toJSON(map);
         respJson.put("singData", object);
