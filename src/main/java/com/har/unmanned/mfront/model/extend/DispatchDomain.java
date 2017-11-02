@@ -24,4 +24,9 @@ public class DispatchDomain extends Dispatch{
     //取货单
     private List<DispatchItemDomain> carrierNote;
 
+    //仓库名称
+    private String storeName;
+    //货架名称
+    private String shopName;
+
 }
