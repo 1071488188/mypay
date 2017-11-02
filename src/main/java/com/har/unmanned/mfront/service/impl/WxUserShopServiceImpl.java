@@ -90,7 +90,11 @@ public class WxUserShopServiceImpl implements IWxUserShopService {
                     goods.put("image", picPath + (CheckUtil.isNull(domain.getImage()) ? "" : domain.getImage()));//商品图片
                     goods.put("price", domain.getPrice());//商品单价
                     goods.put("quantity", domain.getQuantity());//商品库存
-                    goods.put("barCode", domain.getBarCode());//商品条形码
+                    if (CheckUtil.isNull(domain.getBarCode())) {
+                        goods.put("barCode", "-1");//商品条形码
+                    } else {
+                        goods.put("barCode", domain.getBarCode());//商品条形码
+                    }
                     goodsList.add(goods);
                 }
             }
