@@ -48,10 +48,12 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
     @ResponseBody
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("Start:" + request.getRequestURI());
+        String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
         // 返回消息
         RespMessage respMessage = new RespMessage();
         // 将cookie中取出的token转换成OAuth2格式
         String cookieStr = (String) CookieUtil.getCookieByName(request, Constants.ACCESS_TOKEN);
+        ThreadLocalCache.getInstance().setCache(APPID, Constants.Topic, theNameOfTheModule, null, ContextHolderUtils.getIp());//日志系统存日志
         log.info("=====获取到的cookie=====" + cookieStr);
         if (StringUtils.isNotBlank(cookieStr)) {
             log.debug("{}", cookieStr);
@@ -70,7 +72,7 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
             DefaultClaims claims = (DefaultClaims) body;
 
             Object openId = claims.get("openId");
-            String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
+
             if (!CheckUtil.isNull(theNameOfTheModule)) {
                 ThreadLocalCache.getInstance().setCache(APPID, Constants.Topic, theNameOfTheModule, openId + "", ContextHolderUtils.getIp());//日志系统存日志
             }
@@ -79,10 +81,6 @@ public class JwtCheckInterceptor implements HandlerInterceptor {
                 throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
             }
         } else {
-            String theNameOfTheModule = UrlUtil.getSubUrl(3);//获取当前url的第三级作为模块名称存日志
-            if (!CheckUtil.isNull(theNameOfTheModule)) {
-                ThreadLocalCache.getInstance().setCache(APPID, Constants.Topic, theNameOfTheModule, null, ContextHolderUtils.getIp());//日志系统存日志
-            }
             log.error("检查Cookie为空，请授权");
             throw new ApiBizException(ErrorCode.E00000006.CODE, ErrorCode.E00000006.MSG, cookieStr);
         }
